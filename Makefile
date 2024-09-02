@@ -196,7 +196,7 @@ code-docs: $(INSTS)/orig_instances.zip $(INSTS)/QUBO_formulations.zip \
 	$(RLOGS)/dwave/raw_logs.zip $(RLOGS)/quera/raw_logs.zip \
 	$(RLOGS)/ibm-qpu/raw_logs.zip $(RLOGS)/ibm-sim/raw_logs.zip
 	cd .. && \
-	rm -rf $(SUPPLDIR) && mkdir -p $(SUPPLDIR)/docs && \
+	rm -rf $(SUPPLDIR)/* && mkdir -p $(SUPPLDIR)/docs && \
 	cd docs && rm -rf ./source/autosummary && make html && cd .. && \
 	rsync -arv ./docs/build/html/* $(SUPPLDIR)/docs/ && \
 	cd comps && \
@@ -207,7 +207,7 @@ code-docs: $(INSTS)/orig_instances.zip $(INSTS)/QUBO_formulations.zip \
 	cd ../quera && unzip ./raw_logs.zip && rm ./raw_logs.zip && \
 	cd ../.. && \
 	cp ../docs/source/GH_README.md ./README.md && \
-	touch ../../.nojekyll
+	touch ./docs/.nojekyll
 
 
 ######################################################################
