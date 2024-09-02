@@ -1,0 +1,15 @@
+﻿bench\_qubo
+===========
+
+.. automodule:: bench_qubo
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      DataBaseQUBO
+      QUBOSolver
+      QUBOSolverDwave
+      QUBOSolverIBM
+   

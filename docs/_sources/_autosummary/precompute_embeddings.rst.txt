@@ -1,0 +1,12 @@
+﻿precompute\_embeddings
+======================
+
+.. automodule:: precompute_embeddings
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      main
+   

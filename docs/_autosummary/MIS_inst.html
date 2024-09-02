@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MIS_inst &mdash; qopt-overview  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/autoclasstoc.css?v=08871587" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=3dd0334f" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="classic_solve_UDMISes" href="classic_solve_UDMISes.html" />
+    <link rel="prev" title="MWC_inst" href="MWC_inst.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            qopt-overview
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html#computational-pipeline">Computational pipeline</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../overview.html#implementation-details">Implementation details</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="TSP_inst.html">TSP_inst</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MWC_inst.html">MWC_inst</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">MIS_inst</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#MIS_inst.create_UDMIS_name"><code class="docutils literal notranslate"><span class="pre">create_UDMIS_name()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#MIS_inst.create_grid_points"><code class="docutils literal notranslate"><span class="pre">create_grid_points()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#MIS_inst.create_random_points"><code class="docutils literal notranslate"><span class="pre">create_random_points()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#MIS_inst.points_to_graph"><code class="docutils literal notranslate"><span class="pre">points_to_graph()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#MIS_inst.save_orig_UDMIS"><code class="docutils literal notranslate"><span class="pre">save_orig_UDMIS()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#MIS_inst.extract_G_from_json"><code class="docutils literal notranslate"><span class="pre">extract_G_from_json()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#MIS_inst.load_orig_MIS"><code class="docutils literal notranslate"><span class="pre">load_orig_MIS()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#MIS_inst.create_MIS_QUBO"><code class="docutils literal notranslate"><span class="pre">create_MIS_QUBO()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#MIS_inst.generate_UDMIS_instances"><code class="docutils literal notranslate"><span class="pre">generate_UDMIS_instances()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#MIS_inst.is_IS"><code class="docutils literal notranslate"><span class="pre">is_IS()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#MIS_inst.load_instance_by_ID"><code class="docutils literal notranslate"><span class="pre">load_instance_by_ID()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#MIS_inst.visualize_graph"><code class="docutils literal notranslate"><span class="pre">visualize_graph()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#MIS_inst.draw_inst_grid"><code class="docutils literal notranslate"><span class="pre">draw_inst_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#MIS_inst.draw_IDs_grid"><code class="docutils literal notranslate"><span class="pre">draw_IDs_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#MIS_inst.create_orig_MIS_IP"><code class="docutils literal notranslate"><span class="pre">create_orig_MIS_IP()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#MIS_inst.assert_UDMIS_MIP"><code class="docutils literal notranslate"><span class="pre">assert_UDMIS_MIP()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#MIS_inst.check_QuEra_geometry"><code class="docutils literal notranslate"><span class="pre">check_QuEra_geometry()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#MIS_inst.generate_TG_inst"><code class="docutils literal notranslate"><span class="pre">generate_TG_inst()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#MIS_inst.generate_main_dataset"><code class="docutils literal notranslate"><span class="pre">generate_main_dataset()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#MIS_inst.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="classic_solve_UDMISes.html">classic_solve_UDMISes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classic_solve_MWC_QUBO_only.html">classic_solve_MWC_QUBO_only</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classic_solve_MWCs.html">classic_solve_MWCs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classic_solve_TSPs_MTZ.html">classic_solve_TSPs_MTZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="post_processing.logparser.html">post_processing.logparser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="post_processing.select_runs.html">post_processing.select_runs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../overview.html#preparing-python-and-r-environments">Preparing python and R environments</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../raw-data.html">Raw data formats</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">qopt-overview</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../overview.html">Overview</a></li>
+      <li class="breadcrumb-item active">MIS_inst</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_autosummary/MIS_inst.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-MIS_inst">
+<span id="mis-inst"></span><h1>MIS_inst<a class="headerlink" href="#module-MIS_inst" title="Link to this heading"></a></h1>
+<p>Generates Unit Disc Max Independent Set (UDMIS) instances.</p>
+<p>Creates each instance from a generated random collection of points on a 2D
+plane.</p>
+<dl>
+<dt>USAGE:</dt><dd><div class="line-block">
+<div class="line">python -m MIS_inst –dataset small ./instances</div>
+<div class="line">python -m MIS_inst –dataset large ./instances</div>
+</div>
+</dd>
+</dl>
+<p>Generates a set of UDMIS instances, saving original instance data in
+<code class="docutils literal notranslate"><span class="pre">./instances</span></code> (or another specified directory): <code class="docutils literal notranslate"><span class="pre">orig</span></code> subdirectory for
+original instances and <code class="docutils literal notranslate"><span class="pre">QUBO</span></code>, respectively, for QUBOs. Can create either
+<code class="docutils literal notranslate"><span class="pre">small</span></code> dataset (9 instances with suffix <code class="docutils literal notranslate"><span class="pre">TG</span></code> in the name, for manual
+inspection), or a <code class="docutils literal notranslate"><span class="pre">large</span></code> one (the main dataset with <code class="docutils literal notranslate"><span class="pre">EXT</span></code> suffix in the
+name).</p>
+<p>The instance generation parameters are specified in
+<a class="reference internal" href="#MIS_inst.generate_main_dataset" title="MIS_inst.generate_main_dataset"><code class="xref py py-func docutils literal notranslate"><span class="pre">generate_main_dataset()</span></code></a> and <a class="reference internal" href="#MIS_inst.generate_TG_inst" title="MIS_inst.generate_TG_inst"><code class="xref py py-func docutils literal notranslate"><span class="pre">generate_TG_inst()</span></code></a>, respectively,
+for main and small subsets of instances. Both functions rely on the core
+generation code in <a class="reference internal" href="#MIS_inst.generate_UDMIS_instances" title="MIS_inst.generate_UDMIS_instances"><code class="xref py py-func docutils literal notranslate"><span class="pre">generate_UDMIS_instances()</span></code></a>. This module also
+contains a few cross-checks, auxiliary and visualization code.</p>
+<p class="rubric">Functions</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#MIS_inst.assert_UDMIS_MIP" title="MIS_inst.assert_UDMIS_MIP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">assert_UDMIS_MIP</span></code></a>(orig_filename, qubo_model, ...)</p></td>
+<td><p>Asserts whether QUBO and original OP solutions coincide.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#MIS_inst.check_QuEra_geometry" title="MIS_inst.check_QuEra_geometry"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_QuEra_geometry</span></code></a>(orig_files[, verbose])</p></td>
+<td><p>Checks the geometric constraints for QuEra.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#MIS_inst.create_MIS_QUBO" title="MIS_inst.create_MIS_QUBO"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_MIS_QUBO</span></code></a>(G)</p></td>
+<td><p>Takes a graph and returns QUBO coefficients for a MIS.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#MIS_inst.create_UDMIS_name" title="MIS_inst.create_UDMIS_name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_UDMIS_name</span></code></a>(N, wwidth, wheight, R)</p></td>
+<td><p>Helper: creates an instance name string (UD-MIS).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#MIS_inst.create_grid_points" title="MIS_inst.create_grid_points"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_grid_points</span></code></a>(N, wwidth, wheight[, seed])</p></td>
+<td><p>Generates a random (broken) grid of points.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#MIS_inst.create_orig_MIS_IP" title="MIS_inst.create_orig_MIS_IP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_orig_MIS_IP</span></code></a>(G)</p></td>
+<td><p>Generates a MIP for the MIS instance given by G.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#MIS_inst.create_random_points" title="MIS_inst.create_random_points"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_random_points</span></code></a>(N, wwidth, wheight[, seed])</p></td>
+<td><p>Generates a set of random (int-coordinate) points.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#MIS_inst.draw_IDs_grid" title="MIS_inst.draw_IDs_grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">draw_IDs_grid</span></code></a>(sel_IDs[, directory, Ncols])</p></td>
+<td><p>Draws a grid of instances by (the unique part of) IDs.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#MIS_inst.draw_inst_grid" title="MIS_inst.draw_inst_grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">draw_inst_grid</span></code></a>(selected_files[, Ncols, ...])</p></td>
+<td><p>Draws a grid of instances from <code class="docutils literal notranslate"><span class="pre">selected_files</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#MIS_inst.extract_G_from_json" title="MIS_inst.extract_G_from_json"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_G_from_json</span></code></a>(js)</p></td>
+<td><p>Helper: Extracts the graph from JSON <code class="docutils literal notranslate"><span class="pre">js</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#MIS_inst.generate_TG_inst" title="MIS_inst.generate_TG_inst"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_TG_inst</span></code></a>(instdir)</p></td>
+<td><p>Generates grid instances (<code class="docutils literal notranslate"><span class="pre">TG</span></code> suffix).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#MIS_inst.generate_UDMIS_instances" title="MIS_inst.generate_UDMIS_instances"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_UDMIS_instances</span></code></a>([Ns, K, ...])</p></td>
+<td><p>Main instance generation code for UDMIS instances.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#MIS_inst.generate_main_dataset" title="MIS_inst.generate_main_dataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_main_dataset</span></code></a>(instdir)</p></td>
+<td><p>Generates the main UD-MIS dataset (<code class="docutils literal notranslate"><span class="pre">EXT</span></code> suffix).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#MIS_inst.is_IS" title="MIS_inst.is_IS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_IS</span></code></a>(G, solution)</p></td>
+<td><p>Tests if the solution is an independent set.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#MIS_inst.load_instance_by_ID" title="MIS_inst.load_instance_by_ID"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_instance_by_ID</span></code></a>(ID[, directory])</p></td>
+<td><p>Loads an instance by ID and returns graph G.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#MIS_inst.load_orig_MIS" title="MIS_inst.load_orig_MIS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_orig_MIS</span></code></a>(filename)</p></td>
+<td><p>Loads an original MIS instance from JSON file.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#MIS_inst.main" title="MIS_inst.main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">main</span></code></a>()</p></td>
+<td><p>The main function specifying instance generation parameters (see the source code).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#MIS_inst.points_to_graph" title="MIS_inst.points_to_graph"><code class="xref py py-obj docutils literal notranslate"><span class="pre">points_to_graph</span></code></a>(points, R)</p></td>
+<td><p>Generate an <code class="docutils literal notranslate"><span class="pre">nx.Graph</span></code> out of a set of points.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#MIS_inst.save_orig_UDMIS" title="MIS_inst.save_orig_UDMIS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save_orig_UDMIS</span></code></a>(N, wwidth, wheight, R, ...)</p></td>
+<td><p>Saves the original UD-WIS instance in JSON format.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#MIS_inst.visualize_graph" title="MIS_inst.visualize_graph"><code class="xref py py-obj docutils literal notranslate"><span class="pre">visualize_graph</span></code></a>(G[, R, pts, ax, z, ...])</p></td>
+<td><p>Draws the graph (node labels as coordinates), with node color <code class="docutils literal notranslate"><span class="pre">z</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="MIS_inst.create_UDMIS_name">
+<span class="sig-prename descclassname"><span class="pre">MIS_inst.</span></span><span class="sig-name descname"><span class="pre">create_UDMIS_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wwidth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wheight</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">R</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MIS_inst.html#create_UDMIS_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MIS_inst.create_UDMIS_name" title="Link to this definition"></a></dt>
+<dd><p>Helper: creates an instance name string (UD-MIS).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="MIS_inst.create_grid_points">
+<span class="sig-prename descclassname"><span class="pre">MIS_inst.</span></span><span class="sig-name descname"><span class="pre">create_grid_points</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wwidth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wheight</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2023</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MIS_inst.html#create_grid_points"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MIS_inst.create_grid_points" title="Link to this definition"></a></dt>
+<dd><p>Generates a random (broken) grid of points.</p>
+<p>Generates a full grid of (<code class="docutils literal notranslate"><span class="pre">wwidth</span></code> x <code class="docutils literal notranslate"><span class="pre">wheight</span></code>) points,
+and then randomly removes them one by one,
+until the necessary number of points <code class="docutils literal notranslate"><span class="pre">N</span></code> is reached.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>a list of points, each specified by an integer coordinates tuple</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list[tuple[int, int]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="MIS_inst.create_random_points">
+<span class="sig-prename descclassname"><span class="pre">MIS_inst.</span></span><span class="sig-name descname"><span class="pre">create_random_points</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wwidth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wheight</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2023</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MIS_inst.html#create_random_points"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MIS_inst.create_random_points" title="Link to this definition"></a></dt>
+<dd><p>Generates a set of random (int-coordinate) points.</p>
+<p>Point coordinates generated uniformly random from [0,1) x [0,1),
+scaled to [0, wwidth) x [0, wheight) and then rounded. If we happen to get
+duplicate coordinates, we just re-generate the point until we have
+<code class="docutils literal notranslate"><span class="pre">N</span></code> unique points.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>N</strong> (<em>int</em>) – number of points</p></li>
+<li><p><strong>wwidth</strong> (<em>int</em>) – width and height of the square
+to generate points in</p></li>
+<li><p><strong>wheight</strong> (<em>int</em>) – width and height of the square
+to generate points in</p></li>
+<li><p><strong>seed</strong> (<em>int</em>) – random seed for <cite>random</cite></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of tuples, each representing integer coordinates (x,y),
+where 0 &lt;= x &lt;= wwidth and 0 &lt;= y &lt;= wheight.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="MIS_inst.points_to_graph">
+<span class="sig-prename descclassname"><span class="pre">MIS_inst.</span></span><span class="sig-name descname"><span class="pre">points_to_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">R</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Graph</span></span></span><a class="reference internal" href="../_modules/MIS_inst.html#points_to_graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MIS_inst.points_to_graph" title="Link to this definition"></a></dt>
+<dd><p>Generate an <code class="docutils literal notranslate"><span class="pre">nx.Graph</span></code> out of a set of points.</p>
+<p>A node is created for each point, and an edge is created whenever the
+Euclidean distance between two corresponding points is no more than <code class="docutils literal notranslate"><span class="pre">R</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="MIS_inst.save_orig_UDMIS">
+<span class="sig-prename descclassname"><span class="pre">MIS_inst.</span></span><span class="sig-name descname"><span class="pre">save_orig_UDMIS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wwidth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wheight</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">R</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">instance_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./instances/orig'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MIS_inst.html#save_orig_UDMIS"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MIS_inst.save_orig_UDMIS" title="Link to this definition"></a></dt>
+<dd><p>Saves the original UD-WIS instance in JSON format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>N</strong> (<em>int</em>) – number of vertices (points)</p></li>
+<li><p><strong>wwidth</strong> (<em>float</em><em>)</em><em>, </em><em>wheight</em><em>(</em><em>float</em>) – coordinate “window”</p></li>
+<li><p><strong>R</strong> (<em>float</em>) – radius for points generation,</p></li>
+<li><p><strong>instance_id</strong> (<em>str</em>) – a unique instance ID</p></li>
+<li><p><strong>points</strong> (<em>list</em>) – coordinates of points,</p></li>
+<li><p><strong>G</strong> (<em>nx.Graph</em>) – resulting graph,</p></li>
+<li><p><strong>directory</strong> (<em>str</em>) – dir to save the instance to</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>filename (with the path) for the created file.</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>File format:</dt><dd><ul class="simple">
+<li><p>js[“nodes”]: list of nodes,</p></li>
+<li><p>js[“edges”]: list of edges, tuples (i,j) with i &lt; j.</p></li>
+<li><dl class="simple">
+<dt>js[“description”]: info concerning instance generation.</dt><dd><p>UDMIS-specific subfields are:
+- points: dict of point coordinates: {i: (x,y)}
+- wwidth, wheight: max values for coordinates (window parameters)
+- R: radius value used</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="MIS_inst.extract_G_from_json">
+<span class="sig-prename descclassname"><span class="pre">MIS_inst.</span></span><span class="sig-name descname"><span class="pre">extract_G_from_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">js</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Graph</span></span></span><a class="reference internal" href="../_modules/MIS_inst.html#extract_G_from_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MIS_inst.extract_G_from_json" title="Link to this definition"></a></dt>
+<dd><p>Helper: Extracts the graph from JSON <code class="docutils literal notranslate"><span class="pre">js</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="MIS_inst.load_orig_MIS">
+<span class="sig-prename descclassname"><span class="pre">MIS_inst.</span></span><span class="sig-name descname"><span class="pre">load_orig_MIS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Graph</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/MIS_inst.html#load_orig_MIS"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MIS_inst.load_orig_MIS" title="Link to this definition"></a></dt>
+<dd><p>Loads an original MIS instance from JSON file.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="MIS_inst.create_MIS_QUBO">
+<span class="sig-prename descclassname"><span class="pre">MIS_inst.</span></span><span class="sig-name descname"><span class="pre">create_MIS_QUBO</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Graph</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">array</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">array</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/MIS_inst.html#create_MIS_QUBO"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MIS_inst.create_MIS_QUBO" title="Link to this definition"></a></dt>
+<dd><p>Takes a graph and returns QUBO coefficients for a MIS.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><p>Two <code class="docutils literal notranslate"><span class="pre">np.array</span></code>-s,</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Q</span></code> (quadratic coefficients matrix), and</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">P</span></code> (linear coefficients vector).</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="MIS_inst.generate_UDMIS_instances">
+<span class="sig-prename descclassname"><span class="pre">MIS_inst.</span></span><span class="sig-name descname"><span class="pre">generate_UDMIS_instances</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">Ns=[5,</span> <span class="pre">10,</span> <span class="pre">15],</span> <span class="pre">K=1,</span> <span class="pre">pts_windows=[(100,</span> <span class="pre">100),</span> <span class="pre">(100,</span> <span class="pre">100),</span> <span class="pre">(100,</span> <span class="pre">100)],</span> <span class="pre">Rs=[25,</span> <span class="pre">25,</span> <span class="pre">25],</span> <span class="pre">id_suffix='',</span> <span class="pre">id_offset=0,</span> <span class="pre">digits=None,</span> <span class="pre">seed=2023,</span> <span class="pre">each_seed=None,</span> <span class="pre">points_generator=&lt;function</span> <span class="pre">create_random_points&gt;,</span> <span class="pre">instdir='./instances'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MIS_inst.html#generate_UDMIS_instances"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MIS_inst.generate_UDMIS_instances" title="Link to this definition"></a></dt>
+<dd><p>Main instance generation code for UDMIS instances.</p>
+<p>Creates len(Ns) * K instances, each stemming from a set of points from a 2D
+window scaled to wwidth x wheight (integer coordinates) specified in
+<code class="docutils literal notranslate"><span class="pre">pts_windows</span></code>, and “blockade” radius being one of the values specified by
+<code class="docutils literal notranslate"><span class="pre">Rs</span></code>. Points generation is delegated to a separate function given by
+<code class="docutils literal notranslate"><span class="pre">points_generator</span></code> (<a class="reference internal" href="#MIS_inst.create_random_points" title="MIS_inst.create_random_points"><code class="xref py py-func docutils literal notranslate"><span class="pre">create_random_points()</span></code></a> by default).</p>
+<p>Lists Ns, Rs, and pts_windows are assumed to have the same length,
+so that (Ns[i], Rs[i], pts_windows[i]) would specify a single set
+of parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Ns</strong> (<em>list</em><em>[</em><em>int</em><em>]</em>) – instance sizes,</p></li>
+<li><p><strong>id_offset</strong> (<em>int</em>) – number to offset the ID numbering by (default: 0)</p></li>
+<li><p><strong>K</strong> (<em>int</em>) – number of instances per set of parameters,</p></li>
+<li><p><strong>pts_windows</strong> (<em>list</em><em>[</em><em>tuple</em><em>]</em>) – a list of tuples of the form
+(wwidth, wheight) to generate points in.</p></li>
+<li><p><strong>Rs</strong> (<em>list</em>) – a list of “blockade” radiuses to generate the graph.</p></li>
+<li><p><strong>id_suffix</strong> (<em>str</em>) – suffix to append to the instance ID (after the number),</p></li>
+<li><p><strong>digits</strong> (<em>int</em>) – max number of digits in the ID</p></li>
+<li><p><strong>seed</strong> (<em>int</em>) – random seed for <code class="docutils literal notranslate"><span class="pre">random</span></code>,</p></li>
+<li><p><strong>each_seed</strong> (<em>int</em>) – random seed to be used for <em>each</em> instance (if not None)</p></li>
+<li><p><strong>instdir</strong> (<em>str</em>) – directory to save the generated instances to</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="MIS_inst.is_IS">
+<span class="sig-prename descclassname"><span class="pre">MIS_inst.</span></span><span class="sig-name descname"><span class="pre">is_IS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solution</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../_modules/MIS_inst.html#is_IS"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MIS_inst.is_IS" title="Link to this definition"></a></dt>
+<dd><p>Tests if the solution is an independent set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> (<em>nx.Graph</em>) – original graph,</p></li>
+<li><p><strong>solution</strong> (<em>list</em><em>[</em><em>int</em><em>]</em>) – candidate solution</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">solution</span></code> must be in the direct order of nodes</dt><dd><p>(i.e., <code class="docutils literal notranslate"><span class="pre">[n0,</span> <span class="pre">n1,</span> <span class="pre">n2,</span> <span class="pre">...]</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="MIS_inst.load_instance_by_ID">
+<span class="sig-prename descclassname"><span class="pre">MIS_inst.</span></span><span class="sig-name descname"><span class="pre">load_instance_by_ID</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./instances/orig/'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MIS_inst.html#load_instance_by_ID"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MIS_inst.load_instance_by_ID" title="Link to this definition"></a></dt>
+<dd><p>Loads an instance by ID and returns graph G.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="MIS_inst.visualize_graph">
+<span class="sig-prename descclassname"><span class="pre">MIS_inst.</span></span><span class="sig-name descname"><span class="pre">visualize_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G:</span> <span class="pre">~networkx.classes.graph.Graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">R=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pts=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax=&lt;Axes:</span> <span class="pre">&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z='blue'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_labels=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_size=200</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MIS_inst.html#visualize_graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MIS_inst.visualize_graph" title="Link to this definition"></a></dt>
+<dd><p>Draws the graph (node labels as coordinates), with node color <code class="docutils literal notranslate"><span class="pre">z</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="MIS_inst.draw_inst_grid">
+<span class="sig-prename descclassname"><span class="pre">MIS_inst.</span></span><span class="sig-name descname"><span class="pre">draw_inst_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">selected_files</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ncols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./instances-new/QUBO'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MIS_inst.html#draw_inst_grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MIS_inst.draw_inst_grid" title="Link to this definition"></a></dt>
+<dd><p>Draws a grid of instances from <code class="docutils literal notranslate"><span class="pre">selected_files</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>selected_files</strong> (<em>list</em>) – list of files (*.qubo.json)</p></li>
+<li><p><strong>Ncols</strong> (<em>int</em>) – number of columns in the grid.</p></li>
+<li><p><strong>directory</strong> (<em>str</em>) – directory with QUBO files (*.qubo.json)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="MIS_inst.draw_IDs_grid">
+<span class="sig-prename descclassname"><span class="pre">MIS_inst.</span></span><span class="sig-name descname"><span class="pre">draw_IDs_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sel_IDs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./instances-new/QUBO'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ncols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MIS_inst.html#draw_IDs_grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MIS_inst.draw_IDs_grid" title="Link to this definition"></a></dt>
+<dd><p>Draws a grid of instances by (the unique part of) IDs.</p>
+<p class="rubric">Example</p>
+<p><code class="docutils literal notranslate"><span class="pre">draw_IDs_grid(['1EXT','3EXT','5TG'])</span></code> will draw a grid with
+<code class="docutils literal notranslate"><span class="pre">UMDIS001EXT</span></code>, <code class="docutils literal notranslate"><span class="pre">UDMIS003EXT</span></code>, and <code class="docutils literal notranslate"><span class="pre">UDMIS5TG</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sel_IDs</strong> (<em>list</em><em>[</em><em>int</em><em>]</em>) – list of instance IDs (numbers)</p></li>
+<li><p><strong>directory</strong> (<em>str</em>) – directory with QUBO files (*.qubo.json)</p></li>
+<li><p><strong>Ncols</strong> (<em>int</em>) – number of columns in the grid</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>selected file names.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="MIS_inst.create_orig_MIS_IP">
+<span class="sig-prename descclassname"><span class="pre">MIS_inst.</span></span><span class="sig-name descname"><span class="pre">create_orig_MIS_IP</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Graph</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Model</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Var</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/MIS_inst.html#create_orig_MIS_IP"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MIS_inst.create_orig_MIS_IP" title="Link to this definition"></a></dt>
+<dd><p>Generates a MIP for the MIS instance given by G.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A <code class="docutils literal notranslate"><span class="pre">gurobipy.Model</span></code> and a <code class="docutils literal notranslate"><span class="pre">dict</span></code> of variables (<code class="docutils literal notranslate"><span class="pre">x</span></code>).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="MIS_inst.assert_UDMIS_MIP">
+<span class="sig-prename descclassname"><span class="pre">MIS_inst.</span></span><span class="sig-name descname"><span class="pre">assert_UDMIS_MIP</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">orig_filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qubo_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qubo_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quiet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MIS_inst.html#assert_UDMIS_MIP"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MIS_inst.assert_UDMIS_MIP" title="Link to this definition"></a></dt>
+<dd><p>Asserts whether QUBO and original OP solutions coincide.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">qubo_x</span></code> argument is unused but kept for compatibility
+with the testing framework.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="MIS_inst.check_QuEra_geometry">
+<span class="sig-prename descclassname"><span class="pre">MIS_inst.</span></span><span class="sig-name descname"><span class="pre">check_QuEra_geometry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">orig_files</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MIS_inst.html#check_QuEra_geometry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MIS_inst.check_QuEra_geometry" title="Link to this definition"></a></dt>
+<dd><p>Checks the geometric constraints for QuEra.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>orig_files</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – list of filenames (original instances)</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – technical output flag.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>true iff the constraints are satisfied; prints progress
+on the screen if <code class="docutils literal notranslate"><span class="pre">verbose</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="MIS_inst.generate_TG_inst">
+<span class="sig-prename descclassname"><span class="pre">MIS_inst.</span></span><span class="sig-name descname"><span class="pre">generate_TG_inst</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">instdir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MIS_inst.html#generate_TG_inst"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MIS_inst.generate_TG_inst" title="Link to this definition"></a></dt>
+<dd><p>Generates grid instances (<code class="docutils literal notranslate"><span class="pre">TG</span></code> suffix).</p>
+<p>See the source code for specific parameter values. Relies on
+<a class="reference internal" href="#MIS_inst.generate_UDMIS_instances" title="MIS_inst.generate_UDMIS_instances"><code class="xref py py-func docutils literal notranslate"><span class="pre">generate_UDMIS_instances()</span></code></a> for actual instance generation, with
+<a class="reference internal" href="#MIS_inst.create_grid_points" title="MIS_inst.create_grid_points"><code class="xref py py-func docutils literal notranslate"><span class="pre">create_grid_points()</span></code></a> for points generation.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="MIS_inst.generate_main_dataset">
+<span class="sig-prename descclassname"><span class="pre">MIS_inst.</span></span><span class="sig-name descname"><span class="pre">generate_main_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">instdir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MIS_inst.html#generate_main_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MIS_inst.generate_main_dataset" title="Link to this definition"></a></dt>
+<dd><p>Generates the main UD-MIS dataset (<code class="docutils literal notranslate"><span class="pre">EXT</span></code> suffix).</p>
+<p>See the source code for specific parameter values. Relies on
+<a class="reference internal" href="#MIS_inst.generate_UDMIS_instances" title="MIS_inst.generate_UDMIS_instances"><code class="xref py py-func docutils literal notranslate"><span class="pre">generate_UDMIS_instances()</span></code></a> for actual instance generation, with
+<a class="reference internal" href="#MIS_inst.create_grid_points" title="MIS_inst.create_grid_points"><code class="xref py py-func docutils literal notranslate"><span class="pre">create_grid_points()</span></code></a> for points generation.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="MIS_inst.main">
+<span class="sig-prename descclassname"><span class="pre">MIS_inst.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MIS_inst.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MIS_inst.main" title="Link to this definition"></a></dt>
+<dd><p>The main function specifying instance generation parameters (see the source code).</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Bochkarev, Heese, Jäger, Schiewe, and Schöbel.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

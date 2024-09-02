@@ -1,0 +1,13 @@
+﻿classic\_solve\_MWCs
+====================
+
+.. automodule:: classic_solve_MWCs
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      main
+      solve_MWC_classically
+   

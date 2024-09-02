@@ -1,0 +1,7 @@
+2023-10-29 14:45:43,397 bench  INFO   started 1 run(s).
+2023-10-29 14:45:43,397 bench  INFO   run start: instance_id=MWC33, args=({'maxiter': 50}, 'BOBYQA', 3, 1, 3, 1, 3, 1000, 1000, 'ibm_nazca', 'ibm_quantum', 'ibm-q-fraunhofer/fhg-all/fitw01', '8h', False, 1, 1).
+2023-10-29 14:46:33,533 bench  DEBUG  session start.
+2023-10-29 14:46:33,533 bench  DEBUG  estimator start.
+2023-10-29 14:46:33,962 bench  INFO   run finished: failure, saved to "result/qpu_bobyqa1000_p3_nazca_resilient/qpu_bobyqa1000_p3_nazca_resilient_ibm_nazca_2.0.1_1698587143.397196_0000.json".
+2023-10-29 14:46:33,962 bench  INFO   run 1/1 complete.
+2023-10-29 14:46:33,962 bench  INFO   completed 1 run(s): 0 successful.

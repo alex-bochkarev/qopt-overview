@@ -1,0 +1,13 @@
+﻿classic\_solve\_TSPs\_MTZ
+=========================
+
+.. automodule:: classic_solve_TSPs_MTZ
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      main
+      solve_TSP_classically
+   

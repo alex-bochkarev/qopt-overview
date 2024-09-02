@@ -1,0 +1,12 @@
+﻿run\_dwave
+==========
+
+.. automodule:: run_dwave
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      main
+   

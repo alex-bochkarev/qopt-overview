@@ -1,0 +1,37 @@
+﻿TSP\_inst
+=========
+
+.. automodule:: TSP_inst
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      assert_TSP_MIP
+      calc_distances
+      create_MTZ_TSP_model
+      create_simple_TSP_model
+      draw_IDs_grid
+      draw_inst_grid
+      draw_instance
+      encode_constraints
+      generate_TSP_instances
+      get_QF_coeffs
+      get_constraints
+      get_correct_dist
+      is_feasible
+      k
+      load_instance_by_ID
+      main
+      obj_val
+      pt_to_ddeg
+      sample_nodes
+      save_orig_instance
+      show_feasible
+      solve_TSP_MIP
+      solve_TSP_MTZ
+      unpack_tour_QUBO_bitstring
+      unpack_tour_x
+      unpack_tour_y
+   

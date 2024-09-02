@@ -1,0 +1,28 @@
+﻿post\_processing.logparser
+==========================
+
+.. automodule:: post_processing.logparser
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      calculate_QUBO_objective
+      calculate_orig_objective
+      extract_all_samples
+      extract_samples
+      get_inst_type
+      summarize_dwave
+      summarize_ibm
+      summarize_quera
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      DWaveLogParser
+      IBMLogParser
+      QPULogParser
+      QuEraLogParser
+   

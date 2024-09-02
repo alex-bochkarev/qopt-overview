@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MIS_inst &mdash; qopt-overview  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/autoclasstoc.css?v=08871587" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=3dd0334f" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            qopt-overview
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html#computational-pipeline">Computational pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html#implementation-details">Implementation details</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../raw-data.html">Raw data formats</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">qopt-overview</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Module code</a></li>
+      <li class="breadcrumb-item active">MIS_inst</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for MIS_inst</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Generates Unit Disc Max Independent Set (UDMIS) instances.</span>
+
+<span class="sd">Creates each instance from a generated random collection of points on a 2D</span>
+<span class="sd">plane.</span>
+
+<span class="sd">USAGE:</span>
+<span class="sd">    | python -m MIS_inst --dataset small ./instances</span>
+<span class="sd">    | python -m MIS_inst --dataset large ./instances</span>
+
+<span class="sd">Generates a set of UDMIS instances, saving original instance data in</span>
+<span class="sd">``./instances`` (or another specified directory): ``orig`` subdirectory for</span>
+<span class="sd">original instances and ``QUBO``, respectively, for QUBOs. Can create either</span>
+<span class="sd">``small`` dataset (9 instances with suffix ``TG`` in the name, for manual</span>
+<span class="sd">inspection), or a ``large`` one (the main dataset with ``EXT`` suffix in the</span>
+<span class="sd">name).</span>
+
+<span class="sd">The instance generation parameters are specified in</span>
+<span class="sd">:py:func:`generate_main_dataset` and :py:func:`generate_TG_inst`, respectively,</span>
+<span class="sd">for main and small subsets of instances. Both functions rely on the core</span>
+<span class="sd">generation code in :py:func:`generate_UDMIS_instances`. This module also</span>
+<span class="sd">contains a few cross-checks, auxiliary and visualization code.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">glob</span> <span class="kn">import</span> <span class="n">glob</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">ceil</span>
+
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">gurobipy</span> <span class="k">as</span> <span class="nn">gp</span>
+<span class="kn">from</span> <span class="nn">gurobipy</span> <span class="kn">import</span> <span class="n">GRB</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">ceil</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">time</span>
+
+<span class="kn">from</span> <span class="nn">qubo_utils</span> <span class="kn">import</span> <span class="n">save_QUBO</span><span class="p">,</span> <span class="n">load_QUBO</span><span class="p">,</span> <span class="n">solve_QUBO</span>
+
+<div class="viewcode-block" id="create_UDMIS_name">
+<a class="viewcode-back" href="../_autosummary/MIS_inst.html#MIS_inst.create_UDMIS_name">[docs]</a>
+<span class="k">def</span> <span class="nf">create_UDMIS_name</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">wwidth</span><span class="p">,</span> <span class="n">wheight</span><span class="p">,</span> <span class="n">R</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Helper: creates an instance name string (UD-MIS).&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;N</span><span class="si">{</span><span class="n">N</span><span class="si">}</span><span class="s2">_W</span><span class="si">{</span><span class="nb">max</span><span class="p">(</span><span class="n">wwidth</span><span class="p">,</span><span class="w"> </span><span class="n">wheight</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nb">min</span><span class="p">(</span><span class="n">wwidth</span><span class="p">,</span><span class="w"> </span><span class="n">wheight</span><span class="p">)</span><span class="si">}</span><span class="s2">_R</span><span class="si">{</span><span class="n">R</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nb">max</span><span class="p">(</span><span class="n">wwidth</span><span class="p">,</span><span class="w"> </span><span class="n">wheight</span><span class="p">)</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="create_grid_points">
+<a class="viewcode-back" href="../_autosummary/MIS_inst.html#MIS_inst.create_grid_points">[docs]</a>
+<span class="k">def</span> <span class="nf">create_grid_points</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">wwidth</span><span class="p">,</span> <span class="n">wheight</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">2023</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generates a random (broken) grid of points.</span>
+
+<span class="sd">    Generates a full grid of (``wwidth`` x ``wheight``) points,</span>
+<span class="sd">    and then randomly removes them one by one,</span>
+<span class="sd">    until the necessary number of points ``N`` is reached.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list[tuple[int, int]]: a list of points, each specified by an integer coordinates tuple</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">seed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+
+    <span class="k">assert</span> <span class="n">N</span> <span class="o">&lt;=</span> <span class="n">wwidth</span> <span class="o">*</span> <span class="n">wheight</span>
+
+    <span class="n">points</span> <span class="o">=</span> <span class="p">[(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">wwidth</span><span class="p">)</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">wheight</span><span class="p">)]</span>
+    <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">points</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">N</span><span class="p">:</span>
+        <span class="n">points</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">points</span><span class="p">,</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">points</span></div>
+
+
+
+<div class="viewcode-block" id="create_random_points">
+<a class="viewcode-back" href="../_autosummary/MIS_inst.html#MIS_inst.create_random_points">[docs]</a>
+<span class="k">def</span> <span class="nf">create_random_points</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">wwidth</span><span class="p">,</span> <span class="n">wheight</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">2023</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generates a set of random (int-coordinate) points.</span>
+
+<span class="sd">    Point coordinates generated uniformly random from [0,1) x [0,1),</span>
+<span class="sd">    scaled to [0, wwidth) x [0, wheight) and then rounded. If we happen to get</span>
+<span class="sd">    duplicate coordinates, we just re-generate the point until we have</span>
+<span class="sd">    ``N`` unique points.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        N(int): number of points</span>
+<span class="sd">        wwidth, wheight(int): width and height of the square</span>
+<span class="sd">            to generate points in</span>
+<span class="sd">        seed(int): random seed for `random`</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A list of tuples, each representing integer coordinates (x,y),</span>
+<span class="sd">        where 0 &lt;= x &lt;= wwidth and 0 &lt;= y &lt;= wheight.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="p">(</span><span class="n">wwidth</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">wheight</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">seed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+
+    <span class="n">points</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">points</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">:</span>
+        <span class="n">cand</span> <span class="o">=</span> <span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">*</span> <span class="n">wwidth</span><span class="p">),</span>
+                <span class="nb">round</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">*</span> <span class="n">wheight</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">cand</span> <span class="ow">in</span> <span class="n">points</span><span class="p">:</span>
+            <span class="k">continue</span>  <span class="c1"># try to re-generate</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">points</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">cand</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">points</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="points_to_graph">
+<a class="viewcode-back" href="../_autosummary/MIS_inst.html#MIS_inst.points_to_graph">[docs]</a>
+<span class="k">def</span> <span class="nf">points_to_graph</span><span class="p">(</span><span class="n">points</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">R</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate an ``nx.Graph`` out of a set of points.</span>
+
+<span class="sd">    A node is created for each point, and an edge is created whenever the</span>
+<span class="sd">    Euclidean distance between two corresponding points is no more than ``R``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">G</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
+    <span class="n">G</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">([</span><span class="n">j</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">)])</span>
+    <span class="n">G</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">([(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+                      <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+                      <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+                      <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span>
+                              <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span> <span class="o">&lt;=</span> <span class="n">R</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">G</span></div>
+
+
+<div class="viewcode-block" id="save_orig_UDMIS">
+<a class="viewcode-back" href="../_autosummary/MIS_inst.html#MIS_inst.save_orig_UDMIS">[docs]</a>
+<span class="k">def</span> <span class="nf">save_orig_UDMIS</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">wwidth</span><span class="p">,</span> <span class="n">wheight</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">instance_id</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="n">G</span><span class="p">,</span>
+                    <span class="n">directory</span><span class="o">=</span><span class="s2">&quot;./instances/orig&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Saves the original UD-WIS instance in JSON format.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        N(int): number of vertices (points)</span>
+<span class="sd">        wwidth(float), wheight(float): coordinate &quot;window&quot;</span>
+<span class="sd">        R (float): radius for points generation,</span>
+<span class="sd">        instance_id(str): a unique instance ID</span>
+<span class="sd">        points(list): coordinates of points,</span>
+<span class="sd">        G (nx.Graph): resulting graph,</span>
+<span class="sd">        directory(str): dir to save the instance to</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        filename (with the path) for the created file.</span>
+
+<span class="sd">    File format:</span>
+<span class="sd">        - js[&quot;nodes&quot;]: list of nodes,</span>
+<span class="sd">        - js[&quot;edges&quot;]: list of edges, tuples (i,j) with i &lt; j.</span>
+<span class="sd">        - js[&quot;description&quot;]: info concerning instance generation.</span>
+<span class="sd">           UDMIS-specific subfields are:</span>
+<span class="sd">           - points: dict of point coordinates: {i: (x,y)}</span>
+<span class="sd">           - wwidth, wheight: max values for coordinates (window parameters)</span>
+<span class="sd">           - R: radius value used</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">instname</span> <span class="o">=</span> <span class="n">create_UDMIS_name</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">wwidth</span><span class="p">,</span> <span class="n">wheight</span><span class="p">,</span> <span class="n">R</span><span class="p">)</span>
+
+    <span class="n">instance</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;nodes&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">j</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">()],</span>
+                <span class="s2">&quot;edges&quot;</span><span class="p">:</span> <span class="p">[(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span> <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span> <span class="ow">in</span> <span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">()]}</span>
+
+    <span class="n">instance</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;instance_id&quot;</span><span class="p">:</span> <span class="n">instance_id</span><span class="p">,</span>
+        <span class="s2">&quot;instance_type&quot;</span><span class="p">:</span> <span class="s2">&quot;UDMIS&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;original_instance_name&quot;</span><span class="p">:</span> <span class="n">instname</span><span class="p">,</span>
+        <span class="s2">&quot;contents&quot;</span><span class="p">:</span> <span class="s2">&quot;orig_UDMIS&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;wwidth&quot;</span><span class="p">:</span> <span class="n">wwidth</span><span class="p">,</span>
+        <span class="s2">&quot;wheight&quot;</span><span class="p">:</span> <span class="n">wheight</span><span class="p">,</span>
+        <span class="s2">&quot;R&quot;</span><span class="p">:</span> <span class="n">R</span><span class="p">,</span>
+        <span class="s2">&quot;points&quot;</span><span class="p">:</span> <span class="p">{</span><span class="n">i</span><span class="p">:</span> <span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">())</span><span class="o">+</span><span class="mi">1</span><span class="p">)},</span>
+        <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;Underlying graph and the point coordinates.&quot;</span>
+    <span class="p">}</span>
+
+    <span class="n">filename</span> <span class="o">=</span> <span class="n">directory</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">instance_id</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">instname</span> <span class="o">+</span> <span class="s2">&quot;.orig.json&quot;</span>
+
+    <span class="n">inst_json</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">outfile</span><span class="p">:</span>
+        <span class="n">outfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">inst_json</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">filename</span></div>
+
+
+
+<div class="viewcode-block" id="extract_G_from_json">
+<a class="viewcode-back" href="../_autosummary/MIS_inst.html#MIS_inst.extract_G_from_json">[docs]</a>
+<span class="k">def</span> <span class="nf">extract_G_from_json</span><span class="p">(</span><span class="n">js</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Helper: Extracts the graph from JSON ``js``.&quot;&quot;&quot;</span>
+    <span class="n">G</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+    <span class="n">G</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">([</span><span class="n">j</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">js</span><span class="p">[</span><span class="s2">&quot;nodes&quot;</span><span class="p">]])</span>
+    <span class="n">G</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">([(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span> <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span> <span class="ow">in</span> <span class="n">js</span><span class="p">[</span><span class="s2">&quot;edges&quot;</span><span class="p">]])</span>
+    <span class="k">return</span> <span class="n">G</span></div>
+
+
+<div class="viewcode-block" id="load_orig_MIS">
+<a class="viewcode-back" href="../_autosummary/MIS_inst.html#MIS_inst.load_orig_MIS">[docs]</a>
+<span class="k">def</span> <span class="nf">load_orig_MIS</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Loads an original MIS instance from JSON file.&quot;&quot;&quot;</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">openfile</span><span class="p">:</span>
+        <span class="n">myjson</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">openfile</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">extract_G_from_json</span><span class="p">(</span><span class="n">myjson</span><span class="p">),</span> <span class="n">myjson</span></div>
+
+
+<div class="viewcode-block" id="create_MIS_QUBO">
+<a class="viewcode-back" href="../_autosummary/MIS_inst.html#MIS_inst.create_MIS_QUBO">[docs]</a>
+<span class="k">def</span> <span class="nf">create_MIS_QUBO</span><span class="p">(</span><span class="n">G</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Takes a graph and returns QUBO coefficients for a MIS.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Two ``np.array``-s,</span>
+
+<span class="sd">        - ``Q`` (quadratic coefficients matrix), and</span>
+<span class="sd">        - ``P`` (linear coefficients vector).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">())</span>
+    <span class="n">Q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span>
+    <span class="n">P</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+
+    <span class="n">M</span> <span class="o">=</span> <span class="n">N</span><span class="o">+</span><span class="mi">1</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span> <span class="ow">in</span> <span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">():</span>
+        <span class="n">Q</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">M</span>
+
+    <span class="n">Q</span> <span class="o">=</span> <span class="n">Q</span> <span class="o">+</span> <span class="n">Q</span><span class="o">.</span><span class="n">T</span>
+
+    <span class="k">return</span> <span class="n">Q</span><span class="p">,</span> <span class="n">P</span></div>
+
+
+<div class="viewcode-block" id="generate_UDMIS_instances">
+<a class="viewcode-back" href="../_autosummary/MIS_inst.html#MIS_inst.generate_UDMIS_instances">[docs]</a>
+<span class="k">def</span> <span class="nf">generate_UDMIS_instances</span><span class="p">(</span><span class="n">Ns</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">15</span><span class="p">],</span>
+                             <span class="n">K</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                             <span class="n">pts_windows</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">)]</span><span class="o">*</span><span class="mi">3</span><span class="p">,</span>
+                             <span class="n">Rs</span> <span class="o">=</span> <span class="p">[</span><span class="mi">25</span><span class="p">]</span><span class="o">*</span><span class="mi">3</span><span class="p">,</span>
+                             <span class="n">id_suffix</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                             <span class="n">id_offset</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+                             <span class="n">digits</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                             <span class="n">seed</span> <span class="o">=</span> <span class="mi">2023</span><span class="p">,</span>
+                             <span class="n">each_seed</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                             <span class="n">points_generator</span><span class="o">=</span><span class="n">create_random_points</span><span class="p">,</span>
+                             <span class="n">instdir</span><span class="o">=</span><span class="s2">&quot;./instances&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Main instance generation code for UDMIS instances.</span>
+
+<span class="sd">    Creates len(Ns) * K instances, each stemming from a set of points from a 2D</span>
+<span class="sd">    window scaled to wwidth x wheight (integer coordinates) specified in</span>
+<span class="sd">    ``pts_windows``, and &quot;blockade&quot; radius being one of the values specified by</span>
+<span class="sd">    ``Rs``. Points generation is delegated to a separate function given by</span>
+<span class="sd">    ``points_generator`` (:py:func:`create_random_points` by default).</span>
+
+<span class="sd">    Lists Ns, Rs, and pts_windows are assumed to have the same length,</span>
+<span class="sd">    so that (Ns[i], Rs[i], pts_windows[i]) would specify a single set</span>
+<span class="sd">    of parameters.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        Ns(list[int]): instance sizes,</span>
+<span class="sd">        id_offset(int): number to offset the ID numbering by (default: 0)</span>
+<span class="sd">        K(int): number of instances per set of parameters,</span>
+<span class="sd">        pts_windows(list[tuple]): a list of tuples of the form</span>
+<span class="sd">            (wwidth, wheight) to generate points in.</span>
+<span class="sd">        Rs (list): a list of &quot;blockade&quot; radiuses to generate the graph.</span>
+<span class="sd">        id_suffix(str): suffix to append to the instance ID (after the number),</span>
+<span class="sd">        digits(int): max number of digits in the ID</span>
+<span class="sd">        seed (int): random seed for ``random``,</span>
+<span class="sd">        each_seed (int): random seed to be used for *each* instance (if not None)</span>
+<span class="sd">        instdir(str): directory to save the generated instances to</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">Ns</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pts_windows</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;len(Ns) != len(pts_windows), </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">Ns</span><span class="p">)</span><span class="si">}</span><span class="s2"> != </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">pts_windows</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">Ns</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">Rs</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;len(Ns) != len(Rs), </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">Ns</span><span class="p">)</span><span class="si">}</span><span class="s2"> != </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">Rs</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">counter</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="k">if</span> <span class="n">digits</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">digits</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">Ns</span><span class="p">)</span><span class="o">*</span><span class="n">K</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">seed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">Ns</span><span class="p">)):</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="n">Ns</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+        <span class="n">R</span> <span class="o">=</span> <span class="n">Rs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+        <span class="n">wwidth</span><span class="p">,</span> <span class="n">wheight</span> <span class="o">=</span> <span class="n">pts_windows</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">K</span><span class="p">):</span>
+            <span class="n">points</span> <span class="o">=</span> <span class="n">points_generator</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">wwidth</span><span class="p">,</span> <span class="n">wheight</span><span class="p">,</span> <span class="n">each_seed</span><span class="p">)</span>
+            <span class="n">instance_id</span> <span class="o">=</span> <span class="s2">&quot;UDMIS&quot;</span> <span class="o">+</span> \
+                <span class="p">(</span><span class="s2">&quot;{:0&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">digits</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;d}&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">id_offset</span><span class="o">+</span><span class="n">counter</span><span class="p">)</span> <span class="o">+</span> \
+                <span class="n">id_suffix</span>
+
+            <span class="n">G</span> <span class="o">=</span> <span class="n">points_to_graph</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">R</span><span class="p">)</span>
+
+            <span class="n">orig_file</span> <span class="o">=</span> <span class="n">save_orig_UDMIS</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">wwidth</span><span class="p">,</span> <span class="n">wheight</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span>
+                                        <span class="n">instance_id</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="n">G</span><span class="p">,</span>
+                                        <span class="n">directory</span><span class="o">=</span><span class="n">instdir</span><span class="o">+</span><span class="s2">&quot;/orig/&quot;</span><span class="p">)</span>
+
+            <span class="n">Q</span><span class="p">,</span> <span class="n">P</span> <span class="o">=</span> <span class="n">create_MIS_QUBO</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+
+            <span class="n">save_QUBO</span><span class="p">(</span><span class="n">Q</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;UDMIS&quot;</span><span class="p">,</span> <span class="n">create_UDMIS_name</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">wwidth</span><span class="p">,</span>
+                                                            <span class="n">wheight</span><span class="p">,</span> <span class="n">R</span><span class="p">),</span>
+                      <span class="n">orig_file</span><span class="p">,</span>
+                      <span class="n">instance_id</span><span class="p">,</span>
+                      <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;Optimum is *minus* QUBO objective&quot;</span><span class="p">,</span>
+                      <span class="n">directory</span><span class="o">=</span><span class="n">instdir</span> <span class="o">+</span> <span class="s2">&quot;/QUBO/&quot;</span><span class="p">)</span>
+            <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">✅ Done. </span><span class="si">{</span><span class="n">counter</span><span class="o">-</span><span class="mi">1</span><span class="si">}</span><span class="s2"> instances generated.&quot;</span><span class="p">)</span></div>
+
+
+
+<span class="c1">######################################################################</span>
+<span class="c1"># Auxiliary code</span>
+<span class="c1">#</span>
+<div class="viewcode-block" id="is_IS">
+<a class="viewcode-back" href="../_autosummary/MIS_inst.html#MIS_inst.is_IS">[docs]</a>
+<span class="k">def</span> <span class="nf">is_IS</span><span class="p">(</span><span class="n">G</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">solution</span><span class="p">:</span><span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Tests if the solution is an independent set.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        G(nx.Graph): original graph,</span>
+<span class="sd">        solution(list[int]): candidate solution</span>
+
+<span class="sd">    Notes:</span>
+<span class="sd">        ``solution`` must be in the direct order of nodes</span>
+<span class="sd">                    (i.e., ``[n0, n1, n2, ...]``)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span> <span class="ow">in</span> <span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">solution</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">solution</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">return</span> <span class="kc">True</span></div>
+
+
+
+<div class="viewcode-block" id="load_instance_by_ID">
+<a class="viewcode-back" href="../_autosummary/MIS_inst.html#MIS_inst.load_instance_by_ID">[docs]</a>
+<span class="k">def</span> <span class="nf">load_instance_by_ID</span><span class="p">(</span><span class="n">ID</span><span class="p">,</span> <span class="n">directory</span><span class="o">=</span><span class="s2">&quot;./instances/orig/&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Loads an instance by ID and returns graph G.&quot;&quot;&quot;</span>
+    <span class="n">directory</span> <span class="o">+=</span> <span class="s2">&quot;/&quot;</span>
+    <span class="n">file_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">fname</span> <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">glob</span><span class="p">(</span><span class="n">directory</span> <span class="o">+</span> <span class="n">ID</span> <span class="o">+</span> <span class="s2">&quot;_*.json&quot;</span><span class="p">)]</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">file_list</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Instance with ID &#39;</span><span class="si">{</span><span class="n">ID</span><span class="si">}</span><span class="s2">&#39; not found in </span><span class="si">{</span><span class="n">directory</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">file_list</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Multiple instances with ID &#39;</span><span class="si">{</span><span class="n">ID</span><span class="si">}</span><span class="s2">&#39; in </span><span class="si">{</span><span class="n">directory</span><span class="si">}</span><span class="s2">:</span><span class="se">\n</span><span class="si">{</span><span class="n">file_list</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">load_orig_MIS</span><span class="p">(</span><span class="n">file_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span></div>
+
+
+<span class="c1">######################################################################</span>
+<span class="c1"># Visualization and further helpers</span>
+<span class="c1">#</span>
+<div class="viewcode-block" id="visualize_graph">
+<a class="viewcode-back" href="../_autosummary/MIS_inst.html#MIS_inst.visualize_graph">[docs]</a>
+<span class="k">def</span> <span class="nf">visualize_graph</span><span class="p">(</span><span class="n">G</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">pts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">(),</span> <span class="n">z</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span>
+                    <span class="n">with_labels</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">node_size</span><span class="o">=</span><span class="mi">200</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Draws the graph (node labels as coordinates), with node color ``z``. &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">pts</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">pts</span><span class="p">:</span>
+            <span class="n">pos</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">)]</span> <span class="o">=</span> <span class="n">pts</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">R</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">maxval</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">([</span><span class="n">pt</span> <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">pt</span> <span class="ow">in</span> <span class="n">pos</span><span class="o">.</span><span class="n">items</span><span class="p">()],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">xdata</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">ydata</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ceil</span><span class="p">(</span><span class="n">maxval</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">R</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">xdata</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">j</span><span class="o">*</span><span class="n">R</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ceil</span><span class="p">(</span><span class="n">maxval</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">R</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">ydata</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">j</span><span class="o">*</span><span class="n">R</span><span class="p">)</span>
+
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">xdata</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">ydata</span><span class="p">)</span>
+        <span class="c1"># ax.grid()</span>
+
+    <span class="n">style_net</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">node_color</span><span class="o">=</span><span class="n">z</span><span class="p">,</span> <span class="n">edge_color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">node_size</span><span class="o">=</span><span class="n">node_size</span><span class="p">,</span>
+                     <span class="n">font_color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">with_labels</span><span class="o">=</span><span class="n">with_labels</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+                     <span class="n">connectionstyle</span><span class="o">=</span><span class="s1">&#39;arc3,rad=0.1&#39;</span><span class="p">)</span>
+    <span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">pos</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="o">**</span><span class="n">style_net</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="draw_inst_grid">
+<a class="viewcode-back" href="../_autosummary/MIS_inst.html#MIS_inst.draw_inst_grid">[docs]</a>
+<span class="k">def</span> <span class="nf">draw_inst_grid</span><span class="p">(</span><span class="n">selected_files</span><span class="p">,</span> <span class="n">Ncols</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">directory</span><span class="o">=</span><span class="s2">&quot;./instances-new/QUBO&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Draws a grid of instances from ``selected_files``.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        selected_files(list): list of files (\*.qubo.json)</span>
+<span class="sd">        Ncols(int): number of columns in the grid.</span>
+<span class="sd">        directory(str): directory with QUBO files (\*.qubo.json)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">Ncols</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">Ncols</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">selected_files</span><span class="p">))</span>
+    <span class="n">Nrows</span> <span class="o">=</span> <span class="n">ceil</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">selected_files</span><span class="p">)</span> <span class="o">/</span> <span class="n">Ncols</span><span class="p">)</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">Nrows</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">Ncols</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">selected_files</span><span class="p">)),</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span><span class="o">*</span><span class="n">Nrows</span><span class="o">/</span><span class="n">Ncols</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">qubofile</span> <span class="ow">in</span> <span class="n">selected_files</span><span class="p">:</span>
+        <span class="n">Q</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">qubojs</span> <span class="o">=</span> <span class="n">load_QUBO</span><span class="p">(</span><span class="n">qubofile</span><span class="p">)</span>
+        <span class="c1"># solve classically -- MIP</span>
+        <span class="n">G</span><span class="p">,</span> <span class="n">origjs</span> <span class="o">=</span> <span class="n">load_orig_MIS</span><span class="p">(</span><span class="n">qubojs</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">][</span><span class="s2">&quot;original_instance_file&quot;</span><span class="p">])</span>
+
+        <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
+        <span class="n">model</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="n">create_orig_MIS_IP</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">setParam</span><span class="p">(</span><span class="s2">&quot;OutputFlag&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">optimize</span><span class="p">()</span>
+        <span class="n">miptime</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">t0</span>
+        <span class="k">assert</span> <span class="n">model</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="mi">2</span>
+        <span class="n">mipObj</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">objVal</span>
+
+        <span class="c1"># solve as QUBO</span>
+        <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
+        <span class="n">qubo_model</span><span class="p">,</span> <span class="n">qubo_x</span> <span class="o">=</span> <span class="n">solve_QUBO</span><span class="p">(</span><span class="n">Q</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span><span class="n">quiet</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">qubotime</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span>
+        <span class="k">assert</span> <span class="n">qubo_model</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span><span class="mi">2</span>
+
+        <span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="n">mipObj</span> <span class="o">+</span> <span class="n">qubo_model</span><span class="o">.</span><span class="n">objVal</span><span class="p">)</span><span class="o">&lt;</span><span class="mf">1e-5</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;MIP:</span><span class="si">{</span><span class="n">mipObj</span><span class="si">}</span><span class="s2">, QUBO:</span><span class="si">{</span><span class="n">qubo_model</span><span class="o">.</span><span class="n">objVal</span><span class="si">}</span><span class="s2">&quot;</span>
+
+        <span class="c1"># show the results</span>
+        <span class="n">Gp_qubo</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+        <span class="n">Gp_qubo</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">([</span><span class="n">j</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">G</span><span class="o">.</span><span class="n">nodes</span> <span class="k">if</span> <span class="n">qubo_x</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">X</span><span class="o">==</span><span class="mf">1.0</span><span class="p">])</span>
+
+        <span class="n">R</span> <span class="o">=</span> <span class="n">origjs</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">][</span><span class="s2">&quot;R&quot;</span><span class="p">]</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">Nrows</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">Ncols</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">axk</span> <span class="o">=</span> <span class="n">ax</span>  <span class="c1"># ah, edge cases...</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">axk</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">axk</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="n">k</span><span class="o">//</span><span class="n">Ncols</span><span class="p">][</span><span class="n">k</span><span class="o">-</span><span class="n">Ncols</span><span class="o">*</span><span class="p">(</span><span class="n">k</span><span class="o">//</span><span class="n">Ncols</span><span class="p">)]</span>
+
+        <span class="n">visualize_graph</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="n">R</span><span class="p">,</span> <span class="n">pts</span><span class="o">=</span><span class="n">origjs</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">][</span><span class="s2">&quot;points&quot;</span><span class="p">],</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">axk</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span>
+                           <span class="n">with_labels</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">node_size</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+        <span class="n">visualize_graph</span><span class="p">(</span><span class="n">Gp_qubo</span><span class="p">,</span> <span class="n">pts</span> <span class="o">=</span> <span class="n">origjs</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">][</span><span class="s2">&quot;points&quot;</span><span class="p">],</span> <span class="n">ax</span><span class="o">=</span><span class="n">axk</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span>
+                           <span class="n">with_labels</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">node_size</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+
+        <span class="c1"># axk.set_title(f&quot;{os.path.basename(os.path.normpath(qubofile))[5:-10]} \n N:{N} | E:{len(G.edges)}/{N*(N-1)/2:.0f} | (R={R:.1f}) \nTmip:{miptime:.2f} s. | Tqubo:{qubotime:.2f}&quot;)</span>
+        <span class="n">axk</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">origjs</span><span class="p">[</span><span class="s1">&#39;description&#39;</span><span class="p">][</span><span class="s1">&#39;instance_id&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">N</span><span class="si">}</span><span class="s2"> nodes, </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">)</span><span class="si">}</span><span class="s2"> edges.&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+        <span class="n">k</span><span class="o">+=</span><span class="mi">1</span></div>
+
+
+
+<div class="viewcode-block" id="draw_IDs_grid">
+<a class="viewcode-back" href="../_autosummary/MIS_inst.html#MIS_inst.draw_IDs_grid">[docs]</a>
+<span class="k">def</span> <span class="nf">draw_IDs_grid</span><span class="p">(</span><span class="n">sel_IDs</span><span class="p">,</span> <span class="n">directory</span> <span class="o">=</span> <span class="s2">&quot;./instances-new/QUBO&quot;</span><span class="p">,</span> <span class="n">Ncols</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Draws a grid of instances by (the unique part of) IDs.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        ``draw_IDs_grid([&#39;1EXT&#39;,&#39;3EXT&#39;,&#39;5TG&#39;])`` will draw a grid with</span>
+<span class="sd">        ``UMDIS001EXT``, ``UDMIS003EXT``, and ``UDMIS5TG``.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        sel_IDs(list[int]): list of instance IDs (numbers)</span>
+<span class="sd">        directory(str): directory with QUBO files (\*.qubo.json)</span>
+<span class="sd">        Ncols(int): number of columns in the grid</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        selected file names.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">selected_files</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">ID</span> <span class="ow">in</span> <span class="n">sel_IDs</span><span class="p">:</span>
+        <span class="n">file_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">fname</span> <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">glob</span><span class="p">(</span><span class="n">directory</span> <span class="o">+</span> <span class="s2">&quot;/UDMIS*.json&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;.+UDMIS[0]*&#39;</span> <span class="o">+</span> <span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">ID</span><span class="p">))</span> <span class="o">+</span> <span class="sa">r</span><span class="s1">&#39;_.*\.qubo.json&#39;</span><span class="p">,</span> <span class="n">fname</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">file_list</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Instance with ID &#39;</span><span class="si">{</span><span class="n">ID</span><span class="si">}</span><span class="s2">&#39; not found in </span><span class="si">{</span><span class="n">directory</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">file_list</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Multiple instances with ID &#39;</span><span class="si">{</span><span class="n">ID</span><span class="si">}</span><span class="s2">&#39; in </span><span class="si">{</span><span class="n">directory</span><span class="si">}</span><span class="s2">:</span><span class="se">\n</span><span class="si">{</span><span class="n">file_list</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+        <span class="n">selected_files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">file_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="n">draw_inst_grid</span><span class="p">(</span><span class="n">selected_files</span><span class="p">,</span> <span class="n">Ncols</span><span class="o">=</span><span class="n">Ncols</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">selected_files</span></div>
+
+
+<span class="c1">######################################################################</span>
+<span class="c1"># Testing / Cross-checks</span>
+<div class="viewcode-block" id="create_orig_MIS_IP">
+<a class="viewcode-back" href="../_autosummary/MIS_inst.html#MIS_inst.create_orig_MIS_IP">[docs]</a>
+<span class="k">def</span> <span class="nf">create_orig_MIS_IP</span><span class="p">(</span><span class="n">G</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">gp</span><span class="o">.</span><span class="n">Model</span><span class="p">,</span>
+                                             <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">gp</span><span class="o">.</span><span class="n">Var</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generates a MIP for the MIS instance given by G.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A ``gurobipy.Model`` and a ``dict`` of variables (``x``).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">Model</span><span class="p">()</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">addVars</span><span class="p">(</span><span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">,</span><span class="n">vtype</span><span class="o">=</span><span class="n">GRB</span><span class="o">.</span><span class="n">BINARY</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">addConstrs</span><span class="p">(((</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="mi">1</span> <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span> <span class="ow">in</span> <span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">),</span> <span class="s2">&quot;edge_constr&quot;</span><span class="p">)</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">setObjective</span><span class="p">(</span><span class="n">gp</span><span class="o">.</span><span class="n">quicksum</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">),</span> <span class="n">sense</span><span class="o">=</span><span class="n">GRB</span><span class="o">.</span><span class="n">MAXIMIZE</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">model</span><span class="p">,</span> <span class="n">x</span></div>
+
+
+
+<div class="viewcode-block" id="assert_UDMIS_MIP">
+<a class="viewcode-back" href="../_autosummary/MIS_inst.html#MIS_inst.assert_UDMIS_MIP">[docs]</a>
+<span class="k">def</span> <span class="nf">assert_UDMIS_MIP</span><span class="p">(</span><span class="n">orig_filename</span><span class="p">,</span> <span class="n">qubo_model</span><span class="p">,</span> <span class="n">qubo_x</span><span class="p">,</span>
+                     <span class="n">quiet</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Asserts whether QUBO and original OP solutions coincide.</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        ``qubo_x`` argument is unused but kept for compatibility</span>
+<span class="sd">        with the testing framework.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">G</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_orig_MIS</span><span class="p">(</span><span class="n">orig_filename</span><span class="p">)</span>
+
+    <span class="n">model</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">create_orig_MIS_IP</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">quiet</span><span class="p">:</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">setParam</span><span class="p">(</span><span class="s2">&quot;OutputFlag&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">timeout</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">setParam</span><span class="p">(</span><span class="s2">&quot;TimeLimit&quot;</span><span class="p">,</span> <span class="n">timeout</span><span class="p">)</span>
+
+    <span class="n">model</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">optimize</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">timeout</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="n">model</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="n">GRB</span><span class="o">.</span><span class="n">OPTIMAL</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="n">model</span><span class="o">.</span><span class="n">status</span> <span class="ow">in</span> <span class="p">(</span><span class="n">GRB</span><span class="o">.</span><span class="n">OPTIMAL</span><span class="p">,</span> <span class="n">GRB</span><span class="o">.</span><span class="n">TIME_LIMIT</span><span class="p">)</span>
+
+    <span class="n">np</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_allclose</span><span class="p">(</span><span class="o">-</span><span class="n">qubo_model</span><span class="o">.</span><span class="n">ObjVal</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">ObjVal</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="check_QuEra_geometry">
+<a class="viewcode-back" href="../_autosummary/MIS_inst.html#MIS_inst.check_QuEra_geometry">[docs]</a>
+<span class="k">def</span> <span class="nf">check_QuEra_geometry</span><span class="p">(</span><span class="n">orig_files</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Checks the geometric constraints for QuEra.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        orig_files(list[str]): list of filenames (original instances)</span>
+<span class="sd">        verbose(bool): technical output flag.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        true iff the constraints are satisfied; prints progress</span>
+<span class="sd">        on the screen if ``verbose``</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">blockade_radius</span> <span class="o">=</span> <span class="mf">8.044e-06</span>  <span class="c1"># magical constant from the tutorial</span>
+
+    <span class="k">for</span> <span class="n">ofile</span> <span class="ow">in</span> <span class="n">orig_files</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">ofile</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">infile</span><span class="p">:</span>
+            <span class="n">instance_data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">infile</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="n">instance_data</span><span class="p">[</span><span class="s1">&#39;description&#39;</span><span class="p">][</span><span class="s1">&#39;instance_type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;UDMIS&quot;</span><span class="p">,</span> \
+            <span class="sa">f</span><span class="s2">&quot;In </span><span class="si">{</span><span class="n">ofile</span><span class="si">}</span><span class="s2">: unknown instance type </span><span class="si">{</span><span class="n">instance_data</span><span class="p">[</span><span class="s1">&#39;description&#39;</span><span class="p">][</span><span class="s1">&#39;instance_type&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+
+        <span class="n">x_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">([</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="ow">in</span> <span class="n">instance_data</span><span class="p">[</span><span class="s1">&#39;description&#39;</span><span class="p">][</span><span class="s1">&#39;points&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()])</span>
+        <span class="n">y_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">([</span><span class="n">y</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="ow">in</span> <span class="n">instance_data</span><span class="p">[</span><span class="s1">&#39;description&#39;</span><span class="p">][</span><span class="s1">&#39;points&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()])</span>
+        <span class="n">R</span> <span class="o">=</span> <span class="n">instance_data</span><span class="p">[</span><span class="s1">&#39;description&#39;</span><span class="p">][</span><span class="s1">&#39;R&#39;</span><span class="p">]</span>
+
+        <span class="n">factor</span> <span class="o">=</span> <span class="n">blockade_radius</span> <span class="o">/</span> <span class="n">R</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">instance_data</span><span class="p">[</span><span class="s1">&#39;nodes&#39;</span><span class="p">]),</span><span class="mi">2</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span> <span class="ow">in</span> <span class="n">instance_data</span><span class="p">[</span><span class="s1">&#39;description&#39;</span><span class="p">][</span><span class="s1">&#39;points&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">data</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">x_min</span><span class="p">)</span><span class="o">*</span><span class="n">factor</span>
+            <span class="n">data</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">y</span><span class="o">-</span><span class="n">y_min</span><span class="p">)</span><span class="o">*</span><span class="n">factor</span>
+
+        <span class="n">min_dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">data</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+                            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+                            <span class="k">if</span> <span class="n">i</span><span class="o">!=</span><span class="n">j</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Min distance: </span><span class="si">{</span><span class="n">min_dist</span><span class="si">}</span><span class="s2"> (check: </span><span class="si">{</span><span class="n">min_dist</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">4e-06</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+
+        <span class="n">max_coord</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Max coord is: </span><span class="si">{</span><span class="n">max_coord</span><span class="si">}</span><span class="s2"> (check: </span><span class="si">{</span><span class="n">max_coord</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mf">7.5e-05</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">min_dist</span> <span class="o">&lt;=</span> <span class="mf">4e-06</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">max_coord</span> <span class="o">&gt;=</span> <span class="mf">7.5e-05</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Test failed for: </span><span class="si">{</span><span class="n">ofile</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">instance_data</span><span class="p">[</span><span class="s1">&#39;description&#39;</span><span class="p">][</span><span class="s1">&#39;instance_id&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<span class="c1">######################################################################</span>
+<span class="c1"># Command line usage</span>
+
+<div class="viewcode-block" id="generate_TG_inst">
+<a class="viewcode-back" href="../_autosummary/MIS_inst.html#MIS_inst.generate_TG_inst">[docs]</a>
+<span class="k">def</span> <span class="nf">generate_TG_inst</span><span class="p">(</span><span class="n">instdir</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generates grid instances (``TG`` suffix).</span>
+
+<span class="sd">    See the source code for specific parameter values. Relies on</span>
+<span class="sd">    :py:func:`generate_UDMIS_instances` for actual instance generation, with</span>
+<span class="sd">    :py:func:`create_grid_points` for points generation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">windows</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">)]</span><span class="o">*</span><span class="mi">3</span> <span class="o">+</span> <span class="p">[(</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">)]</span><span class="o">*</span><span class="mi">3</span> <span class="o">+</span> <span class="p">[(</span><span class="mi">13</span><span class="p">,</span><span class="mi">13</span><span class="p">)]</span><span class="o">*</span><span class="mi">3</span>
+    <span class="n">Ns</span> <span class="o">=</span> <span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">150</span><span class="p">]</span>
+    <span class="n">Rs</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.5</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">windows</span><span class="p">))]</span>
+
+    <span class="n">K</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># number of instances per set of parameters</span>
+
+    <span class="n">generate_UDMIS_instances</span><span class="p">(</span><span class="n">Ns</span><span class="o">=</span><span class="n">Ns</span><span class="p">,</span> <span class="n">pts_windows</span><span class="o">=</span><span class="n">windows</span><span class="p">,</span>
+                             <span class="n">points_generator</span><span class="o">=</span><span class="n">create_grid_points</span><span class="p">,</span> <span class="n">K</span><span class="o">=</span><span class="n">K</span><span class="p">,</span> <span class="n">Rs</span><span class="o">=</span><span class="n">Rs</span><span class="p">,</span>
+                             <span class="n">id_suffix</span><span class="o">=</span><span class="s2">&quot;TG&quot;</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">2023</span><span class="p">,</span> <span class="n">instdir</span><span class="o">=</span><span class="n">instdir</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="generate_main_dataset">
+<a class="viewcode-back" href="../_autosummary/MIS_inst.html#MIS_inst.generate_main_dataset">[docs]</a>
+<span class="k">def</span> <span class="nf">generate_main_dataset</span><span class="p">(</span><span class="n">instdir</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generates the main UD-MIS dataset (``EXT`` suffix).</span>
+
+<span class="sd">    See the source code for specific parameter values. Relies on</span>
+<span class="sd">    :py:func:`generate_UDMIS_instances` for actual instance generation, with</span>
+<span class="sd">    :py:func:`create_grid_points` for points generation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Ns</span> <span class="o">=</span> <span class="p">[</span><span class="mi">15</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">36</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">49</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">120</span><span class="p">]</span>
+    <span class="n">windows</span> <span class="o">=</span> <span class="p">[(</span><span class="n">ceil</span><span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="n">N</span><span class="p">))</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">ceil</span><span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="n">N</span><span class="p">))</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">N</span> <span class="ow">in</span> <span class="n">Ns</span><span class="p">]</span>
+
+    <span class="n">K</span><span class="o">=</span><span class="mi">3</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">R</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([</span><span class="mf">1.25</span><span class="p">,</span> <span class="mf">1.42</span><span class="p">,</span> <span class="mf">1.85</span><span class="p">]):</span>
+        <span class="n">Rs</span> <span class="o">=</span> <span class="p">[</span><span class="n">R</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">Ns</span><span class="p">))]</span>
+        <span class="n">generate_UDMIS_instances</span><span class="p">(</span><span class="n">Ns</span><span class="o">=</span><span class="n">Ns</span><span class="p">,</span> <span class="n">pts_windows</span><span class="o">=</span><span class="n">windows</span><span class="p">,</span>
+                                 <span class="n">points_generator</span><span class="o">=</span><span class="n">create_grid_points</span><span class="p">,</span> <span class="n">K</span><span class="o">=</span><span class="n">K</span><span class="p">,</span>
+                                 <span class="n">Rs</span><span class="o">=</span><span class="n">Rs</span><span class="p">,</span> <span class="n">id_suffix</span><span class="o">=</span><span class="s2">&quot;EXT&quot;</span><span class="p">,</span> <span class="n">id_offset</span><span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">Ns</span><span class="p">)</span><span class="o">*</span><span class="n">K</span><span class="o">*</span><span class="n">i</span><span class="p">,</span>
+                                 <span class="n">digits</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">2023</span><span class="p">,</span> <span class="n">instdir</span><span class="o">=</span><span class="n">instdir</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="main">
+<a class="viewcode-back" href="../_autosummary/MIS_inst.html#MIS_inst.main">[docs]</a>
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The main function specifying instance generation parameters (see the source code).&quot;&quot;&quot;</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;instdir&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;(output) instances directory&quot;</span><span class="p">,</span>
+                        <span class="n">default</span><span class="o">=</span><span class="s2">&quot;./instances&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-t&#39;</span><span class="p">,</span> <span class="s2">&quot;--dataset&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;dataset type: ``small`` or ``large`` &quot;</span><span class="p">,</span>
+                        <span class="n">default</span><span class="o">=</span><span class="s2">&quot;large&quot;</span><span class="p">)</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">Path</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">instdir</span><span class="p">)</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">instdir</span><span class="si">}</span><span class="s2">: does not exist, or is not a directory.&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">dataset</span> <span class="o">==</span> <span class="s2">&quot;small&quot;</span><span class="p">:</span>
+        <span class="n">generate_TG_inst</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">instdir</span><span class="p">)</span>  <span class="c1"># &lt;- used to generate TG instances</span>
+    <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">dataset</span> <span class="o">==</span> <span class="s2">&quot;large&quot;</span><span class="p">:</span>
+        <span class="n">generate_main_dataset</span><span class="p">(</span><span class="n">instdir</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">dataset</span><span class="si">}</span><span class="s2">: wrong value (&#39;small&#39; or &#39;large&#39; expected).&quot;</span><span class="p">)</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Alexey Bochkarev et al..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

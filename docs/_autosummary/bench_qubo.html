@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>bench_qubo &mdash; qopt-overview  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/autoclasstoc.css?v=08871587" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=3dd0334f" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            qopt-overview
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html#computational-pipeline">Computational pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html#implementation-details">Implementation details</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../raw-data.html">Raw data formats</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">qopt-overview</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">bench_qubo</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_autosummary/bench_qubo.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-bench_qubo">
+<span id="bench-qubo"></span><h1>bench_qubo<a class="headerlink" href="#module-bench_qubo" title="Link to this heading"></a></h1>
+<p>Contains core QPU-interaction code.</p>
+<p>Implements the abstract interface <a class="reference internal" href="#bench_qubo.QUBOSolver" title="bench_qubo.QUBOSolver"><code class="xref py py-mod docutils literal notranslate"><span class="pre">bench_qubo.QUBOSolver</span></code></a>, and the
+related “QPU solver classes” <a class="reference internal" href="#bench_qubo.QUBOSolverDwave" title="bench_qubo.QUBOSolverDwave"><code class="xref py py-class docutils literal notranslate"><span class="pre">bench_qubo.QUBOSolverDwave</span></code></a> and
+<a class="reference internal" href="#bench_qubo.QUBOSolverIBM" title="bench_qubo.QUBOSolverIBM"><code class="xref py py-class docutils literal notranslate"><span class="pre">bench_qubo.QUBOSolverIBM</span></code></a>, along with technical data preprocessing
+and access code in <a class="reference internal" href="#bench_qubo.DataBaseQUBO" title="bench_qubo.DataBaseQUBO"><code class="xref py py-class docutils literal notranslate"><span class="pre">bench_qubo.DataBaseQUBO</span></code></a>. Most notably, each
+device-specific class implements <code class="docutils literal notranslate"><span class="pre">_run</span></code> method that is used to submit a job to
+an actual device.</p>
+<p>Relies on abstact descriptions from <a class="reference internal" href="bench.html#bench.DataBase" title="bench.DataBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">bench.DataBase</span></code></a> and
+<code class="xref py py-class docutils literal notranslate"><span class="pre">Solver</span></code>.</p>
+<p class="rubric">Classes</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#bench_qubo.DataBaseQUBO" title="bench_qubo.DataBaseQUBO"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DataBaseQUBO</span></code></a>(directory[, file_ext, ...])</p></td>
+<td><p>Implements QUBO instance storage.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#bench_qubo.QUBOSolver" title="bench_qubo.QUBOSolver"><code class="xref py py-obj docutils literal notranslate"><span class="pre">QUBOSolver</span></code></a>(name, db)</p></td>
+<td><p>Describes an abstract QPU solver interface.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#bench_qubo.QUBOSolverDwave" title="bench_qubo.QUBOSolverDwave"><code class="xref py py-obj docutils literal notranslate"><span class="pre">QUBOSolverDwave</span></code></a>(db, token)</p></td>
+<td><p>Implements D-Wave specific solver code.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#bench_qubo.QUBOSolverIBM" title="bench_qubo.QUBOSolverIBM"><code class="xref py py-obj docutils literal notranslate"><span class="pre">QUBOSolverIBM</span></code></a>(db)</p></td>
+<td><p>Implements IBM-specific solver code.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="bench_qubo.DataBaseQUBO">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bench_qubo.</span></span><span class="sig-name descname"><span class="pre">DataBaseQUBO</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">directory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_ext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.json'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_fun</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_fun</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directory_embeddings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bench_qubo.html#DataBaseQUBO"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bench_qubo.DataBaseQUBO" title="Link to this definition"></a></dt>
+<dd><p>Implements QUBO instance storage.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="bench_qubo.DataBaseQUBO._preprocess_qubo_data">
+<span class="sig-name descname"><span class="pre">_preprocess_qubo_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">P</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bench_qubo.html#DataBaseQUBO._preprocess_qubo_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bench_qubo.DataBaseQUBO._preprocess_qubo_data" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bench_qubo.DataBaseQUBO.get_qubo_data">
+<span class="sig-name descname"><span class="pre">get_qubo_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">instance_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bench_qubo.html#DataBaseQUBO.get_qubo_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bench_qubo.DataBaseQUBO.get_qubo_data" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bench_qubo.DataBaseQUBO.get_embedding_data">
+<span class="sig-name descname"><span class="pre">get_embedding_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">instance_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">object_hook</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bench_qubo.html#DataBaseQUBO.get_embedding_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bench_qubo.DataBaseQUBO.get_embedding_data" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="bench_qubo.QUBOSolver">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bench_qubo.</span></span><span class="sig-name descname"><span class="pre">QUBOSolver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bench_qubo.html#QUBOSolver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bench_qubo.QUBOSolver" title="Link to this definition"></a></dt>
+<dd><p>Describes an abstract QPU solver interface.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="bench_qubo.QUBOSolver._run">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">instance_id</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bench_qubo.html#QUBOSolver._run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bench_qubo.QUBOSolver._run" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bench_qubo.QUBOSolver.get_data">
+<span class="sig-name descname"><span class="pre">get_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">instance_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bench_qubo.html#QUBOSolver.get_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bench_qubo.QUBOSolver.get_data" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bench_qubo.QUBOSolver.get_embedding_data">
+<span class="sig-name descname"><span class="pre">get_embedding_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">instance_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">object_hook</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bench_qubo.html#QUBOSolver.get_embedding_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bench_qubo.QUBOSolver.get_embedding_data" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="bench_qubo.QUBOSolverDwave">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bench_qubo.</span></span><span class="sig-name descname"><span class="pre">QUBOSolverDwave</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bench_qubo.html#QUBOSolverDwave"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bench_qubo.QUBOSolverDwave" title="Link to this definition"></a></dt>
+<dd><p>Implements D-Wave specific solver code.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="bench_qubo.QUBOSolverDwave._load_embedding">
+<span class="sig-name descname"><span class="pre">_load_embedding</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">instance_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bench_qubo.html#QUBOSolverDwave._load_embedding"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bench_qubo.QUBOSolverDwave._load_embedding" title="Link to this definition"></a></dt>
+<dd><p>Loads precomputed D-Wave embeddings from a file.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bench_qubo.QUBOSolverDwave._calculate_embedding">
+<span class="sig-name descname"><span class="pre">_calculate_embedding</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Q_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_edgelist</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bench_qubo.html#QUBOSolverDwave._calculate_embedding"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bench_qubo.QUBOSolverDwave._calculate_embedding" title="Link to this definition"></a></dt>
+<dd><p>Computes D-Wave embedding locally (and tracks the respective time for that).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bench_qubo.QUBOSolverDwave._run">
+<span class="sig-name descname"><span class="pre">_run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">instance_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_reads</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bench_qubo.html#QUBOSolverDwave._run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bench_qubo.QUBOSolverDwave._run" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="bench_qubo.QUBOSolverIBM">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bench_qubo.</span></span><span class="sig-name descname"><span class="pre">QUBOSolverIBM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bench_qubo.html#QUBOSolverIBM"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bench_qubo.QUBOSolverIBM" title="Link to this definition"></a></dt>
+<dd><p>Implements IBM-specific solver code.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="bench_qubo.QUBOSolverIBM._run_qpu_estimator">
+<span class="sig-name descname"><span class="pre">_run_qpu_estimator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimator_options</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimizer_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimizer_kwargs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimizer_obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimizer_obj_kwargs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost_func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ansatz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qubitOp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bench_qubo.html#QUBOSolverIBM._run_qpu_estimator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bench_qubo.QUBOSolverIBM._run_qpu_estimator" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bench_qubo.QUBOSolverIBM._run_qpu_sampler">
+<span class="sig-name descname"><span class="pre">_run_qpu_sampler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampler_options</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ansatz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">res</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bench_qubo.html#QUBOSolverIBM._run_qpu_sampler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bench_qubo.QUBOSolverIBM._run_qpu_sampler" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bench_qubo.QUBOSolverIBM._run">
+<span class="sig-name descname"><span class="pre">_run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">instance_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimizer_kwargs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimizer_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampler_optimization_level</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampler_resilience_level</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimator_optimization_level</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimator_resilience_level</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampler_shots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimator_shots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backend_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">service_channel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">service_instance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recover_on_exception</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/bench_qubo.html#QUBOSolverIBM._run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bench_qubo.QUBOSolverIBM._run" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Bochkarev, Heese, Jäger, Schiewe, and Schöbel.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,13 @@
+﻿bench
+=====
+
+.. automodule:: bench
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      DataBase
+      Solver
+   

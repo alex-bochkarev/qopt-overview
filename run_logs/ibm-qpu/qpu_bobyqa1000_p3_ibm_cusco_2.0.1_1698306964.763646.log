@@ -1,0 +1,10 @@
+2023-10-26 09:56:04,763 bench  INFO   started 1 run(s).
+2023-10-26 09:56:04,763 bench  INFO   run start: instance_id=MWC4, args=({'maxiter': 50}, 'BOBYQA', 3, 0, 3, 0, 3, 1000, 1000, 'ibm_cusco', 'ibm_quantum', 'ibm-q-fraunhofer/fhg-all/fitw01', '8h', False, 1, 1).
+2023-10-26 09:56:16,016 bench  DEBUG  session start.
+2023-10-26 09:56:16,016 bench  DEBUG  estimator start.
+2023-10-26 12:38:07,282 bench  DEBUG  solver: cost=0.0072701896300389245, params=[5.04404109 2.47484387 0.38880116 3.22048292 1.31201421 2.90689388], index=0.
+2023-10-26 12:38:41,248 bench  DEBUG  solver: cost=0.007224656667625342, params=[5.5484452  2.47484387 0.38880116 3.22048292 1.31201421 2.90689388], index=1.
+2023-10-26 12:39:22,093 bench  DEBUG  solver: cost=-0.000868143729535089, params=[5.04404109 2.97924798 0.38880116 3.22048292 1.31201421 2.90689388], index=2.
+2023-10-26 13:31:08,857 bench  INFO   run finished: failure, saved to "result/qpu_bobyqa1000_p3/qpu_bobyqa1000_p3_ibm_cusco_2.0.1_1698306964.763646_0000.json".
+2023-10-26 13:31:08,857 bench  INFO   run 1/1 complete.
+2023-10-26 13:31:08,857 bench  INFO   completed 1 run(s): 0 successful.

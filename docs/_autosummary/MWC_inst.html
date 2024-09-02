@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MWC_inst &mdash; qopt-overview  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/autoclasstoc.css?v=08871587" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=3dd0334f" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="MIS_inst" href="MIS_inst.html" />
+    <link rel="prev" title="TSP_inst" href="TSP_inst.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            qopt-overview
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html#computational-pipeline">Computational pipeline</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../overview.html#implementation-details">Implementation details</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="TSP_inst.html">TSP_inst</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">MWC_inst</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#MWC_inst.generate_instance"><code class="docutils literal notranslate"><span class="pre">generate_instance()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#MWC_inst.draw_instance"><code class="docutils literal notranslate"><span class="pre">draw_instance()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#MWC_inst.draw_inst_grid"><code class="docutils literal notranslate"><span class="pre">draw_inst_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#MWC_inst.draw_IDs_grid"><code class="docutils literal notranslate"><span class="pre">draw_IDs_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#MWC_inst.create_MWC_QUBO"><code class="docutils literal notranslate"><span class="pre">create_MWC_QUBO()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#MWC_inst.create_MWC_LBOP"><code class="docutils literal notranslate"><span class="pre">create_MWC_LBOP()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#MWC_inst.save_orig_MWC_instance"><code class="docutils literal notranslate"><span class="pre">save_orig_MWC_instance()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#MWC_inst.extract_G_from_json"><code class="docutils literal notranslate"><span class="pre">extract_G_from_json()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#MWC_inst.load_instance_by_ID"><code class="docutils literal notranslate"><span class="pre">load_instance_by_ID()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#MWC_inst.load_orig_MWC_instance"><code class="docutils literal notranslate"><span class="pre">load_orig_MWC_instance()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#MWC_inst.generate_MWC_instances"><code class="docutils literal notranslate"><span class="pre">generate_MWC_instances()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#MWC_inst.get_objective_from_sol"><code class="docutils literal notranslate"><span class="pre">get_objective_from_sol()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#MWC_inst.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#MWC_inst.assert_MWC_MIP"><code class="docutils literal notranslate"><span class="pre">assert_MWC_MIP()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="MIS_inst.html">MIS_inst</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classic_solve_UDMISes.html">classic_solve_UDMISes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classic_solve_MWC_QUBO_only.html">classic_solve_MWC_QUBO_only</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classic_solve_MWCs.html">classic_solve_MWCs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classic_solve_TSPs_MTZ.html">classic_solve_TSPs_MTZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="post_processing.logparser.html">post_processing.logparser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="post_processing.select_runs.html">post_processing.select_runs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../overview.html#preparing-python-and-r-environments">Preparing python and R environments</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../raw-data.html">Raw data formats</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">qopt-overview</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../overview.html">Overview</a></li>
+      <li class="breadcrumb-item active">MWC_inst</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_autosummary/MWC_inst.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-MWC_inst">
+<span id="mwc-inst"></span><h1>MWC_inst<a class="headerlink" href="#module-MWC_inst" title="Link to this heading"></a></h1>
+<p>Generates MaxCut (“MWC”) instances by generating random graphs.</p>
+<dl class="simple">
+<dt>USAGE:</dt><dd><p>python -m MWC_inst ./instances</p>
+</dd>
+</dl>
+<p>Generates a set of MaxCut instances, saving original instance data in
+<code class="docutils literal notranslate"><span class="pre">./instances</span></code> (or another specified directory): <code class="docutils literal notranslate"><span class="pre">orig</span></code> subdirectory
+for original instances and <code class="docutils literal notranslate"><span class="pre">QUBO</span></code>, respectively, for QUBOs.</p>
+<p>Instance parameters are specified in <a class="reference internal" href="#MWC_inst.main" title="MWC_inst.main"><code class="xref py py-func docutils literal notranslate"><span class="pre">main()</span></code></a>, which in turn calls the
+core generation function, <a class="reference internal" href="#MWC_inst.generate_MWC_instances" title="MWC_inst.generate_MWC_instances"><code class="xref py py-func docutils literal notranslate"><span class="pre">generate_MWC_instances()</span></code></a>. This module also
+contains a few cross-checks, auxiliary and
+visualization code.</p>
+<p class="rubric">Functions</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#MWC_inst.assert_MWC_MIP" title="MWC_inst.assert_MWC_MIP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">assert_MWC_MIP</span></code></a>(orig_json, qubo_model[, ...])</p></td>
+<td><p>Asserts if the objectives for QUBO and original MWC (MIP) coincide.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#MWC_inst.create_MWC_LBOP" title="MWC_inst.create_MWC_LBOP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_MWC_LBOP</span></code></a>(G[, quiet, timeout])</p></td>
+<td><p>Creates a linear binary problem from the underlying graph G.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#MWC_inst.create_MWC_QUBO" title="MWC_inst.create_MWC_QUBO"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_MWC_QUBO</span></code></a>(G)</p></td>
+<td><p>Given the graph G, creates a QUBO formulation.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#MWC_inst.draw_IDs_grid" title="MWC_inst.draw_IDs_grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">draw_IDs_grid</span></code></a>(sel_IDs[, directory, Ncols, ...])</p></td>
+<td><p>Draws a grid of instances by (the number part of) IDs.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#MWC_inst.draw_inst_grid" title="MWC_inst.draw_inst_grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">draw_inst_grid</span></code></a>(selected_files[, Ncols, ...])</p></td>
+<td><p>Draws a grid of instances from <code class="docutils literal notranslate"><span class="pre">selected_files</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#MWC_inst.draw_instance" title="MWC_inst.draw_instance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">draw_instance</span></code></a>(G[, ax, node_color, ...])</p></td>
+<td><p>Draws weighted graph G.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#MWC_inst.extract_G_from_json" title="MWC_inst.extract_G_from_json"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_G_from_json</span></code></a>(js)</p></td>
+<td><p>Helper: extracts the graph from the problem JSON.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#MWC_inst.generate_MWC_instances" title="MWC_inst.generate_MWC_instances"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_MWC_instances</span></code></a>([K, Ns, Ps, Cmin, ...])</p></td>
+<td><p>Core function: generates a set of MWC instances with given parameters.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#MWC_inst.generate_instance" title="MWC_inst.generate_instance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_instance</span></code></a>(p, N, C)</p></td>
+<td><p>Generates a (single) graph for a MaxCut instance.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#MWC_inst.get_objective_from_sol" title="MWC_inst.get_objective_from_sol"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_objective_from_sol</span></code></a>(G, sol)</p></td>
+<td><p>Calculates a MaxCut objective given the graph and solution bistring.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#MWC_inst.load_instance_by_ID" title="MWC_inst.load_instance_by_ID"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_instance_by_ID</span></code></a>(ID[, directory])</p></td>
+<td><p>Loads an instance by ID and returns graph G.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#MWC_inst.load_orig_MWC_instance" title="MWC_inst.load_orig_MWC_instance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_orig_MWC_instance</span></code></a>(filename)</p></td>
+<td><p>Loads the instance from <code class="docutils literal notranslate"><span class="pre">filename</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#MWC_inst.main" title="MWC_inst.main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">main</span></code></a>()</p></td>
+<td><p>The main function specifying instance generation parameters (see the source code).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#MWC_inst.save_orig_MWC_instance" title="MWC_inst.save_orig_MWC_instance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save_orig_MWC_instance</span></code></a>(G, inst_id, problem_name)</p></td>
+<td><p>Saves a MaxCut instance encoded by graph G to a JSON (with metadata).</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="MWC_inst.generate_instance">
+<span class="sig-prename descclassname"><span class="pre">MWC_inst.</span></span><span class="sig-name descname"><span class="pre">generate_instance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MWC_inst.html#generate_instance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MWC_inst.generate_instance" title="Link to this definition"></a></dt>
+<dd><p>Generates a (single) graph for a MaxCut instance.</p>
+<p>Uses Erdos-Renyi model for random graphs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> – Erdos-Renyi parameter (probability of an edge between any two given vertices),</p></li>
+<li><p><strong>N</strong> – number of vertices,</p></li>
+<li><p><strong>C</strong> – maximum (absolute) value of the edge weight.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Weighted graph G.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="MWC_inst.draw_instance">
+<span class="sig-prename descclassname"><span class="pre">MWC_inst.</span></span><span class="sig-name descname"><span class="pre">draw_instance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax=&lt;Axes:</span> <span class="pre">&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_color='blue'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_size=200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_labels=True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MWC_inst.html#draw_instance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MWC_inst.draw_instance" title="Link to this definition"></a></dt>
+<dd><p>Draws weighted graph G.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="MWC_inst.draw_inst_grid">
+<span class="sig-prename descclassname"><span class="pre">MWC_inst.</span></span><span class="sig-name descname"><span class="pre">draw_inst_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">selected_files</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ncols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./instances-new/QUBO'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cross_check</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MWC_inst.html#draw_inst_grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MWC_inst.draw_inst_grid" title="Link to this definition"></a></dt>
+<dd><p>Draws a grid of instances from <code class="docutils literal notranslate"><span class="pre">selected_files</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>selected_files</strong> (<em>list</em>) – list of files (*.qubo.json)</p></li>
+<li><p><strong>Ncols</strong> (<em>int</em>) – number of columns in the grid.</p></li>
+<li><p><strong>directory</strong> (<em>str</em>) – directory with QUBO files (*.qubo.json)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="MWC_inst.draw_IDs_grid">
+<span class="sig-prename descclassname"><span class="pre">MWC_inst.</span></span><span class="sig-name descname"><span class="pre">draw_IDs_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sel_IDs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./instances-new/QUBO'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ncols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cross_check</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MWC_inst.html#draw_IDs_grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MWC_inst.draw_IDs_grid" title="Link to this definition"></a></dt>
+<dd><p>Draws a grid of instances by (the number part of) IDs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sel_IDs</strong> (<em>list</em><em>[</em><em>int</em><em>]</em>) – list of instance IDs (numbers)</p></li>
+<li><p><strong>directory</strong> (<em>str</em>) – directory with QUBO files (*.qubo.json)</p></li>
+<li><p><strong>Ncols</strong> (<em>int</em>) – number of columns in the grid</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>selected file names.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="MWC_inst.create_MWC_QUBO">
+<span class="sig-prename descclassname"><span class="pre">MWC_inst.</span></span><span class="sig-name descname"><span class="pre">create_MWC_QUBO</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Graph</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MWC_inst.html#create_MWC_QUBO"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MWC_inst.create_MWC_QUBO" title="Link to this definition"></a></dt>
+<dd><p>Given the graph G, creates a QUBO formulation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>G</strong> (<em>nx.Graph</em>) – the underlying weighted graph,</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>QUBO coefficients as np.arrays</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Q, P</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>We assume QUBO in the form:</dt><dd><p>min (1/2) x’ Q x + P x</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="MWC_inst.create_MWC_LBOP">
+<span class="sig-prename descclassname"><span class="pre">MWC_inst.</span></span><span class="sig-name descname"><span class="pre">create_MWC_LBOP</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quiet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MWC_inst.html#create_MWC_LBOP"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MWC_inst.create_MWC_LBOP" title="Link to this definition"></a></dt>
+<dd><p>Creates a linear binary problem from the underlying graph G.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>G</strong> (<em>nx.Graph</em>) – the underlying weighted graph,</p></li>
+<li><p><strong>quiet</strong> (<em>bool</em>) – suppress model output (flag),</p></li>
+<li><p><strong>timeout</strong> (<em>int</em>) – timeout for the solver (seconds)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a tuple of m (gurobipy model), z (z-vars), x (x-vars)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="MWC_inst.save_orig_MWC_instance">
+<span class="sig-prename descclassname"><span class="pre">MWC_inst.</span></span><span class="sig-name descname"><span class="pre">save_orig_MWC_instance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inst_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">problem_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comment</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./instances/orig/'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MWC_inst.html#save_orig_MWC_instance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MWC_inst.save_orig_MWC_instance" title="Link to this definition"></a></dt>
+<dd><p>Saves a MaxCut instance encoded by graph G to a JSON (with metadata).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nodes</strong> – list of nodes,</p></li>
+<li><p><strong>edges</strong> – list of tuples (i, j, w), where (i, j) is the edge, w is the weight</p></li>
+<li><p><strong>inst_id</strong> (<em>string</em>) – instance ID,</p></li>
+<li><p><strong>problem_name</strong> (<em>string</em>) – (relatively) human-readable name,</p></li>
+<li><p><strong>comment</strong> – optional comment for the JSON file,</p></li>
+<li><p><strong>directory</strong> – a dir to save files.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="MWC_inst.extract_G_from_json">
+<span class="sig-prename descclassname"><span class="pre">MWC_inst.</span></span><span class="sig-name descname"><span class="pre">extract_G_from_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">js</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Graph</span></span></span><a class="reference internal" href="../_modules/MWC_inst.html#extract_G_from_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MWC_inst.extract_G_from_json" title="Link to this definition"></a></dt>
+<dd><p>Helper: extracts the graph from the problem JSON.</p>
+<p>Assumes original JSON format (typically, in <code class="docutils literal notranslate"><span class="pre">instances/orig/</span></code> folder).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="MWC_inst.load_instance_by_ID">
+<span class="sig-prename descclassname"><span class="pre">MWC_inst.</span></span><span class="sig-name descname"><span class="pre">load_instance_by_ID</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directory</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./instances/orig/'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MWC_inst.html#load_instance_by_ID"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MWC_inst.load_instance_by_ID" title="Link to this definition"></a></dt>
+<dd><p>Loads an instance by ID and returns graph G.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="MWC_inst.load_orig_MWC_instance">
+<span class="sig-prename descclassname"><span class="pre">MWC_inst.</span></span><span class="sig-name descname"><span class="pre">load_orig_MWC_instance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MWC_inst.html#load_orig_MWC_instance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MWC_inst.load_orig_MWC_instance" title="Link to this definition"></a></dt>
+<dd><p>Loads the instance from <code class="docutils literal notranslate"><span class="pre">filename</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="MWC_inst.generate_MWC_instances">
+<span class="sig-prename descclassname"><span class="pre">MWC_inst.</span></span><span class="sig-name descname"><span class="pre">generate_MWC_instances</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">K</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ns</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[5,</span> <span class="pre">10,</span> <span class="pre">15]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0.1,</span> <span class="pre">0.25,</span> <span class="pre">0.5,</span> <span class="pre">0.75,</span> <span class="pre">0.9]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Cmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Cmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2023</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">instdir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./instances'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MWC_inst.html#generate_MWC_instances"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MWC_inst.generate_MWC_instances" title="Link to this definition"></a></dt>
+<dd><p>Core function: generates a set of MWC instances with given parameters.</p>
+<p>Creates K * len(Ns) * len(Ps) instances, using the given random seed
+and the costs bounds, and saves them to directory <code class="docutils literal notranslate"><span class="pre">instdir</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>K</strong> (<em>int</em>) – number of instances per set of parameters,</p></li>
+<li><p><strong>Ns</strong> (<em>list</em><em>[</em><em>int</em><em>]</em>) – instance sizes,</p></li>
+<li><p><strong>Ps</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – p parameter for ER random graph model,</p></li>
+<li><p><strong>Cmin</strong> (<em>int</em>) – min/max edge costs,</p></li>
+<li><p><strong>Cmax</strong> (<em>int</em>) – min/max edge costs,</p></li>
+<li><p><strong>seed</strong> (<em>int</em>) – random seed</p></li>
+<li><p><strong>instdir</strong> (<em>str</em>) – directory to save instances to.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="MWC_inst.get_objective_from_sol">
+<span class="sig-prename descclassname"><span class="pre">MWC_inst.</span></span><span class="sig-name descname"><span class="pre">get_objective_from_sol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">G</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/MWC_inst.html#get_objective_from_sol"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MWC_inst.get_objective_from_sol" title="Link to this definition"></a></dt>
+<dd><p>Calculates a MaxCut objective given the graph and solution bistring.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Assumes <strong>direct</strong> order of bits in the solution.
+E.g., <code class="docutils literal notranslate"><span class="pre">[n0,</span> <span class="pre">n1,</span> <span class="pre">n2,</span> <span class="pre">...]</span></code>.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="MWC_inst.main">
+<span class="sig-prename descclassname"><span class="pre">MWC_inst.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MWC_inst.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MWC_inst.main" title="Link to this definition"></a></dt>
+<dd><p>The main function specifying instance generation parameters (see the source code).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="MWC_inst.assert_MWC_MIP">
+<span class="sig-prename descclassname"><span class="pre">MWC_inst.</span></span><span class="sig-name descname"><span class="pre">assert_MWC_MIP</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">orig_json</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qubo_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quiet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/MWC_inst.html#assert_MWC_MIP"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#MWC_inst.assert_MWC_MIP" title="Link to this definition"></a></dt>
+<dd><p>Asserts if the objectives for QUBO and original MWC (MIP) coincide.</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Bochkarev, Heese, Jäger, Schiewe, and Schöbel.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

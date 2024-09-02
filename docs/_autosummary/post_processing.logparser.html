@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>post_processing.logparser &mdash; qopt-overview  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/autoclasstoc.css?v=08871587" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=3dd0334f" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="post_processing.select_runs" href="post_processing.select_runs.html" />
+    <link rel="prev" title="classic_solve_TSPs_MTZ" href="classic_solve_TSPs_MTZ.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            qopt-overview
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html#computational-pipeline">Computational pipeline</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../overview.html#implementation-details">Implementation details</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="TSP_inst.html">TSP_inst</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MWC_inst.html">MWC_inst</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MIS_inst.html">MIS_inst</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classic_solve_UDMISes.html">classic_solve_UDMISes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classic_solve_MWC_QUBO_only.html">classic_solve_MWC_QUBO_only</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classic_solve_MWCs.html">classic_solve_MWCs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classic_solve_TSPs_MTZ.html">classic_solve_TSPs_MTZ</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">post_processing.logparser</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#post_processing.logparser.get_inst_type"><code class="docutils literal notranslate"><span class="pre">get_inst_type()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#post_processing.logparser.calculate_QUBO_objective"><code class="docutils literal notranslate"><span class="pre">calculate_QUBO_objective()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#post_processing.logparser.calculate_orig_objective"><code class="docutils literal notranslate"><span class="pre">calculate_orig_objective()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#post_processing.logparser.QPULogParser"><code class="docutils literal notranslate"><span class="pre">QPULogParser</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#post_processing.logparser.QPULogParser.files"><code class="docutils literal notranslate"><span class="pre">QPULogParser.files</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#post_processing.logparser.QPULogParser.df"><code class="docutils literal notranslate"><span class="pre">QPULogParser.df</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#post_processing.logparser.QPULogParser._extract_successful_line"><code class="docutils literal notranslate"><span class="pre">QPULogParser._extract_successful_line()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#post_processing.logparser.QPULogParser._extract_failed_line"><code class="docutils literal notranslate"><span class="pre">QPULogParser._extract_failed_line()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#post_processing.logparser.QPULogParser.save"><code class="docutils literal notranslate"><span class="pre">QPULogParser.save()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#post_processing.logparser.QPULogParser.process_files"><code class="docutils literal notranslate"><span class="pre">QPULogParser.process_files()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#post_processing.logparser.DWaveLogParser"><code class="docutils literal notranslate"><span class="pre">DWaveLogParser</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#post_processing.logparser.DWaveLogParser._extract_successful_line"><code class="docutils literal notranslate"><span class="pre">DWaveLogParser._extract_successful_line()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#post_processing.logparser.DWaveLogParser._extract_failed_line"><code class="docutils literal notranslate"><span class="pre">DWaveLogParser._extract_failed_line()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#post_processing.logparser.DWaveLogParser.extract_samples"><code class="docutils literal notranslate"><span class="pre">DWaveLogParser.extract_samples()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#post_processing.logparser.IBMLogParser"><code class="docutils literal notranslate"><span class="pre">IBMLogParser</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#post_processing.logparser.IBMLogParser._extract_successful_line"><code class="docutils literal notranslate"><span class="pre">IBMLogParser._extract_successful_line()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#post_processing.logparser.IBMLogParser._extract_failed_line"><code class="docutils literal notranslate"><span class="pre">IBMLogParser._extract_failed_line()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#post_processing.logparser.IBMLogParser.extract_samples"><code class="docutils literal notranslate"><span class="pre">IBMLogParser.extract_samples()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#post_processing.logparser.IBMLogParser.extract_convergence_data"><code class="docutils literal notranslate"><span class="pre">IBMLogParser.extract_convergence_data()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#post_processing.logparser.QuEraLogParser"><code class="docutils literal notranslate"><span class="pre">QuEraLogParser</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#post_processing.logparser.QuEraLogParser._extract_successful_line"><code class="docutils literal notranslate"><span class="pre">QuEraLogParser._extract_successful_line()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#post_processing.logparser.QuEraLogParser._extract_failed_line"><code class="docutils literal notranslate"><span class="pre">QuEraLogParser._extract_failed_line()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#post_processing.logparser.QuEraLogParser.extract_samples"><code class="docutils literal notranslate"><span class="pre">QuEraLogParser.extract_samples()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#post_processing.logparser.summarize_dwave"><code class="docutils literal notranslate"><span class="pre">summarize_dwave()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#post_processing.logparser.summarize_ibm"><code class="docutils literal notranslate"><span class="pre">summarize_ibm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#post_processing.logparser.summarize_quera"><code class="docutils literal notranslate"><span class="pre">summarize_quera()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#post_processing.logparser.extract_samples"><code class="docutils literal notranslate"><span class="pre">extract_samples()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#post_processing.logparser.extract_all_samples"><code class="docutils literal notranslate"><span class="pre">extract_all_samples()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="post_processing.select_runs.html">post_processing.select_runs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../overview.html#preparing-python-and-r-environments">Preparing python and R environments</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../raw-data.html">Raw data formats</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">qopt-overview</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../overview.html">Overview</a></li>
+      <li class="breadcrumb-item active">post_processing.logparser</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_autosummary/post_processing.logparser.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-post_processing.logparser">
+<span id="post-processing-logparser"></span><h1>post_processing.logparser<a class="headerlink" href="#module-post_processing.logparser" title="Link to this heading"></a></h1>
+<p>Implements JSON pasers, summarizing the raw QPU output files.</p>
+<dl>
+<dt>USAGE:</dt><dd><div class="line-block">
+<div class="line">python -m post_processing.logparser summarize_dwave ./run_logs/dwave   ./run_logs/summaries/dwave_summary.csv   ./run_logs/summaries/dwave_stats.csv dwave</div>
+<div class="line"><br /></div>
+<div class="line">python -m post_processing.logparser summarize_ibm   ./run_logs/ibm-qpu ./run_logs/summaries/ibm-qpu_summary.csv ./run_logs/summaries/ibm-qpu_stats.csv “IBM-QPU”</div>
+<div class="line"><br /></div>
+<div class="line">python -m post_processing.logparser summarize_quera ./run_logs/quera   ./run_logs/summaries/quera_summary.csv   ./run_logs/summaries/quera_stats.csv</div>
+<div class="line"><br /></div>
+<div class="line">python -m post_processing.logparser extract_samples dwave ./run_logs/dwave/&lt;instance&gt;.json ./run_logs/dwave/samples-csv/&lt;instance&gt;.sample.csv ./instances/QUBO ./instances/orig</div>
+</div>
+</dd>
+</dl>
+<p>The module implements the abstract parser class befining a universal interface
+<a class="reference internal" href="#post_processing.logparser.QPULogParser" title="post_processing.logparser.QPULogParser"><code class="xref py py-class docutils literal notranslate"><span class="pre">post_processing.logparser.QPULogParser</span></code></a> and the three derived classes
+for device-specific code. Each of these most notably implements the
+method <code class="docutils literal notranslate"><span class="pre">extract_samples</span></code> used to extract the data regarding individual QPU
+shots, which allows to recover a solution and is then used to calculate the
+objective values with the helper functions <a class="reference internal" href="#post_processing.logparser.calculate_QUBO_objective" title="post_processing.logparser.calculate_QUBO_objective"><code class="xref py py-func docutils literal notranslate"><span class="pre">calculate_QUBO_objective()</span></code></a>
+and <a class="reference internal" href="#post_processing.logparser.calculate_orig_objective" title="post_processing.logparser.calculate_orig_objective"><code class="xref py py-func docutils literal notranslate"><span class="pre">calculate_orig_objective()</span></code></a>.</p>
+<p>When run from the command line as presented above, the function specified in the
+first argument is run. Therefore, log parser interface is wrapped into several
+functions accessible from the command line.</p>
+<p class="rubric">Functions</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#post_processing.logparser.calculate_QUBO_objective" title="post_processing.logparser.calculate_QUBO_objective"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_QUBO_objective</span></code></a>(inst_id, top_samples)</p></td>
+<td><p>Helper: Returns the QUBO objective and the feasibility flag from a collection of samples.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#post_processing.logparser.calculate_orig_objective" title="post_processing.logparser.calculate_orig_objective"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_orig_objective</span></code></a>(inst_id, top_samples)</p></td>
+<td><p>Helper: Calculates the objective given the instance ID and the collection of bitstrings.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#post_processing.logparser.extract_all_samples" title="post_processing.logparser.extract_all_samples"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_all_samples</span></code></a>(logtype, jsondir, outdir)</p></td>
+<td><p>Extracts the last sample from the JSONs in <cite>jsondir</cite>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#post_processing.logparser.extract_samples" title="post_processing.logparser.extract_samples"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_samples</span></code></a>(logtype, infile, outfile[, ...])</p></td>
+<td><p>Extracts the last sample from the JSON log.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#post_processing.logparser.get_inst_type" title="post_processing.logparser.get_inst_type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_inst_type</span></code></a>(inst_id)</p></td>
+<td><p>Helper: Extracts the instance type from <code class="docutils literal notranslate"><span class="pre">inst_id</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#post_processing.logparser.summarize_dwave" title="post_processing.logparser.summarize_dwave"><code class="xref py py-obj docutils literal notranslate"><span class="pre">summarize_dwave</span></code></a>(directory, outfile, statsfile)</p></td>
+<td><p>Processes all the DWave logs in the given directory.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#post_processing.logparser.summarize_ibm" title="post_processing.logparser.summarize_ibm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">summarize_ibm</span></code></a>(directory, outfile, statsfile)</p></td>
+<td><p>Processes all the IBM logs in the given directory.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#post_processing.logparser.summarize_quera" title="post_processing.logparser.summarize_quera"><code class="xref py py-obj docutils literal notranslate"><span class="pre">summarize_quera</span></code></a>(directory, outfile, statsfile)</p></td>
+<td><p>Processes all the QuEra logs in the given directory.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Classes</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#post_processing.logparser.DWaveLogParser" title="post_processing.logparser.DWaveLogParser"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DWaveLogParser</span></code></a>([files, log])</p></td>
+<td><p>Implements the D-Wave specific log parsing code.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#post_processing.logparser.IBMLogParser" title="post_processing.logparser.IBMLogParser"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IBMLogParser</span></code></a>([files, log, logtype])</p></td>
+<td><p>Implements the IBM specific log parsing code.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#post_processing.logparser.QPULogParser" title="post_processing.logparser.QPULogParser"><code class="xref py py-obj docutils literal notranslate"><span class="pre">QPULogParser</span></code></a>([files, log, orig_dir, qubo_dir])</p></td>
+<td><p>Implements the basic JSON log parser interface.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#post_processing.logparser.QuEraLogParser" title="post_processing.logparser.QuEraLogParser"><code class="xref py py-obj docutils literal notranslate"><span class="pre">QuEraLogParser</span></code></a>([files, log])</p></td>
+<td><p>Implements the QuEra specific log parsing code.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="post_processing.logparser.get_inst_type">
+<span class="sig-prename descclassname"><span class="pre">post_processing.logparser.</span></span><span class="sig-name descname"><span class="pre">get_inst_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inst_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/post_processing/logparser.html#get_inst_type"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#post_processing.logparser.get_inst_type" title="Link to this definition"></a></dt>
+<dd><p>Helper: Extracts the instance type from <code class="docutils literal notranslate"><span class="pre">inst_id</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="post_processing.logparser.calculate_QUBO_objective">
+<span class="sig-prename descclassname"><span class="pre">post_processing.logparser.</span></span><span class="sig-name descname"><span class="pre">calculate_QUBO_objective</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inst_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orig_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./instances/orig'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qubo_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./instances/QUBO'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/post_processing/logparser.html#calculate_QUBO_objective"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#post_processing.logparser.calculate_QUBO_objective" title="Link to this definition"></a></dt>
+<dd><p>Helper: Returns the QUBO objective and the feasibility flag from a collection of samples.</p>
+<p>Calculates the objective values using the QUBO machinery
+and assesses the feasibility of each respective solution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>inst_id</strong> (<em>str</em>) – instance id,</p></li>
+<li><p><strong>top_samples</strong> (<em>list</em>) – best samples to choose from (list of bitstrings).</p></li>
+<li><p><strong>orig_dir</strong> (<em>str</em>) – directory with original instance JSONs,</p></li>
+<li><p><strong>qubo_dir</strong> (<em>str</em>) – directory with QUBO instance JSONs,</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple of <code class="docutils literal notranslate"><span class="pre">(obj,</span> <span class="pre">feas)</span></code>, where <code class="docutils literal notranslate"><span class="pre">obj</span></code> is the best (minimum)
+feasible QUBO objective value (just minimum if no feasible solutions
+found among <code class="docutils literal notranslate"><span class="pre">top_samples</span></code>) and <code class="docutils literal notranslate"><span class="pre">feas</span></code> = <code class="docutils literal notranslate"><span class="pre">True</span></code> if it is feasible,
+and <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise.</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">top_samples</span></code> must contain a list of bitstrings, where higher</dt><dd><p>ranking qubits are on the left: e.g., <code class="docutils literal notranslate"><span class="pre">[b3,</span> <span class="pre">b2,</span> <span class="pre">b1,</span> <span class="pre">b0]</span></code>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="post_processing.logparser.calculate_orig_objective">
+<span class="sig-prename descclassname"><span class="pre">post_processing.logparser.</span></span><span class="sig-name descname"><span class="pre">calculate_orig_objective</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inst_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orig_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./instances/orig'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/post_processing/logparser.html#calculate_orig_objective"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#post_processing.logparser.calculate_orig_objective" title="Link to this definition"></a></dt>
+<dd><p>Helper: Calculates the objective given the instance ID and the collection of bitstrings.</p>
+<p>Uses the logic of the original problem, not the universal QUBO code.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>inst_id</strong> (<em>str</em>) – instance id,</p></li>
+<li><p><strong>top_samples</strong> (<em>list</em>) – best samples to choose from (bitstrings).</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">top_samples</span></code> must contain a list of bitstrings, where higher</dt><dd><p>ranking qubits are on the left: e.g., <code class="docutils literal notranslate"><span class="pre">[b3,</span> <span class="pre">b2,</span> <span class="pre">b1,</span> <span class="pre">b0]</span></code>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="post_processing.logparser.QPULogParser">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">post_processing.logparser.</span></span><span class="sig-name descname"><span class="pre">QPULogParser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orig_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./instances/orig'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qubo_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./instances/QUBO'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/post_processing/logparser.html#QPULogParser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#post_processing.logparser.QPULogParser" title="Link to this definition"></a></dt>
+<dd><p>Implements the basic JSON log parser interface.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="post_processing.logparser.QPULogParser.files">
+<span class="sig-name descname"><span class="pre">files</span></span><a class="headerlink" href="#post_processing.logparser.QPULogParser.files" title="Link to this definition"></a></dt>
+<dd><p>list of processed files (filenames)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="post_processing.logparser.QPULogParser.df">
+<span class="sig-name descname"><span class="pre">df</span></span><a class="headerlink" href="#post_processing.logparser.QPULogParser.df" title="Link to this definition"></a></dt>
+<dd><p>the data accumulated</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="post_processing.logparser.QPULogParser._extract_successful_line">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_extract_successful_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">js</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/post_processing/logparser.html#QPULogParser._extract_successful_line"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#post_processing.logparser.QPULogParser._extract_successful_line" title="Link to this definition"></a></dt>
+<dd><p>Extracts a single successful instance run (from a single JSON).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="post_processing.logparser.QPULogParser._extract_failed_line">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_extract_failed_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">js</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">statsfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/post_processing/logparser.html#QPULogParser._extract_failed_line"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#post_processing.logparser.QPULogParser._extract_failed_line" title="Link to this definition"></a></dt>
+<dd><p>Extracts a single failed instance run (from a single JSON).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="post_processing.logparser.QPULogParser.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">statsfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/post_processing/logparser.html#QPULogParser.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#post_processing.logparser.QPULogParser.save" title="Link to this definition"></a></dt>
+<dd><p>Helper: saves the statistics on the processed files.</p>
+<p>This generates <code class="docutils literal notranslate"><span class="pre">*_stats.csv</span></code> type of files, which summarize the
+number of successful and failed runs per instance.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="post_processing.logparser.QPULogParser.process_files">
+<span class="sig-name descname"><span class="pre">process_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filenames</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">statsfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/post_processing/logparser.html#QPULogParser.process_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#post_processing.logparser.QPULogParser.process_files" title="Link to this definition"></a></dt>
+<dd><p>Processes the list of JSON raw log files (in <code class="docutils literal notranslate"><span class="pre">filenames</span></code>).</p>
+<p>A universal high-level procedure, which relies on
+<cite>_extract_successful_line</cite> and <cite>_extract_failed_line</cite> methods
+implemented for each respective log file type (device type).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="post_processing.logparser.DWaveLogParser">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">post_processing.logparser.</span></span><span class="sig-name descname"><span class="pre">DWaveLogParser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/post_processing/logparser.html#DWaveLogParser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#post_processing.logparser.DWaveLogParser" title="Link to this definition"></a></dt>
+<dd><p>Implements the D-Wave specific log parsing code.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="post_processing.logparser.DWaveLogParser._extract_successful_line">
+<span class="sig-name descname"><span class="pre">_extract_successful_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">js</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/post_processing/logparser.html#DWaveLogParser._extract_successful_line"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#post_processing.logparser.DWaveLogParser._extract_successful_line" title="Link to this definition"></a></dt>
+<dd><p>Extracts a summary for a single DWave’s log.</p>
+<p>This function extracts a “successful” summary line: the one corresponding
+to an experiment that yielded some solutions (feasible or not).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="post_processing.logparser.DWaveLogParser._extract_failed_line">
+<span class="sig-name descname"><span class="pre">_extract_failed_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">js</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/post_processing/logparser.html#DWaveLogParser._extract_failed_line"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#post_processing.logparser.DWaveLogParser._extract_failed_line" title="Link to this definition"></a></dt>
+<dd><p>Extracts a summary for a single D-Wave’s log.</p>
+<p>This function extracts a “failed” summary line: the one corresponding
+to an experiment that yielded no solutions. (A separate function
+is needed as some fields might be absent from such logfile,
+as compared to a “successful” one.)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="post_processing.logparser.DWaveLogParser.extract_samples">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">extract_samples</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">js</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qubo_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./instances/QUBO'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orig_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./instances/orig'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/post_processing/logparser.html#DWaveLogParser.extract_samples"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#post_processing.logparser.DWaveLogParser.extract_samples" title="Link to this definition"></a></dt>
+<dd><p>Extracts the sample data from JSON (DWave).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>js</strong> – loaded JSON,</p></li>
+<li><p><strong>logfile</strong> – log file name (to save into the output)</p></li>
+<li><p><strong>qubo_dir</strong> (<em>str</em>) – respective JSON files directories
+(for objective calculations)</p></li>
+<li><p><strong>orig_dir</strong> (<em>str</em>) – respective JSON files directories
+(for objective calculations)</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>resulting solution bitstrings are in <strong>reverse</strong> order:
+e.g., <code class="docutils literal notranslate"><span class="pre">[b3,</span> <span class="pre">b2,</span> <span class="pre">b1,</span> <span class="pre">b0]</span></code>.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>a <code class="docutils literal notranslate"><span class="pre">pd.DataFrame</span></code> with the samples, or <code class="docutils literal notranslate"><span class="pre">None</span></code> if corresponding
+JSON files are not found in either of <code class="docutils literal notranslate"><span class="pre">qubo_dir</span></code> or <code class="docutils literal notranslate"><span class="pre">orig_dir</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="post_processing.logparser.IBMLogParser">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">post_processing.logparser.</span></span><span class="sig-name descname"><span class="pre">IBMLogParser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'IBM'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/post_processing/logparser.html#IBMLogParser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#post_processing.logparser.IBMLogParser" title="Link to this definition"></a></dt>
+<dd><p>Implements the IBM specific log parsing code.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="post_processing.logparser.IBMLogParser._extract_successful_line">
+<span class="sig-name descname"><span class="pre">_extract_successful_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">js</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/post_processing/logparser.html#IBMLogParser._extract_successful_line"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#post_processing.logparser.IBMLogParser._extract_successful_line" title="Link to this definition"></a></dt>
+<dd><p>Extracts a single instance run, parsing a single IBM’s log.</p>
+<p>This function extract a “successful” line: the one corresponding
+to an experiment that yielded some solutions (feasible or not).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="post_processing.logparser.IBMLogParser._extract_failed_line">
+<span class="sig-name descname"><span class="pre">_extract_failed_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">js</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/post_processing/logparser.html#IBMLogParser._extract_failed_line"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#post_processing.logparser.IBMLogParser._extract_failed_line" title="Link to this definition"></a></dt>
+<dd><p>Extracts a single instance run, parsing a single IBM log.</p>
+<p>This function extract a “failed” summary line: the one corresponding to
+an experiment that yielded no solutions. (A separate function is needed
+as some fields might be absent from such logfile, as compared to a
+“successful” one.)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="post_processing.logparser.IBMLogParser.extract_samples">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">extract_samples</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">js</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qubo_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./instances/QUBO'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orig_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./instances/orig'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/post_processing/logparser.html#IBMLogParser.extract_samples"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#post_processing.logparser.IBMLogParser.extract_samples" title="Link to this definition"></a></dt>
+<dd><p>Extracts the sample data from JSON (IBM).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>js</strong> – loaded JSON,</p></li>
+<li><p><strong>logfile</strong> (<em>str</em>) – log file name (to save into the output)</p></li>
+<li><p><strong>logfile</strong> – analyzed logfile name,</p></li>
+<li><p><strong>qubo_dir</strong> (<em>str</em>) – respective JSON files directories
+(for objective calculations)</p></li>
+<li><p><strong>orig_dir</strong> (<em>str</em>) – respective JSON files directories
+(for objective calculations)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a <code class="docutils literal notranslate"><span class="pre">pd.DataFrame</span></code> with the samples.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="post_processing.logparser.IBMLogParser.extract_convergence_data">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">extract_convergence_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">js</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/post_processing/logparser.html#IBMLogParser.extract_convergence_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#post_processing.logparser.IBMLogParser.extract_convergence_data" title="Link to this definition"></a></dt>
+<dd><p>Extracts the outer loop convergence data from an IBM log.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>js</strong> – loaded JSON,</p></li>
+<li><p><strong>logfile</strong> – log file name (to save into the output)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a <code class="docutils literal notranslate"><span class="pre">pd.DataFrame</span></code> with the samples.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="post_processing.logparser.QuEraLogParser">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">post_processing.logparser.</span></span><span class="sig-name descname"><span class="pre">QuEraLogParser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/post_processing/logparser.html#QuEraLogParser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#post_processing.logparser.QuEraLogParser" title="Link to this definition"></a></dt>
+<dd><p>Implements the QuEra specific log parsing code.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="post_processing.logparser.QuEraLogParser._extract_successful_line">
+<span class="sig-name descname"><span class="pre">_extract_successful_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">js</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/post_processing/logparser.html#QuEraLogParser._extract_successful_line"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#post_processing.logparser.QuEraLogParser._extract_successful_line" title="Link to this definition"></a></dt>
+<dd><p>Extracts a single instance run, parsing a single QuEra log.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="post_processing.logparser.QuEraLogParser._extract_failed_line">
+<span class="sig-name descname"><span class="pre">_extract_failed_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">js</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/post_processing/logparser.html#QuEraLogParser._extract_failed_line"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#post_processing.logparser.QuEraLogParser._extract_failed_line" title="Link to this definition"></a></dt>
+<dd><p>This function is not implemented, we never received such result.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="post_processing.logparser.QuEraLogParser.extract_samples">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">extract_samples</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">js</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qubo_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./instances/QUBO/'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orig_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./instances/orig/'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/post_processing/logparser.html#QuEraLogParser.extract_samples"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#post_processing.logparser.QuEraLogParser.extract_samples" title="Link to this definition"></a></dt>
+<dd><p>Extracts the sample data from JSON (QuEra logfile).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>js</strong> – loaded JSON,</p></li>
+<li><p><strong>logfile</strong> – log file name (to save into the output)</p></li>
+<li><p><strong>qubo_dir</strong> (<em>str</em>) – respective JSON files directories
+(for objective calculations)</p></li>
+<li><p><strong>orig_dir</strong> (<em>str</em>) – respective JSON files directories
+(for objective calculations)</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The method assumes (UD)MIS instances only!</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>a <code class="docutils literal notranslate"><span class="pre">pd.DataFrame</span></code> with the samples.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="post_processing.logparser.summarize_dwave">
+<span class="sig-prename descclassname"><span class="pre">post_processing.logparser.</span></span><span class="sig-name descname"><span class="pre">summarize_dwave</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">directory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">statsfile</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/post_processing/logparser.html#summarize_dwave"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#post_processing.logparser.summarize_dwave" title="Link to this definition"></a></dt>
+<dd><p>Processes all the DWave logs in the given directory.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="post_processing.logparser.summarize_ibm">
+<span class="sig-prename descclassname"><span class="pre">post_processing.logparser.</span></span><span class="sig-name descname"><span class="pre">summarize_ibm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">directory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">statsfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'IBM'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/post_processing/logparser.html#summarize_ibm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#post_processing.logparser.summarize_ibm" title="Link to this definition"></a></dt>
+<dd><p>Processes all the IBM logs in the given directory.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="post_processing.logparser.summarize_quera">
+<span class="sig-prename descclassname"><span class="pre">post_processing.logparser.</span></span><span class="sig-name descname"><span class="pre">summarize_quera</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">directory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">statsfile</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/post_processing/logparser.html#summarize_quera"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#post_processing.logparser.summarize_quera" title="Link to this definition"></a></dt>
+<dd><p>Processes all the QuEra logs in the given directory.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="post_processing.logparser.extract_samples">
+<span class="sig-prename descclassname"><span class="pre">post_processing.logparser.</span></span><span class="sig-name descname"><span class="pre">extract_samples</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logtype</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">infile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qubo_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./instances/QUBO'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orig_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./instances/orig'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/post_processing/logparser.html#extract_samples"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#post_processing.logparser.extract_samples" title="Link to this definition"></a></dt>
+<dd><p>Extracts the last sample from the JSON log.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="post_processing.logparser.extract_all_samples">
+<span class="sig-prename descclassname"><span class="pre">post_processing.logparser.</span></span><span class="sig-name descname"><span class="pre">extract_all_samples</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logtype</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jsondir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outdir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/post_processing/logparser.html#extract_all_samples"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#post_processing.logparser.extract_all_samples" title="Link to this definition"></a></dt>
+<dd><p>Extracts the last sample from the JSONs in <cite>jsondir</cite>.</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Bochkarev, Heese, Jäger, Schiewe, and Schöbel.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,25 @@
+﻿MWC\_inst
+=========
+
+.. automodule:: MWC_inst
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      assert_MWC_MIP
+      create_MWC_LBOP
+      create_MWC_QUBO
+      draw_IDs_grid
+      draw_inst_grid
+      draw_instance
+      extract_G_from_json
+      generate_MWC_instances
+      generate_instance
+      get_objective_from_sol
+      load_instance_by_ID
+      load_orig_MWC_instance
+      main
+      save_orig_MWC_instance
+   

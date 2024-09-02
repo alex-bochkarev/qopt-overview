@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MWC_inst &mdash; qopt-overview  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/autoclasstoc.css?v=08871587" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=3dd0334f" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            qopt-overview
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html#computational-pipeline">Computational pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html#implementation-details">Implementation details</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../raw-data.html">Raw data formats</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">qopt-overview</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Module code</a></li>
+      <li class="breadcrumb-item active">MWC_inst</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for MWC_inst</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Generates MaxCut (&quot;MWC&quot;) instances by generating random graphs.</span>
+
+<span class="sd">USAGE:</span>
+<span class="sd">    python -m MWC_inst ./instances</span>
+
+<span class="sd">Generates a set of MaxCut instances, saving original instance data in</span>
+<span class="sd">``./instances`` (or another specified directory): ``orig`` subdirectory</span>
+<span class="sd">for original instances and ``QUBO``, respectively, for QUBOs.</span>
+
+<span class="sd">Instance parameters are specified in :py:func:`main`, which in turn calls the</span>
+<span class="sd">core generation function, :py:func:`generate_MWC_instances`. This module also</span>
+<span class="sd">contains a few cross-checks, auxiliary and</span>
+<span class="sd">visualization code.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">ceil</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">time</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
+<span class="kn">import</span> <span class="nn">gurobipy</span> <span class="k">as</span> <span class="nn">gp</span>
+<span class="kn">from</span> <span class="nn">gurobipy</span> <span class="kn">import</span> <span class="n">GRB</span>
+<span class="kn">from</span> <span class="nn">glob</span> <span class="kn">import</span> <span class="n">glob</span>
+<span class="kn">from</span> <span class="nn">qubo_utils</span> <span class="kn">import</span> <span class="n">save_QUBO</span><span class="p">,</span> <span class="n">load_QUBO</span><span class="p">,</span> <span class="n">solve_QUBO</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+
+<span class="c1">###############################################################################</span>
+<span class="c1"># Instance generation</span>
+<div class="viewcode-block" id="generate_instance">
+<a class="viewcode-back" href="../_autosummary/MWC_inst.html#MWC_inst.generate_instance">[docs]</a>
+<span class="k">def</span> <span class="nf">generate_instance</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">C</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generates a (single) graph for a MaxCut instance.</span>
+
+<span class="sd">    Uses Erdos-Renyi model for random graphs.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        p: Erdos-Renyi parameter (probability of an edge between any two given vertices),</span>
+<span class="sd">        N: number of vertices,</span>
+<span class="sd">        C: maximum (absolute) value of the edge weight.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Weighted graph G.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">G</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">erdos_renyi_graph</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">N</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="ow">in</span> <span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">():</span>
+        <span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">][</span><span class="s1">&#39;weight&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">C</span><span class="o">*</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">G</span></div>
+
+
+
+<div class="viewcode-block" id="draw_instance">
+<a class="viewcode-back" href="../_autosummary/MWC_inst.html#MWC_inst.draw_instance">[docs]</a>
+<span class="k">def</span> <span class="nf">draw_instance</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">(),</span> <span class="n">node_color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span>
+                  <span class="n">node_size</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">with_labels</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Draws weighted graph G.&quot;&quot;&quot;</span>
+    <span class="n">pos</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">nx_agraph</span><span class="o">.</span><span class="n">graphviz_layout</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+    <span class="n">edge_labels</span> <span class="o">=</span> <span class="p">{(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;weight&quot;</span><span class="p">]</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">&#39;</span>
+                   <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">True</span><span class="p">)}</span>
+
+    <span class="n">style_net</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">node_color</span><span class="o">=</span><span class="n">node_color</span><span class="p">,</span> <span class="n">node_size</span><span class="o">=</span><span class="n">node_size</span><span class="p">,</span>
+                     <span class="n">font_color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span>
+                     <span class="n">with_labels</span><span class="o">=</span><span class="n">with_labels</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">nx</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="o">**</span><span class="n">style_net</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">with_labels</span><span class="p">:</span>
+        <span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_edge_labels</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">edge_labels</span><span class="o">=</span><span class="n">edge_labels</span><span class="p">,</span>
+                                    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="draw_inst_grid">
+<a class="viewcode-back" href="../_autosummary/MWC_inst.html#MWC_inst.draw_inst_grid">[docs]</a>
+<span class="k">def</span> <span class="nf">draw_inst_grid</span><span class="p">(</span><span class="n">selected_files</span><span class="p">,</span> <span class="n">Ncols</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">directory</span><span class="o">=</span><span class="s2">&quot;./instances-new/QUBO&quot;</span><span class="p">,</span>
+                   <span class="n">cross_check</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Draws a grid of instances from ``selected_files``.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        selected_files(list): list of files (\*.qubo.json)</span>
+<span class="sd">        Ncols(int): number of columns in the grid.</span>
+<span class="sd">        directory(str): directory with QUBO files (\*.qubo.json)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">Ncols</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">Ncols</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">selected_files</span><span class="p">))</span>
+    <span class="n">Nrows</span> <span class="o">=</span> <span class="n">ceil</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">selected_files</span><span class="p">)</span> <span class="o">/</span> <span class="n">Ncols</span><span class="p">)</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">Nrows</span><span class="p">,</span> <span class="n">Ncols</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">20</span> <span class="o">*</span> <span class="n">Nrows</span> <span class="o">/</span> <span class="n">Ncols</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">qubofile</span> <span class="ow">in</span> <span class="n">selected_files</span><span class="p">:</span>
+        <span class="n">Q</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">qubojs</span> <span class="o">=</span> <span class="n">load_QUBO</span><span class="p">(</span><span class="n">qubofile</span><span class="p">)</span>
+        <span class="c1"># solve classically -- MIP</span>
+        <span class="n">G</span><span class="p">,</span> <span class="n">origjs</span> <span class="o">=</span> <span class="n">load_orig_MWC_instance</span><span class="p">(</span><span class="n">qubojs</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">][</span><span class="s2">&quot;original_instance_file&quot;</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="n">cross_check</span><span class="p">:</span>
+            <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
+            <span class="n">model</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="n">create_MWC_LBOP</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">model</span><span class="o">.</span><span class="n">setParam</span><span class="p">(</span><span class="s2">&quot;OutputFlag&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">model</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+            <span class="n">model</span><span class="o">.</span><span class="n">optimize</span><span class="p">()</span>
+            <span class="n">miptime</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">t0</span>
+            <span class="k">assert</span> <span class="n">model</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="mi">2</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;status = </span><span class="si">{</span><span class="n">model</span><span class="o">.</span><span class="n">status</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">mipObj</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">objVal</span>
+
+            <span class="c1"># solve as QUBO</span>
+            <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
+            <span class="n">qubo_model</span><span class="p">,</span> <span class="n">qubo_x</span> <span class="o">=</span> <span class="n">solve_QUBO</span><span class="p">(</span><span class="n">Q</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span><span class="n">quiet</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">qubotime</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span>
+            <span class="k">assert</span> <span class="n">qubo_model</span><span class="o">.</span><span class="n">status</span><span class="o">==</span><span class="mi">2</span>
+
+            <span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="n">mipObj</span> <span class="o">+</span> <span class="n">qubo_model</span><span class="o">.</span><span class="n">objVal</span><span class="p">)</span><span class="o">&lt;</span><span class="mf">1e-5</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;MIP: </span><span class="si">{</span><span class="n">mipObj</span><span class="si">}</span><span class="s2">, QUBO: </span><span class="si">{</span><span class="n">qubo_model</span><span class="o">.</span><span class="n">objVal</span><span class="si">}</span><span class="s2">&quot;</span>
+
+            <span class="c1"># show the results</span>
+            <span class="n">Gp_qubo</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+            <span class="n">Gp_qubo</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">([</span><span class="n">j</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">G</span><span class="o">.</span><span class="n">nodes</span> <span class="k">if</span> <span class="n">qubo_x</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">X</span><span class="o">==</span><span class="mf">1.0</span><span class="p">])</span>
+
+        <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">Nrows</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">axk</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">axk</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="n">k</span><span class="o">//</span><span class="n">Ncols</span><span class="p">][</span><span class="n">k</span><span class="o">-</span><span class="n">Ncols</span><span class="o">*</span><span class="p">(</span><span class="n">k</span><span class="o">//</span><span class="n">Ncols</span><span class="p">)]</span>
+
+        <span class="n">draw_instance</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">axk</span><span class="p">,</span> <span class="n">node_color</span> <span class="o">=</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">with_labels</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                      <span class="n">node_size</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+        <span class="c1"># ax_title = f&quot;{os.path.basename(os.path.normpath(qubofile))[3:-10]} \n N:{N} | E:{len(G.edges)}/{N*(N-1)/2:.0f})&quot;</span>
+
+        <span class="n">ax_title</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">origjs</span><span class="p">[</span><span class="s1">&#39;description&#39;</span><span class="p">][</span><span class="s1">&#39;instance_id&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">N</span><span class="si">}</span><span class="s2"> nodes, </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">)</span><span class="si">}</span><span class="s2"> edges.&quot;</span>
+
+        <span class="k">if</span> <span class="n">cross_check</span><span class="p">:</span>
+            <span class="n">draw_instance</span><span class="p">(</span><span class="n">Gp_qubo</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axk</span><span class="p">,</span> <span class="n">node_color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span>
+                        <span class="n">with_labels</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">node_size</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+            <span class="n">ax_title</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Tmip:</span><span class="si">{</span><span class="n">miptime</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> s. | Tqubo:</span><span class="si">{</span><span class="n">qubotime</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span>
+
+        <span class="n">axk</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">ax_title</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+        <span class="n">k</span><span class="o">+=</span><span class="mi">1</span></div>
+
+
+
+<div class="viewcode-block" id="draw_IDs_grid">
+<a class="viewcode-back" href="../_autosummary/MWC_inst.html#MWC_inst.draw_IDs_grid">[docs]</a>
+<span class="k">def</span> <span class="nf">draw_IDs_grid</span><span class="p">(</span><span class="n">sel_IDs</span><span class="p">,</span> <span class="n">directory</span> <span class="o">=</span> <span class="s2">&quot;./instances-new/QUBO&quot;</span><span class="p">,</span> <span class="n">Ncols</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+                  <span class="n">cross_check</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Draws a grid of instances by (the number part of) IDs.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        sel_IDs(list[int]): list of instance IDs (numbers)</span>
+<span class="sd">        directory(str): directory with QUBO files (\*.qubo.json)</span>
+<span class="sd">        Ncols(int): number of columns in the grid</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        selected file names.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">selected_files</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">ID</span> <span class="ow">in</span> <span class="n">sel_IDs</span><span class="p">:</span>
+        <span class="n">file_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">fname</span> <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">glob</span><span class="p">(</span><span class="n">directory</span> <span class="o">+</span> <span class="s2">&quot;/MWC*.json&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;.+MWC[0]*&#39;</span> <span class="o">+</span> <span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">ID</span><span class="p">))</span> <span class="o">+</span> <span class="sa">r</span><span class="s1">&#39;_.*\.qubo.json&#39;</span><span class="p">,</span> <span class="n">fname</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">file_list</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Instance with ID &#39;</span><span class="si">{</span><span class="n">ID</span><span class="si">}</span><span class="s2">&#39; not found in </span><span class="si">{</span><span class="n">directory</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">file_list</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Multiple instances with ID &#39;</span><span class="si">{</span><span class="n">ID</span><span class="si">}</span><span class="s2">&#39; in </span><span class="si">{</span><span class="n">directory</span><span class="si">}</span><span class="s2">:</span><span class="se">\n</span><span class="si">{</span><span class="n">file_list</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+        <span class="n">selected_files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">file_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="n">draw_inst_grid</span><span class="p">(</span><span class="n">selected_files</span><span class="p">,</span> <span class="n">Ncols</span><span class="o">=</span><span class="n">Ncols</span><span class="p">,</span> <span class="n">cross_check</span><span class="o">=</span><span class="n">cross_check</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">selected_files</span></div>
+
+
+<div class="viewcode-block" id="create_MWC_QUBO">
+<a class="viewcode-back" href="../_autosummary/MWC_inst.html#MWC_inst.create_MWC_QUBO">[docs]</a>
+<span class="k">def</span> <span class="nf">create_MWC_QUBO</span><span class="p">(</span><span class="n">G</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Given the graph G, creates a QUBO formulation.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        G (nx.Graph): the underlying weighted graph,</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Q, P: QUBO coefficients as np.arrays</span>
+
+<span class="sd">    Notes:</span>
+<span class="sd">        - We assume QUBO in the form:</span>
+<span class="sd">            min (1/2) x&#39; Q x + P x</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">)</span>
+    <span class="n">Q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span>
+    <span class="n">P</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span> <span class="ow">in</span> <span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">:</span>
+        <span class="n">Q</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">2</span><span class="o">*</span><span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">][</span><span class="s2">&quot;weight&quot;</span><span class="p">]</span>
+        <span class="n">Q</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">2</span><span class="o">*</span><span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">][</span><span class="s2">&quot;weight&quot;</span><span class="p">]</span>
+        <span class="n">P</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-=</span> <span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">][</span><span class="s2">&quot;weight&quot;</span><span class="p">]</span>
+        <span class="n">P</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-=</span> <span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">][</span><span class="s2">&quot;weight&quot;</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">Q</span><span class="p">,</span> <span class="n">P</span></div>
+
+
+
+<div class="viewcode-block" id="create_MWC_LBOP">
+<a class="viewcode-back" href="../_autosummary/MWC_inst.html#MWC_inst.create_MWC_LBOP">[docs]</a>
+<span class="k">def</span> <span class="nf">create_MWC_LBOP</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Creates a linear binary problem from the underlying graph G.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        G (nx.Graph): the underlying weighted graph,</span>
+<span class="sd">        quiet (bool): suppress model output (flag),</span>
+<span class="sd">        timeout (int): timeout for the solver (seconds)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        a tuple of m (gurobipy model), z (z-vars), x (x-vars)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="s2">&quot;LBOP&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Defining variables</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="p">{(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">):</span> <span class="n">model</span><span class="o">.</span><span class="n">addVar</span><span class="p">(</span><span class="n">vtype</span><span class="o">=</span><span class="n">GRB</span><span class="o">.</span><span class="n">BINARY</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;z_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">j</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+         <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span> <span class="ow">in</span> <span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">}</span>
+
+    <span class="n">x</span> <span class="o">=</span> <span class="p">{</span><span class="n">i</span><span class="p">:</span> <span class="n">model</span><span class="o">.</span><span class="n">addVar</span><span class="p">(</span><span class="n">vtype</span><span class="o">=</span><span class="n">GRB</span><span class="o">.</span><span class="n">BINARY</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;x_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">}</span>
+
+    <span class="c1"># Setting the objective</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">setObjective</span><span class="p">(</span><span class="n">gp</span><span class="o">.</span><span class="n">quicksum</span><span class="p">(</span><span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">][</span><span class="s2">&quot;weight&quot;</span><span class="p">]</span><span class="o">*</span><span class="n">z</span><span class="p">[(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)]</span>
+                                   <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span> <span class="ow">in</span> <span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">),</span> <span class="n">GRB</span><span class="o">.</span><span class="n">MAXIMIZE</span><span class="p">)</span>
+
+    <span class="c1"># Defining constraints</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span> <span class="ow">in</span> <span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">:</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">addConstr</span><span class="p">(</span><span class="n">z</span><span class="p">[(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)]</span> <span class="o">&lt;=</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">addConstr</span><span class="p">(</span><span class="n">z</span><span class="p">[(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)]</span> <span class="o">&lt;=</span> <span class="mi">2</span> <span class="o">-</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="p">]))</span>
+
+    <span class="k">if</span> <span class="n">quiet</span><span class="p">:</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">setParam</span><span class="p">(</span><span class="s2">&quot;OutputFlag&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">timeout</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">setParam</span><span class="p">(</span><span class="s2">&quot;TimeLimit&quot;</span><span class="p">,</span> <span class="n">timeout</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">model</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">x</span></div>
+
+
+
+<span class="c1">###############################################################################</span>
+<span class="c1"># Original instance file I/O</span>
+<div class="viewcode-block" id="save_orig_MWC_instance">
+<a class="viewcode-back" href="../_autosummary/MWC_inst.html#MWC_inst.save_orig_MWC_instance">[docs]</a>
+<span class="k">def</span> <span class="nf">save_orig_MWC_instance</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">inst_id</span><span class="p">,</span> <span class="n">problem_name</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+                           <span class="n">directory</span><span class="o">=</span><span class="s2">&quot;./instances/orig/&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Saves a MaxCut instance encoded by graph G to a JSON (with metadata).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        nodes: list of nodes,</span>
+<span class="sd">        edges: list of tuples (i, j, w), where (i, j) is the edge, w is the weight</span>
+<span class="sd">        inst_id (string): instance ID,</span>
+<span class="sd">        problem_name (string): (relatively) human-readable name,</span>
+<span class="sd">        comment: optional comment for the JSON file,</span>
+<span class="sd">        directory: a dir to save files.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">instance</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;nodes&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">],</span>
+               <span class="s2">&quot;edges&quot;</span><span class="p">:</span> <span class="p">[(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">][</span><span class="s2">&quot;weight&quot;</span><span class="p">])</span> <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span> <span class="ow">in</span> <span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">]}</span>
+
+    <span class="n">instance</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;instance_id&quot;</span><span class="p">:</span> <span class="n">inst_id</span><span class="p">,</span>
+        <span class="s2">&quot;instance_type&quot;</span><span class="p">:</span> <span class="s2">&quot;MWC&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;original_instance_name&quot;</span><span class="p">:</span> <span class="n">problem_name</span><span class="p">,</span>
+        <span class="s2">&quot;contents&quot;</span><span class="p">:</span> <span class="s2">&quot;orig_MWC_G&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;Nodes and weighted edges. &quot;</span> <span class="o">+</span> <span class="n">comment</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">inst_id</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">problem_name</span><span class="si">}</span><span class="s2">.orig.json&quot;</span>
+
+    <span class="n">filename</span> <span class="o">=</span> <span class="n">directory</span> <span class="o">+</span> <span class="n">filename</span>
+
+    <span class="n">inst_json</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">outfile</span><span class="p">:</span>
+        <span class="n">outfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">inst_json</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">filename</span></div>
+
+
+
+<div class="viewcode-block" id="extract_G_from_json">
+<a class="viewcode-back" href="../_autosummary/MWC_inst.html#MWC_inst.extract_G_from_json">[docs]</a>
+<span class="k">def</span> <span class="nf">extract_G_from_json</span><span class="p">(</span><span class="n">js</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Helper: extracts the graph from the problem JSON.</span>
+
+<span class="sd">    Assumes original JSON format (typically, in ``instances/orig/`` folder).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">G</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+    <span class="n">G</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">(</span><span class="n">js</span><span class="p">[</span><span class="s1">&#39;nodes&#39;</span><span class="p">])</span>
+    <span class="n">G</span><span class="o">.</span><span class="n">add_weighted_edges_from</span><span class="p">(</span><span class="n">js</span><span class="p">[</span><span class="s1">&#39;edges&#39;</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">G</span></div>
+
+
+
+<div class="viewcode-block" id="load_instance_by_ID">
+<a class="viewcode-back" href="../_autosummary/MWC_inst.html#MWC_inst.load_instance_by_ID">[docs]</a>
+<span class="k">def</span> <span class="nf">load_instance_by_ID</span><span class="p">(</span><span class="n">ID</span><span class="p">,</span> <span class="n">directory</span><span class="o">=</span><span class="s2">&quot;./instances/orig/&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Loads an instance by ID and returns graph G.&quot;&quot;&quot;</span>
+    <span class="n">directory</span> <span class="o">+=</span> <span class="s2">&quot;/&quot;</span>
+    <span class="n">file_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">fname</span> <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">glob</span><span class="p">(</span><span class="n">directory</span> <span class="o">+</span> <span class="n">ID</span> <span class="o">+</span> <span class="s2">&quot;_*.json&quot;</span><span class="p">)]</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">file_list</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Instance with ID &#39;</span><span class="si">{</span><span class="n">ID</span><span class="si">}</span><span class="s2">&#39; not found in </span><span class="si">{</span><span class="n">directory</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">file_list</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Multiple instances with ID &#39;</span><span class="si">{</span><span class="n">ID</span><span class="si">}</span><span class="s2">&#39; in </span><span class="si">{</span><span class="n">directory</span><span class="si">}</span><span class="s2">:</span><span class="se">\n</span><span class="si">{</span><span class="n">file_list</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_list</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">ofile</span><span class="p">:</span>
+        <span class="n">js</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">ofile</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">js</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">][</span><span class="s2">&quot;instance_type&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;MWC&quot;</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Instance &#39;</span><span class="si">{</span><span class="n">ID</span><span class="si">}</span><span class="s2">&#39; is not marked as MWC in &#39;instance_type&#39; field. (see </span><span class="si">{</span><span class="n">file_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">extract_G_from_json</span><span class="p">(</span><span class="n">js</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="load_orig_MWC_instance">
+<a class="viewcode-back" href="../_autosummary/MWC_inst.html#MWC_inst.load_orig_MWC_instance">[docs]</a>
+<span class="k">def</span> <span class="nf">load_orig_MWC_instance</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Loads the instance from ``filename``.&quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">openfile</span><span class="p">:</span>
+        <span class="n">myjson</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">openfile</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">extract_G_from_json</span><span class="p">(</span><span class="n">myjson</span><span class="p">),</span> <span class="n">myjson</span></div>
+
+
+
+<span class="c1">###############################################################################</span>
+<span class="c1"># Instance generator</span>
+<div class="viewcode-block" id="generate_MWC_instances">
+<a class="viewcode-back" href="../_autosummary/MWC_inst.html#MWC_inst.generate_MWC_instances">[docs]</a>
+<span class="k">def</span> <span class="nf">generate_MWC_instances</span><span class="p">(</span><span class="n">K</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+                           <span class="n">Ns</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">15</span><span class="p">],</span>
+                           <span class="n">Ps</span><span class="o">=</span><span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">],</span>
+                           <span class="n">Cmin</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                           <span class="n">Cmax</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                           <span class="n">seed</span><span class="o">=</span><span class="mi">2023</span><span class="p">,</span>
+                           <span class="n">instdir</span><span class="o">=</span><span class="s2">&quot;./instances&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Core function: generates a set of MWC instances with given parameters.</span>
+
+<span class="sd">    Creates K * len(Ns) * len(Ps) instances, using the given random seed</span>
+<span class="sd">    and the costs bounds, and saves them to directory ``instdir``.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        K(int): number of instances per set of parameters,</span>
+<span class="sd">        Ns(list[int]): instance sizes,</span>
+<span class="sd">        Ps(list[float]): p parameter for ER random graph model,</span>
+<span class="sd">        Cmin, Cmax(int): min/max edge costs,</span>
+<span class="sd">        seed(int): random seed</span>
+<span class="sd">        instdir(str): directory to save instances to.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="p">(</span><span class="n">Cmin</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">Cmax</span> <span class="o">&gt;</span><span class="mi">0</span><span class="p">),</span> \
+        <span class="sa">f</span><span class="s2">&quot;Can&#39;t sample costs from (</span><span class="si">{</span><span class="n">Cmin</span><span class="p">,</span><span class="w"> </span><span class="n">Cmax</span><span class="si">}</span><span class="s2">): nonnegative numbers expected.&quot;</span>
+
+    <span class="n">inst_id</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">K</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">N</span> <span class="ow">in</span> <span class="n">Ns</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">Ps</span><span class="p">:</span>
+                <span class="n">inst_id</span> <span class="o">+=</span> <span class="mi">1</span>
+
+                <span class="n">C</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">Cmin</span><span class="p">,</span> <span class="n">Cmax</span><span class="p">)</span>
+                <span class="n">G</span> <span class="o">=</span> <span class="n">generate_instance</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">C</span><span class="p">)</span>
+                <span class="n">Q</span><span class="p">,</span> <span class="n">P</span> <span class="o">=</span> <span class="n">create_MWC_QUBO</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+
+                <span class="n">orig_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;N</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">)</span><span class="si">}</span><span class="s2">E</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">)</span><span class="si">}</span><span class="s2">_ERG_p</span><span class="si">{</span><span class="n">p</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="c1"># save the original instance</span>
+                <span class="n">orig_file</span> <span class="o">=</span> <span class="n">save_orig_MWC_instance</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;MWC</span><span class="si">{</span><span class="n">inst_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                                                   <span class="n">orig_name</span><span class="p">,</span>
+                                                   <span class="n">directory</span> <span class="o">=</span> <span class="n">instdir</span><span class="o">+</span><span class="s2">&quot;/orig/&quot;</span><span class="p">)</span>
+                <span class="c1"># save the QUBO</span>
+                <span class="n">save_QUBO</span><span class="p">(</span><span class="n">Q</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s2">&quot;MWC&quot;</span><span class="p">,</span> <span class="n">orig_name</span><span class="p">,</span> <span class="n">orig_file</span><span class="p">,</span>
+                                      <span class="sa">f</span><span class="s2">&quot;MWC</span><span class="si">{</span><span class="n">inst_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                                      <span class="n">comment</span> <span class="o">=</span> <span class="s2">&quot;Optimal objective is *minus* the QUBO objective.&quot;</span><span class="p">,</span>
+                          <span class="n">directory</span><span class="o">=</span><span class="n">instdir</span><span class="o">+</span><span class="s2">&quot;/QUBO/&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">✅ Done. Generated </span><span class="si">{</span><span class="n">inst_id</span><span class="si">}</span><span class="s2"> instances.&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_objective_from_sol">
+<a class="viewcode-back" href="../_autosummary/MWC_inst.html#MWC_inst.get_objective_from_sol">[docs]</a>
+<span class="k">def</span> <span class="nf">get_objective_from_sol</span><span class="p">(</span><span class="n">G</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">sol</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculates a MaxCut objective given the graph and solution bistring.</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        Assumes **direct** order of bits in the solution.</span>
+<span class="sd">        E.g., ``[n0, n1, n2, ...]``.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">obj</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span> <span class="ow">in</span> <span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">sol</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">sol</span><span class="p">[</span><span class="n">j</span><span class="p">]:</span>
+            <span class="n">obj</span> <span class="o">+=</span> <span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">][</span><span class="s1">&#39;weight&#39;</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">obj</span></div>
+
+
+<span class="c1"># The code to be run from the command line</span>
+<div class="viewcode-block" id="main">
+<a class="viewcode-back" href="../_autosummary/MWC_inst.html#MWC_inst.main">[docs]</a>
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The main function specifying instance generation parameters (see the source code).&quot;&quot;&quot;</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;instdir&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;(output) instances directory&quot;</span><span class="p">,</span>
+                        <span class="n">default</span><span class="o">=</span><span class="s2">&quot;./instances&quot;</span><span class="p">)</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">Path</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">instdir</span><span class="p">)</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">instdir</span><span class="si">}</span><span class="s2">: does not exist, or is not a directory.&quot;</span><span class="p">)</span>
+
+    <span class="n">generate_MWC_instances</span><span class="p">(</span><span class="n">Ns</span> <span class="o">=</span> <span class="p">[</span><span class="n">j</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">256</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">)],</span>
+                           <span class="n">Ps</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">],</span>
+                           <span class="n">K</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                           <span class="n">instdir</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">instdir</span><span class="p">)</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+
+<span class="c1">###############################################################################</span>
+<span class="c1"># Cross-checks</span>
+<div class="viewcode-block" id="assert_MWC_MIP">
+<a class="viewcode-back" href="../_autosummary/MWC_inst.html#MWC_inst.assert_MWC_MIP">[docs]</a>
+<span class="k">def</span> <span class="nf">assert_MWC_MIP</span><span class="p">(</span><span class="n">orig_json</span><span class="p">,</span> <span class="n">qubo_model</span><span class="p">,</span>
+                   <span class="n">quiet</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Asserts if the objectives for QUBO and original MWC (MIP) coincide.&quot;&quot;&quot;</span>
+    <span class="n">G</span> <span class="o">=</span> <span class="n">extract_G_from_json</span><span class="p">(</span><span class="n">orig_json</span><span class="p">)</span>
+    <span class="n">m1</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">create_MWC_LBOP</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">quiet</span><span class="p">:</span>
+        <span class="n">m1</span><span class="o">.</span><span class="n">setParam</span><span class="p">(</span><span class="s2">&quot;OutputFlag&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">timeout</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">m1</span><span class="o">.</span><span class="n">setParam</span><span class="p">(</span><span class="s2">&quot;TimeLimit&quot;</span><span class="p">,</span> <span class="n">timeout</span><span class="p">)</span>
+
+    <span class="n">m1</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+    <span class="n">m1</span><span class="o">.</span><span class="n">optimize</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">timeout</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="n">m1</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="n">GRB</span><span class="o">.</span><span class="n">OPTIMAL</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="p">(</span><span class="n">m1</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="n">GRB</span><span class="o">.</span><span class="n">OPTIMAL</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">m1</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="n">GRB</span><span class="o">.</span><span class="n">TIME_LIMIT</span><span class="p">)</span>
+
+    <span class="c1"># note the &quot;+&quot;: that&#39;s due to different sizes / QUBO formulation with &#39;min&#39;</span>
+    <span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="n">m1</span><span class="o">.</span><span class="n">objVal</span> <span class="o">+</span> <span class="n">qubo_model</span><span class="o">.</span><span class="n">objVal</span><span class="p">)</span><span class="o">&lt;=</span><span class="n">tol</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Alexey Bochkarev et al..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

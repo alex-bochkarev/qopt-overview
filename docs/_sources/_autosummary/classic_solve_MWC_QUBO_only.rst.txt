@@ -1,0 +1,13 @@
+﻿classic\_solve\_MWC\_QUBO\_only
+===============================
+
+.. automodule:: classic_solve_MWC_QUBO_only
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      main
+      solve_MWC_classically
+   

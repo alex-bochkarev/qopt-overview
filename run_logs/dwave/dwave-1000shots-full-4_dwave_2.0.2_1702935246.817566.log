@@ -1,0 +1,1163 @@
+2023-12-18 22:34:06,848 bench  INFO   started 667 run(s).
+2023-12-18 22:34:06,848 bench  INFO   run start: instance_id=MWC339, args=(1000, None, None).
+2023-12-18 22:34:11,252 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:34:11,283 bench  DEBUG  qpu: start.
+2023-12-18 22:34:11,361 bench  DEBUG  qpu: finished.
+2023-12-18 22:34:17,251 bench  INFO   run finished: success, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0000.json".
+2023-12-18 22:34:17,267 bench  INFO   run 1/667 complete.
+2023-12-18 22:34:17,267 bench  INFO   run start: instance_id=UDMIS121, args=(1000, None, None).
+2023-12-18 22:34:20,595 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0001.json".
+2023-12-18 22:34:20,595 bench  INFO   run 2/667 complete.
+2023-12-18 22:34:20,595 bench  INFO   run start: instance_id=UDMIS122, args=(1000, None, None).
+2023-12-18 22:34:23,888 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0002.json".
+2023-12-18 22:34:23,888 bench  INFO   run 3/667 complete.
+2023-12-18 22:34:23,888 bench  INFO   run start: instance_id=UDMIS123, args=(1000, None, None).
+2023-12-18 22:34:26,454 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0003.json".
+2023-12-18 22:34:26,454 bench  INFO   run 4/667 complete.
+2023-12-18 22:34:26,454 bench  INFO   run start: instance_id=UDMIS124, args=(1000, None, None).
+2023-12-18 22:34:29,981 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0004.json".
+2023-12-18 22:34:29,981 bench  INFO   run 5/667 complete.
+2023-12-18 22:34:29,981 bench  INFO   run start: instance_id=UDMIS125, args=(1000, None, None).
+2023-12-18 22:34:32,918 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0005.json".
+2023-12-18 22:34:32,918 bench  INFO   run 6/667 complete.
+2023-12-18 22:34:32,918 bench  INFO   run start: instance_id=UDMIS126, args=(1000, None, None).
+2023-12-18 22:34:36,424 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0006.json".
+2023-12-18 22:34:36,424 bench  INFO   run 7/667 complete.
+2023-12-18 22:34:36,424 bench  INFO   run start: instance_id=UDMIS127, args=(1000, None, None).
+2023-12-18 22:34:38,940 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0007.json".
+2023-12-18 22:34:38,940 bench  INFO   run 8/667 complete.
+2023-12-18 22:34:38,940 bench  INFO   run start: instance_id=UDMIS128, args=(1000, None, None).
+2023-12-18 22:34:41,408 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0008.json".
+2023-12-18 22:34:41,408 bench  INFO   run 9/667 complete.
+2023-12-18 22:34:41,408 bench  INFO   run start: instance_id=UDMIS129, args=(1000, None, None).
+2023-12-18 22:34:45,132 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0009.json".
+2023-12-18 22:34:45,132 bench  INFO   run 10/667 complete.
+2023-12-18 22:34:45,132 bench  INFO   run start: instance_id=UDMIS130, args=(1000, None, None).
+2023-12-18 22:34:47,733 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0010.json".
+2023-12-18 22:34:47,733 bench  INFO   run 11/667 complete.
+2023-12-18 22:34:47,733 bench  INFO   run start: instance_id=UDMIS131, args=(1000, None, None).
+2023-12-18 22:34:50,358 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0011.json".
+2023-12-18 22:34:50,358 bench  INFO   run 12/667 complete.
+2023-12-18 22:34:50,358 bench  INFO   run start: instance_id=UDMIS132, args=(1000, None, None).
+2023-12-18 22:34:54,146 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0012.json".
+2023-12-18 22:34:54,146 bench  INFO   run 13/667 complete.
+2023-12-18 22:34:54,146 bench  INFO   run start: instance_id=UDMIS133, args=(1000, None, None).
+2023-12-18 22:34:56,718 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0013.json".
+2023-12-18 22:34:56,718 bench  INFO   run 14/667 complete.
+2023-12-18 22:34:56,718 bench  INFO   run start: instance_id=UDMIS134, args=(1000, None, None).
+2023-12-18 22:34:59,318 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0014.json".
+2023-12-18 22:34:59,318 bench  INFO   run 15/667 complete.
+2023-12-18 22:34:59,318 bench  INFO   run start: instance_id=UDMIS135, args=(1000, None, None).
+2023-12-18 22:35:01,911 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0015.json".
+2023-12-18 22:35:01,911 bench  INFO   run 16/667 complete.
+2023-12-18 22:35:01,911 bench  INFO   run start: instance_id=UDMIS028EXT, args=(1000, None, None).
+2023-12-18 22:35:05,853 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:35:05,869 bench  DEBUG  qpu: start.
+2023-12-18 22:35:05,885 bench  DEBUG  qpu: finished.
+2023-12-18 22:35:11,257 bench  INFO   run finished: success, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0016.json".
+2023-12-18 22:35:11,273 bench  INFO   run 17/667 complete.
+2023-12-18 22:35:11,273 bench  INFO   run start: instance_id=UDMIS029EXT, args=(1000, None, None).
+2023-12-18 22:35:13,862 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:35:13,878 bench  DEBUG  qpu: start.
+2023-12-18 22:35:13,893 bench  DEBUG  qpu: finished.
+2023-12-18 22:35:19,252 bench  INFO   run finished: success, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0017.json".
+2023-12-18 22:35:19,267 bench  INFO   run 18/667 complete.
+2023-12-18 22:35:19,267 bench  INFO   run start: instance_id=UDMIS030EXT, args=(1000, None, None).
+2023-12-18 22:35:21,735 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:35:21,766 bench  DEBUG  qpu: start.
+2023-12-18 22:35:21,782 bench  DEBUG  qpu: finished.
+2023-12-18 22:35:27,123 bench  INFO   run finished: success, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0018.json".
+2023-12-18 22:35:27,138 bench  INFO   run 19/667 complete.
+2023-12-18 22:35:27,138 bench  INFO   run start: instance_id=UDMIS064EXT, args=(1000, None, None).
+2023-12-18 22:35:29,802 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:35:29,818 bench  DEBUG  qpu: start.
+2023-12-18 22:35:29,849 bench  DEBUG  qpu: finished.
+2023-12-18 22:35:35,380 bench  INFO   run finished: success, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0019.json".
+2023-12-18 22:35:35,396 bench  INFO   run 20/667 complete.
+2023-12-18 22:35:35,396 bench  INFO   run start: instance_id=UDMIS065EXT, args=(1000, None, None).
+2023-12-18 22:35:40,506 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:35:40,522 bench  DEBUG  qpu: start.
+2023-12-18 22:35:40,552 bench  DEBUG  qpu: finished.
+2023-12-18 22:35:46,061 bench  INFO   run finished: success, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0020.json".
+2023-12-18 22:35:46,061 bench  INFO   run 21/667 complete.
+2023-12-18 22:35:46,061 bench  INFO   run start: instance_id=UDMIS066EXT, args=(1000, None, None).
+2023-12-18 22:35:48,633 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:35:48,649 bench  DEBUG  qpu: start.
+2023-12-18 22:35:48,680 bench  DEBUG  qpu: finished.
+2023-12-18 22:35:54,078 bench  INFO   run finished: success, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0021.json".
+2023-12-18 22:35:54,093 bench  INFO   run 22/667 complete.
+2023-12-18 22:35:54,093 bench  INFO   run start: instance_id=UDMIS100EXT, args=(1000, None, None).
+2023-12-18 22:35:56,625 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:35:56,641 bench  DEBUG  qpu: start.
+2023-12-18 22:35:56,672 bench  DEBUG  qpu: finished.
+2023-12-18 22:36:02,236 bench  INFO   run finished: success, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0022.json".
+2023-12-18 22:36:02,251 bench  INFO   run 23/667 complete.
+2023-12-18 22:36:02,251 bench  INFO   run start: instance_id=UDMIS101EXT, args=(1000, None, None).
+2023-12-18 22:36:04,761 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:36:04,777 bench  DEBUG  qpu: start.
+2023-12-18 22:36:04,808 bench  DEBUG  qpu: finished.
+2023-12-18 22:36:10,547 bench  INFO   run finished: success, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0023.json".
+2023-12-18 22:36:10,547 bench  INFO   run 24/667 complete.
+2023-12-18 22:36:10,547 bench  INFO   run start: instance_id=UDMIS102EXT, args=(1000, None, None).
+2023-12-18 22:36:13,127 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:36:13,142 bench  DEBUG  qpu: start.
+2023-12-18 22:36:13,174 bench  DEBUG  qpu: finished.
+2023-12-18 22:36:18,760 bench  INFO   run finished: success, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0024.json".
+2023-12-18 22:36:18,776 bench  INFO   run 25/667 complete.
+2023-12-18 22:36:18,776 bench  INFO   run start: instance_id=MWC106, args=(1000, None, None).
+2023-12-18 22:36:21,293 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:36:21,324 bench  DEBUG  qpu: start.
+2023-12-18 22:36:21,449 bench  DEBUG  qpu: finished.
+2023-12-18 22:36:27,646 bench  INFO   run finished: success, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0025.json".
+2023-12-18 22:36:27,661 bench  INFO   run 26/667 complete.
+2023-12-18 22:36:27,661 bench  INFO   run start: instance_id=MWC107, args=(1000, None, None).
+2023-12-18 22:36:32,685 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:36:32,700 bench  DEBUG  qpu: start.
+2023-12-18 22:36:32,825 bench  DEBUG  qpu: finished.
+2023-12-18 22:36:38,952 bench  INFO   run finished: success, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0026.json".
+2023-12-18 22:36:38,968 bench  INFO   run 27/667 complete.
+2023-12-18 22:36:38,968 bench  INFO   run start: instance_id=MWC108, args=(1000, None, None).
+2023-12-18 22:36:41,494 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:36:41,525 bench  DEBUG  qpu: start.
+2023-12-18 22:36:41,619 bench  DEBUG  qpu: finished.
+2023-12-18 22:36:47,637 bench  INFO   run finished: success, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0027.json".
+2023-12-18 22:36:47,653 bench  INFO   run 28/667 complete.
+2023-12-18 22:36:47,653 bench  INFO   run start: instance_id=MWC184, args=(1000, None, None).
+2023-12-18 22:36:50,231 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:36:50,262 bench  DEBUG  qpu: start.
+2023-12-18 22:36:50,387 bench  DEBUG  qpu: finished.
+2023-12-18 22:36:56,470 bench  INFO   run finished: success, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0028.json".
+2023-12-18 22:36:56,470 bench  INFO   run 29/667 complete.
+2023-12-18 22:36:56,470 bench  INFO   run start: instance_id=MWC185, args=(1000, None, None).
+2023-12-18 22:36:59,017 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:36:59,049 bench  DEBUG  qpu: start.
+2023-12-18 22:36:59,174 bench  DEBUG  qpu: finished.
+2023-12-18 22:37:05,322 bench  INFO   run finished: success, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0029.json".
+2023-12-18 22:37:05,337 bench  INFO   run 30/667 complete.
+2023-12-18 22:37:05,337 bench  INFO   run start: instance_id=MWC186, args=(1000, None, None).
+2023-12-18 22:37:07,844 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:37:07,875 bench  DEBUG  qpu: start.
+2023-12-18 22:37:07,984 bench  DEBUG  qpu: finished.
+2023-12-18 22:37:14,143 bench  INFO   run finished: success, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0030.json".
+2023-12-18 22:37:14,159 bench  INFO   run 31/667 complete.
+2023-12-18 22:37:14,159 bench  INFO   run start: instance_id=MWC262, args=(1000, None, None).
+2023-12-18 22:37:16,638 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:37:16,654 bench  DEBUG  qpu: start.
+2023-12-18 22:37:16,794 bench  DEBUG  qpu: finished.
+2023-12-18 22:37:22,844 bench  INFO   run finished: success, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0031.json".
+2023-12-18 22:37:22,860 bench  INFO   run 32/667 complete.
+2023-12-18 22:37:22,860 bench  INFO   run start: instance_id=MWC263, args=(1000, None, None).
+2023-12-18 22:37:27,929 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:37:27,960 bench  DEBUG  qpu: start.
+2023-12-18 22:37:28,085 bench  DEBUG  qpu: finished.
+2023-12-18 22:37:34,290 bench  INFO   run finished: success, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0032.json".
+2023-12-18 22:37:34,305 bench  INFO   run 33/667 complete.
+2023-12-18 22:37:34,305 bench  INFO   run start: instance_id=MWC264, args=(1000, None, None).
+2023-12-18 22:37:36,743 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:37:36,774 bench  DEBUG  qpu: start.
+2023-12-18 22:37:36,868 bench  DEBUG  qpu: finished.
+2023-12-18 22:37:42,820 bench  INFO   run finished: success, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0033.json".
+2023-12-18 22:37:42,820 bench  INFO   run 34/667 complete.
+2023-12-18 22:37:42,820 bench  INFO   run start: instance_id=MWC28, args=(1000, None, None).
+2023-12-18 22:37:45,317 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:37:45,364 bench  DEBUG  qpu: start.
+2023-12-18 22:37:45,505 bench  DEBUG  qpu: finished.
+2023-12-18 22:37:51,578 bench  INFO   run finished: success, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0034.json".
+2023-12-18 22:37:51,593 bench  INFO   run 35/667 complete.
+2023-12-18 22:37:51,593 bench  INFO   run start: instance_id=MWC29, args=(1000, None, None).
+2023-12-18 22:37:54,069 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:37:54,100 bench  DEBUG  qpu: start.
+2023-12-18 22:37:54,225 bench  DEBUG  qpu: finished.
+2023-12-18 22:38:00,292 bench  INFO   run finished: success, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0035.json".
+2023-12-18 22:38:00,308 bench  INFO   run 36/667 complete.
+2023-12-18 22:38:00,308 bench  INFO   run start: instance_id=MWC30, args=(1000, None, None).
+2023-12-18 22:38:02,797 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:38:02,829 bench  DEBUG  qpu: start.
+2023-12-18 22:38:02,922 bench  DEBUG  qpu: finished.
+2023-12-18 22:38:09,111 bench  INFO   run finished: success, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0036.json".
+2023-12-18 22:38:09,111 bench  INFO   run 37/667 complete.
+2023-12-18 22:38:09,111 bench  INFO   run start: instance_id=MWC340, args=(1000, None, None).
+2023-12-18 22:38:11,631 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:38:11,647 bench  DEBUG  qpu: start.
+2023-12-18 22:38:11,787 bench  DEBUG  qpu: finished.
+2023-12-18 22:38:17,952 bench  INFO   run finished: success, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0037.json".
+2023-12-18 22:38:17,967 bench  INFO   run 38/667 complete.
+2023-12-18 22:38:17,967 bench  INFO   run start: instance_id=MWC341, args=(1000, None, None).
+2023-12-18 22:38:20,479 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:38:20,510 bench  DEBUG  qpu: start.
+2023-12-18 22:38:20,635 bench  DEBUG  qpu: finished.
+2023-12-18 22:38:26,820 bench  INFO   run finished: success, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0038.json".
+2023-12-18 22:38:26,836 bench  INFO   run 39/667 complete.
+2023-12-18 22:38:26,836 bench  INFO   run start: instance_id=MWC342, args=(1000, None, None).
+2023-12-18 22:38:29,421 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:38:29,452 bench  DEBUG  qpu: start.
+2023-12-18 22:38:29,561 bench  DEBUG  qpu: finished.
+2023-12-18 22:38:35,813 bench  INFO   run finished: success, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0039.json".
+2023-12-18 22:38:35,829 bench  INFO   run 40/667 complete.
+2023-12-18 22:38:35,829 bench  INFO   run start: instance_id=UDMIS136, args=(1000, None, None).
+2023-12-18 22:38:41,898 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0040.json".
+2023-12-18 22:38:41,898 bench  INFO   run 41/667 complete.
+2023-12-18 22:38:41,898 bench  INFO   run start: instance_id=UDMIS137, args=(1000, None, None).
+2023-12-18 22:38:44,467 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0041.json".
+2023-12-18 22:38:44,467 bench  INFO   run 42/667 complete.
+2023-12-18 22:38:44,467 bench  INFO   run start: instance_id=UDMIS138, args=(1000, None, None).
+2023-12-18 22:38:46,962 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0042.json".
+2023-12-18 22:38:46,962 bench  INFO   run 43/667 complete.
+2023-12-18 22:38:46,962 bench  INFO   run start: instance_id=UDMIS139, args=(1000, None, None).
+2023-12-18 22:38:49,437 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0043.json".
+2023-12-18 22:38:49,437 bench  INFO   run 44/667 complete.
+2023-12-18 22:38:49,437 bench  INFO   run start: instance_id=UDMIS140, args=(1000, None, None).
+2023-12-18 22:38:51,929 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0044.json".
+2023-12-18 22:38:51,929 bench  INFO   run 45/667 complete.
+2023-12-18 22:38:51,929 bench  INFO   run start: instance_id=UDMIS141, args=(1000, None, None).
+2023-12-18 22:38:54,465 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0045.json".
+2023-12-18 22:38:54,465 bench  INFO   run 46/667 complete.
+2023-12-18 22:38:54,465 bench  INFO   run start: instance_id=UDMIS142, args=(1000, None, None).
+2023-12-18 22:38:56,965 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0046.json".
+2023-12-18 22:38:56,981 bench  INFO   run 47/667 complete.
+2023-12-18 22:38:56,981 bench  INFO   run start: instance_id=UDMIS143, args=(1000, None, None).
+2023-12-18 22:38:59,600 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0047.json".
+2023-12-18 22:38:59,600 bench  INFO   run 48/667 complete.
+2023-12-18 22:38:59,600 bench  INFO   run start: instance_id=UDMIS144, args=(1000, None, None).
+2023-12-18 22:39:02,115 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0048.json".
+2023-12-18 22:39:02,115 bench  INFO   run 49/667 complete.
+2023-12-18 22:39:02,115 bench  INFO   run start: instance_id=UDMIS145, args=(1000, None, None).
+2023-12-18 22:39:04,629 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0049.json".
+2023-12-18 22:39:04,629 bench  INFO   run 50/667 complete.
+2023-12-18 22:39:04,629 bench  INFO   run start: instance_id=UDMIS146, args=(1000, None, None).
+2023-12-18 22:39:07,108 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0050.json".
+2023-12-18 22:39:07,108 bench  INFO   run 51/667 complete.
+2023-12-18 22:39:07,108 bench  INFO   run start: instance_id=UDMIS147, args=(1000, None, None).
+2023-12-18 22:39:13,509 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0051.json".
+2023-12-18 22:39:13,509 bench  INFO   run 52/667 complete.
+2023-12-18 22:39:13,509 bench  INFO   run start: instance_id=UDMIS148, args=(1000, None, None).
+2023-12-18 22:39:16,063 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0052.json".
+2023-12-18 22:39:16,063 bench  INFO   run 53/667 complete.
+2023-12-18 22:39:16,063 bench  INFO   run start: instance_id=UDMIS149, args=(1000, None, None).
+2023-12-18 22:39:18,549 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0053.json".
+2023-12-18 22:39:18,549 bench  INFO   run 54/667 complete.
+2023-12-18 22:39:18,549 bench  INFO   run start: instance_id=UDMIS150, args=(1000, None, None).
+2023-12-18 22:39:21,181 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0054.json".
+2023-12-18 22:39:21,181 bench  INFO   run 55/667 complete.
+2023-12-18 22:39:21,181 bench  INFO   run start: instance_id=TSP111, args=(1000, None, None).
+2023-12-18 22:39:23,764 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:39:23,795 bench  DEBUG  qpu: start.
+2023-12-18 22:39:23,904 bench  DEBUG  qpu: finished.
+2023-12-18 22:39:30,192 bench  INFO   run finished: success, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0055.json".
+2023-12-18 22:39:30,207 bench  INFO   run 56/667 complete.
+2023-12-18 22:39:30,207 bench  INFO   run start: instance_id=TSP124, args=(1000, None, None).
+2023-12-18 22:39:32,933 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:39:32,964 bench  DEBUG  qpu: start.
+2023-12-18 22:39:33,073 bench  DEBUG  qpu: finished.
+2023-12-18 22:39:39,407 bench  INFO   run finished: success, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0056.json".
+2023-12-18 22:39:39,422 bench  INFO   run 57/667 complete.
+2023-12-18 22:39:39,422 bench  INFO   run start: instance_id=TSP137, args=(1000, None, None).
+2023-12-18 22:39:41,907 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:39:41,922 bench  DEBUG  qpu: start.
+2023-12-18 22:39:42,032 bench  DEBUG  qpu: finished.
+2023-12-18 22:39:49,157 bench  INFO   run finished: success, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0057.json".
+2023-12-18 22:39:49,157 bench  INFO   run 58/667 complete.
+2023-12-18 22:39:49,157 bench  INFO   run start: instance_id=TSP150, args=(1000, None, None).
+2023-12-18 22:39:51,782 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:39:51,829 bench  DEBUG  qpu: start.
+2023-12-18 22:39:51,938 bench  DEBUG  qpu: finished.
+2023-12-18 22:39:58,176 bench  INFO   run finished: success, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0058.json".
+2023-12-18 22:39:58,192 bench  INFO   run 59/667 complete.
+2023-12-18 22:39:58,192 bench  INFO   run start: instance_id=TSP163, args=(1000, None, None).
+2023-12-18 22:40:00,661 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:40:00,676 bench  DEBUG  qpu: start.
+2023-12-18 22:40:00,802 bench  DEBUG  qpu: finished.
+2023-12-18 22:40:07,095 bench  INFO   run finished: success, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0059.json".
+2023-12-18 22:40:07,111 bench  INFO   run 60/667 complete.
+2023-12-18 22:40:07,111 bench  INFO   run start: instance_id=TSP176, args=(1000, None, None).
+2023-12-18 22:40:09,595 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:40:09,627 bench  DEBUG  qpu: start.
+2023-12-18 22:40:09,752 bench  DEBUG  qpu: finished.
+2023-12-18 22:40:16,765 bench  INFO   run finished: success, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0060.json".
+2023-12-18 22:40:16,781 bench  INFO   run 61/667 complete.
+2023-12-18 22:40:16,781 bench  INFO   run start: instance_id=TSP189, args=(1000, None, None).
+2023-12-18 22:40:19,314 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:40:19,330 bench  DEBUG  qpu: start.
+2023-12-18 22:40:19,455 bench  DEBUG  qpu: finished.
+2023-12-18 22:40:26,475 bench  INFO   run finished: success, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0061.json".
+2023-12-18 22:40:26,490 bench  INFO   run 62/667 complete.
+2023-12-18 22:40:26,490 bench  INFO   run start: instance_id=TSP20, args=(1000, None, None).
+2023-12-18 22:40:28,947 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:40:28,979 bench  DEBUG  qpu: start.
+2023-12-18 22:40:29,088 bench  DEBUG  qpu: finished.
+2023-12-18 22:40:35,361 bench  INFO   run finished: success, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0062.json".
+2023-12-18 22:40:35,377 bench  INFO   run 63/667 complete.
+2023-12-18 22:40:35,377 bench  INFO   run start: instance_id=TSP33, args=(1000, None, None).
+2023-12-18 22:40:42,611 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:40:42,643 bench  DEBUG  qpu: start.
+2023-12-18 22:40:42,736 bench  DEBUG  qpu: finished.
+2023-12-18 22:40:48,977 bench  INFO   run finished: success, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0063.json".
+2023-12-18 22:40:48,992 bench  INFO   run 64/667 complete.
+2023-12-18 22:40:48,992 bench  INFO   run start: instance_id=TSP46, args=(1000, None, None).
+2023-12-18 22:40:51,492 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:40:51,524 bench  DEBUG  qpu: start.
+2023-12-18 22:40:51,633 bench  DEBUG  qpu: finished.
+2023-12-18 22:40:57,847 bench  INFO   run finished: success, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0064.json".
+2023-12-18 22:40:57,862 bench  INFO   run 65/667 complete.
+2023-12-18 22:40:57,862 bench  INFO   run start: instance_id=TSP59, args=(1000, None, None).
+2023-12-18 22:41:00,354 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:41:00,385 bench  DEBUG  qpu: start.
+2023-12-18 22:41:00,494 bench  DEBUG  qpu: finished.
+2023-12-18 22:41:07,795 bench  INFO   run finished: success, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0065.json".
+2023-12-18 22:41:07,811 bench  INFO   run 66/667 complete.
+2023-12-18 22:41:07,811 bench  INFO   run start: instance_id=TSP7, args=(1000, None, None).
+2023-12-18 22:41:10,270 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:41:10,286 bench  DEBUG  qpu: start.
+2023-12-18 22:41:10,411 bench  DEBUG  qpu: finished.
+2023-12-18 22:41:16,922 bench  INFO   run finished: success, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0066.json".
+2023-12-18 22:41:16,937 bench  INFO   run 67/667 complete.
+2023-12-18 22:41:16,937 bench  INFO   run start: instance_id=TSP72, args=(1000, None, None).
+2023-12-18 22:41:19,507 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:41:19,538 bench  DEBUG  qpu: start.
+2023-12-18 22:41:19,648 bench  DEBUG  qpu: finished.
+2023-12-18 22:41:25,902 bench  INFO   run finished: success, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0067.json".
+2023-12-18 22:41:25,917 bench  INFO   run 68/667 complete.
+2023-12-18 22:41:25,917 bench  INFO   run start: instance_id=TSP85, args=(1000, None, None).
+2023-12-18 22:41:28,449 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:41:28,480 bench  DEBUG  qpu: start.
+2023-12-18 22:41:28,589 bench  DEBUG  qpu: finished.
+2023-12-18 22:41:34,971 bench  INFO   run finished: success, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0068.json".
+2023-12-18 22:41:34,986 bench  INFO   run 69/667 complete.
+2023-12-18 22:41:34,986 bench  INFO   run start: instance_id=TSP98, args=(1000, None, None).
+2023-12-18 22:41:37,524 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:41:37,555 bench  DEBUG  qpu: start.
+2023-12-18 22:41:37,649 bench  DEBUG  qpu: finished.
+2023-12-18 22:41:43,963 bench  INFO   run finished: success, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0069.json".
+2023-12-18 22:41:43,978 bench  INFO   run 70/667 complete.
+2023-12-18 22:41:43,978 bench  INFO   run start: instance_id=UDMIS031EXT, args=(1000, None, None).
+2023-12-18 22:41:46,619 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:41:46,650 bench  DEBUG  qpu: start.
+2023-12-18 22:41:46,666 bench  DEBUG  qpu: finished.
+2023-12-18 22:41:52,463 bench  INFO   run finished: success, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0070.json".
+2023-12-18 22:41:52,479 bench  INFO   run 71/667 complete.
+2023-12-18 22:41:52,479 bench  INFO   run start: instance_id=UDMIS032EXT, args=(1000, None, None).
+2023-12-18 22:41:54,994 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:41:55,010 bench  DEBUG  qpu: start.
+2023-12-18 22:41:55,041 bench  DEBUG  qpu: finished.
+2023-12-18 22:42:00,484 bench  INFO   run finished: success, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0071.json".
+2023-12-18 22:42:00,484 bench  INFO   run 72/667 complete.
+2023-12-18 22:42:00,500 bench  INFO   run start: instance_id=UDMIS033EXT, args=(1000, None, None).
+2023-12-18 22:42:03,016 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:42:03,032 bench  DEBUG  qpu: start.
+2023-12-18 22:42:03,063 bench  DEBUG  qpu: finished.
+2023-12-18 22:42:08,531 bench  INFO   run finished: success, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0072.json".
+2023-12-18 22:42:08,547 bench  INFO   run 73/667 complete.
+2023-12-18 22:42:08,547 bench  INFO   run start: instance_id=UDMIS067EXT, args=(1000, None, None).
+2023-12-18 22:42:11,090 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:42:11,105 bench  DEBUG  qpu: start.
+2023-12-18 22:42:11,137 bench  DEBUG  qpu: finished.
+2023-12-18 22:42:16,668 bench  INFO   run finished: success, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0073.json".
+2023-12-18 22:42:16,683 bench  INFO   run 74/667 complete.
+2023-12-18 22:42:16,683 bench  INFO   run start: instance_id=UDMIS068EXT, args=(1000, None, None).
+2023-12-18 22:42:19,199 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:42:19,215 bench  DEBUG  qpu: start.
+2023-12-18 22:42:19,246 bench  DEBUG  qpu: finished.
+2023-12-18 22:42:24,777 bench  INFO   run finished: success, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0074.json".
+2023-12-18 22:42:24,777 bench  INFO   run 75/667 complete.
+2023-12-18 22:42:24,777 bench  INFO   run start: instance_id=UDMIS069EXT, args=(1000, None, None).
+2023-12-18 22:42:27,309 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:42:27,324 bench  DEBUG  qpu: start.
+2023-12-18 22:42:27,356 bench  DEBUG  qpu: finished.
+2023-12-18 22:42:32,917 bench  INFO   run finished: success, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0075.json".
+2023-12-18 22:42:32,933 bench  INFO   run 76/667 complete.
+2023-12-18 22:42:32,933 bench  INFO   run start: instance_id=UDMIS103EXT, args=(1000, None, None).
+2023-12-18 22:42:35,459 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:42:35,475 bench  DEBUG  qpu: start.
+2023-12-18 22:42:35,506 bench  DEBUG  qpu: finished.
+2023-12-18 22:42:38,225 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0076.json".
+2023-12-18 22:42:38,225 bench  INFO   run 77/667 complete.
+2023-12-18 22:42:38,225 bench  INFO   run start: instance_id=UDMIS104EXT, args=(1000, None, None).
+2023-12-18 22:42:40,801 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:42:40,832 bench  DEBUG  qpu: start.
+2023-12-18 22:42:40,863 bench  DEBUG  qpu: finished.
+2023-12-18 22:42:43,575 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0077.json".
+2023-12-18 22:42:43,575 bench  INFO   run 78/667 complete.
+2023-12-18 22:42:43,575 bench  INFO   run start: instance_id=UDMIS105EXT, args=(1000, None, None).
+2023-12-18 22:42:51,842 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:42:51,858 bench  DEBUG  qpu: start.
+2023-12-18 22:42:51,889 bench  DEBUG  qpu: finished.
+2023-12-18 22:42:54,574 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0078.json".
+2023-12-18 22:42:54,574 bench  INFO   run 79/667 complete.
+2023-12-18 22:42:54,574 bench  INFO   run start: instance_id=UDMIS1TR, args=(1000, None, None).
+2023-12-18 22:42:57,050 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0079.json".
+2023-12-18 22:42:57,050 bench  INFO   run 80/667 complete.
+2023-12-18 22:42:57,050 bench  INFO   run start: instance_id=UDMIS4T, args=(1000, None, None).
+2023-12-18 22:42:59,524 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0080.json".
+2023-12-18 22:42:59,524 bench  INFO   run 81/667 complete.
+2023-12-18 22:42:59,524 bench  INFO   run start: instance_id=UDMIS5T, args=(1000, None, None).
+2023-12-18 22:43:02,255 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0081.json".
+2023-12-18 22:43:02,255 bench  INFO   run 82/667 complete.
+2023-12-18 22:43:02,255 bench  INFO   run start: instance_id=UDMIS6T, args=(1000, None, None).
+2023-12-18 22:43:04,761 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0082.json".
+2023-12-18 22:43:04,761 bench  INFO   run 83/667 complete.
+2023-12-18 22:43:04,761 bench  INFO   run start: instance_id=MWC109, args=(1000, None, None).
+2023-12-18 22:43:07,205 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:43:07,236 bench  DEBUG  qpu: start.
+2023-12-18 22:43:07,393 bench  DEBUG  qpu: finished.
+2023-12-18 22:43:10,891 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0083.json".
+2023-12-18 22:43:10,891 bench  INFO   run 84/667 complete.
+2023-12-18 22:43:10,891 bench  INFO   run start: instance_id=MWC110, args=(1000, None, None).
+2023-12-18 22:43:13,414 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:43:13,445 bench  DEBUG  qpu: start.
+2023-12-18 22:43:13,601 bench  DEBUG  qpu: finished.
+2023-12-18 22:43:16,515 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0084.json".
+2023-12-18 22:43:16,515 bench  INFO   run 85/667 complete.
+2023-12-18 22:43:16,515 bench  INFO   run start: instance_id=MWC111, args=(1000, None, None).
+2023-12-18 22:43:18,950 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:43:18,965 bench  DEBUG  qpu: start.
+2023-12-18 22:43:19,090 bench  DEBUG  qpu: finished.
+2023-12-18 22:43:22,009 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0085.json".
+2023-12-18 22:43:22,009 bench  INFO   run 86/667 complete.
+2023-12-18 22:43:22,009 bench  INFO   run start: instance_id=MWC187, args=(1000, None, None).
+2023-12-18 22:43:24,535 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:43:24,566 bench  DEBUG  qpu: start.
+2023-12-18 22:43:24,723 bench  DEBUG  qpu: finished.
+2023-12-18 22:43:27,605 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0086.json".
+2023-12-18 22:43:27,605 bench  INFO   run 87/667 complete.
+2023-12-18 22:43:27,605 bench  INFO   run start: instance_id=MWC188, args=(1000, None, None).
+2023-12-18 22:43:30,058 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:43:30,090 bench  DEBUG  qpu: start.
+2023-12-18 22:43:30,230 bench  DEBUG  qpu: finished.
+2023-12-18 22:43:33,117 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0087.json".
+2023-12-18 22:43:33,117 bench  INFO   run 88/667 complete.
+2023-12-18 22:43:33,117 bench  INFO   run start: instance_id=MWC189, args=(1000, None, None).
+2023-12-18 22:43:35,554 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:43:35,586 bench  DEBUG  qpu: start.
+2023-12-18 22:43:35,726 bench  DEBUG  qpu: finished.
+2023-12-18 22:43:38,850 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0088.json".
+2023-12-18 22:43:38,850 bench  INFO   run 89/667 complete.
+2023-12-18 22:43:38,850 bench  INFO   run start: instance_id=MWC265, args=(1000, None, None).
+2023-12-18 22:43:41,363 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:43:41,394 bench  DEBUG  qpu: start.
+2023-12-18 22:43:41,566 bench  DEBUG  qpu: finished.
+2023-12-18 22:43:44,654 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0089.json".
+2023-12-18 22:43:44,654 bench  INFO   run 90/667 complete.
+2023-12-18 22:43:44,654 bench  INFO   run start: instance_id=MWC266, args=(1000, None, None).
+2023-12-18 22:43:47,203 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:43:47,234 bench  DEBUG  qpu: start.
+2023-12-18 22:43:47,406 bench  DEBUG  qpu: finished.
+2023-12-18 22:43:50,281 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0090.json".
+2023-12-18 22:43:50,281 bench  INFO   run 91/667 complete.
+2023-12-18 22:43:50,281 bench  INFO   run start: instance_id=MWC267, args=(1000, None, None).
+2023-12-18 22:43:52,857 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:43:52,888 bench  DEBUG  qpu: start.
+2023-12-18 22:43:53,013 bench  DEBUG  qpu: finished.
+2023-12-18 22:43:55,916 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0091.json".
+2023-12-18 22:43:55,916 bench  INFO   run 92/667 complete.
+2023-12-18 22:43:55,916 bench  INFO   run start: instance_id=MWC31, args=(1000, None, None).
+2023-12-18 22:43:58,431 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:43:58,462 bench  DEBUG  qpu: start.
+2023-12-18 22:43:58,634 bench  DEBUG  qpu: finished.
+2023-12-18 22:44:01,616 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0092.json".
+2023-12-18 22:44:01,616 bench  INFO   run 93/667 complete.
+2023-12-18 22:44:01,616 bench  INFO   run start: instance_id=MWC32, args=(1000, None, None).
+2023-12-18 22:44:04,160 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:44:04,191 bench  DEBUG  qpu: start.
+2023-12-18 22:44:04,347 bench  DEBUG  qpu: finished.
+2023-12-18 22:44:07,253 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0093.json".
+2023-12-18 22:44:07,253 bench  INFO   run 94/667 complete.
+2023-12-18 22:44:07,253 bench  INFO   run start: instance_id=MWC33, args=(1000, None, None).
+2023-12-18 22:44:09,847 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:44:09,878 bench  DEBUG  qpu: start.
+2023-12-18 22:44:10,003 bench  DEBUG  qpu: finished.
+2023-12-18 22:44:12,942 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0094.json".
+2023-12-18 22:44:12,942 bench  INFO   run 95/667 complete.
+2023-12-18 22:44:12,942 bench  INFO   run start: instance_id=MWC343, args=(1000, None, None).
+2023-12-18 22:44:15,692 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:44:15,723 bench  DEBUG  qpu: start.
+2023-12-18 22:44:15,879 bench  DEBUG  qpu: finished.
+2023-12-18 22:44:18,843 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0095.json".
+2023-12-18 22:44:18,843 bench  INFO   run 96/667 complete.
+2023-12-18 22:44:18,843 bench  INFO   run start: instance_id=MWC344, args=(1000, None, None).
+2023-12-18 22:44:28,884 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:44:28,915 bench  DEBUG  qpu: start.
+2023-12-18 22:44:29,087 bench  DEBUG  qpu: finished.
+2023-12-18 22:44:32,181 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0096.json".
+2023-12-18 22:44:32,181 bench  INFO   run 97/667 complete.
+2023-12-18 22:44:32,181 bench  INFO   run start: instance_id=MWC345, args=(1000, None, None).
+2023-12-18 22:44:34,937 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:44:34,969 bench  DEBUG  qpu: start.
+2023-12-18 22:44:35,109 bench  DEBUG  qpu: finished.
+2023-12-18 22:44:38,028 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0097.json".
+2023-12-18 22:44:38,028 bench  INFO   run 98/667 complete.
+2023-12-18 22:44:38,028 bench  INFO   run start: instance_id=UDMIS151, args=(1000, None, None).
+2023-12-18 22:44:40,512 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0098.json".
+2023-12-18 22:44:40,512 bench  INFO   run 99/667 complete.
+2023-12-18 22:44:40,512 bench  INFO   run start: instance_id=UDMIS152, args=(1000, None, None).
+2023-12-18 22:44:43,088 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0099.json".
+2023-12-18 22:44:43,088 bench  INFO   run 100/667 complete.
+2023-12-18 22:44:43,088 bench  INFO   run start: instance_id=UDMIS153, args=(1000, None, None).
+2023-12-18 22:44:45,603 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0100.json".
+2023-12-18 22:44:45,603 bench  INFO   run 101/667 complete.
+2023-12-18 22:44:45,603 bench  INFO   run start: instance_id=UDMIS154, args=(1000, None, None).
+2023-12-18 22:44:48,182 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0101.json".
+2023-12-18 22:44:48,182 bench  INFO   run 102/667 complete.
+2023-12-18 22:44:48,182 bench  INFO   run start: instance_id=UDMIS155, args=(1000, None, None).
+2023-12-18 22:44:50,767 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0102.json".
+2023-12-18 22:44:50,767 bench  INFO   run 103/667 complete.
+2023-12-18 22:44:50,767 bench  INFO   run start: instance_id=UDMIS156, args=(1000, None, None).
+2023-12-18 22:44:53,361 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0103.json".
+2023-12-18 22:44:53,361 bench  INFO   run 104/667 complete.
+2023-12-18 22:44:53,361 bench  INFO   run start: instance_id=UDMIS157, args=(1000, None, None).
+2023-12-18 22:44:55,913 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0104.json".
+2023-12-18 22:44:55,913 bench  INFO   run 105/667 complete.
+2023-12-18 22:44:55,913 bench  INFO   run start: instance_id=UDMIS158, args=(1000, None, None).
+2023-12-18 22:44:58,444 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0105.json".
+2023-12-18 22:44:58,444 bench  INFO   run 106/667 complete.
+2023-12-18 22:44:58,444 bench  INFO   run start: instance_id=UDMIS159, args=(1000, None, None).
+2023-12-18 22:45:01,054 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0106.json".
+2023-12-18 22:45:01,054 bench  INFO   run 107/667 complete.
+2023-12-18 22:45:01,054 bench  INFO   run start: instance_id=UDMIS160, args=(1000, None, None).
+2023-12-18 22:45:03,644 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0107.json".
+2023-12-18 22:45:03,644 bench  INFO   run 108/667 complete.
+2023-12-18 22:45:03,644 bench  INFO   run start: instance_id=UDMIS161, args=(1000, None, None).
+2023-12-18 22:45:06,213 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0108.json".
+2023-12-18 22:45:06,213 bench  INFO   run 109/667 complete.
+2023-12-18 22:45:06,213 bench  INFO   run start: instance_id=UDMIS162, args=(1000, None, None).
+2023-12-18 22:45:08,713 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0109.json".
+2023-12-18 22:45:08,713 bench  INFO   run 110/667 complete.
+2023-12-18 22:45:08,713 bench  INFO   run start: instance_id=UDMIS163, args=(1000, None, None).
+2023-12-18 22:45:11,316 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0110.json".
+2023-12-18 22:45:11,316 bench  INFO   run 111/667 complete.
+2023-12-18 22:45:11,316 bench  INFO   run start: instance_id=UDMIS164, args=(1000, None, None).
+2023-12-18 22:45:13,920 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0111.json".
+2023-12-18 22:45:13,920 bench  INFO   run 112/667 complete.
+2023-12-18 22:45:13,920 bench  INFO   run start: instance_id=UDMIS165, args=(1000, None, None).
+2023-12-18 22:45:16,499 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0112.json".
+2023-12-18 22:45:16,499 bench  INFO   run 113/667 complete.
+2023-12-18 22:45:16,499 bench  INFO   run start: instance_id=MWC112, args=(1000, None, None).
+2023-12-18 22:45:19,046 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:45:19,077 bench  DEBUG  qpu: start.
+2023-12-18 22:45:19,280 bench  DEBUG  qpu: finished.
+2023-12-18 22:45:22,234 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0113.json".
+2023-12-18 22:45:22,234 bench  INFO   run 114/667 complete.
+2023-12-18 22:45:22,234 bench  INFO   run start: instance_id=MWC113, args=(1000, None, None).
+2023-12-18 22:45:24,798 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:45:24,829 bench  DEBUG  qpu: start.
+2023-12-18 22:45:25,016 bench  DEBUG  qpu: finished.
+2023-12-18 22:45:27,876 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0114.json".
+2023-12-18 22:45:27,876 bench  INFO   run 115/667 complete.
+2023-12-18 22:45:27,876 bench  INFO   run start: instance_id=MWC114, args=(1000, None, None).
+2023-12-18 22:45:30,433 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:45:30,480 bench  DEBUG  qpu: start.
+2023-12-18 22:45:30,636 bench  DEBUG  qpu: finished.
+2023-12-18 22:45:33,722 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0115.json".
+2023-12-18 22:45:33,722 bench  INFO   run 116/667 complete.
+2023-12-18 22:45:33,722 bench  INFO   run start: instance_id=MWC190, args=(1000, None, None).
+2023-12-18 22:45:36,261 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:45:36,292 bench  DEBUG  qpu: start.
+2023-12-18 22:45:36,495 bench  DEBUG  qpu: finished.
+2023-12-18 22:45:39,546 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0116.json".
+2023-12-18 22:45:39,546 bench  INFO   run 117/667 complete.
+2023-12-18 22:45:39,546 bench  INFO   run start: instance_id=MWC191, args=(1000, None, None).
+2023-12-18 22:45:42,114 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:45:42,146 bench  DEBUG  qpu: start.
+2023-12-18 22:45:42,333 bench  DEBUG  qpu: finished.
+2023-12-18 22:45:45,231 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0117.json".
+2023-12-18 22:45:45,231 bench  INFO   run 118/667 complete.
+2023-12-18 22:45:45,231 bench  INFO   run start: instance_id=MWC192, args=(1000, None, None).
+2023-12-18 22:45:47,809 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:45:47,840 bench  DEBUG  qpu: start.
+2023-12-18 22:45:47,981 bench  DEBUG  qpu: finished.
+2023-12-18 22:45:54,645 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0118.json".
+2023-12-18 22:45:54,645 bench  INFO   run 119/667 complete.
+2023-12-18 22:45:54,645 bench  INFO   run start: instance_id=MWC268, args=(1000, None, None).
+2023-12-18 22:45:57,240 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:45:57,287 bench  DEBUG  qpu: start.
+2023-12-18 22:45:57,475 bench  DEBUG  qpu: finished.
+2023-12-18 22:46:00,371 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0119.json".
+2023-12-18 22:46:00,371 bench  INFO   run 120/667 complete.
+2023-12-18 22:46:00,371 bench  INFO   run start: instance_id=MWC269, args=(1000, None, None).
+2023-12-18 22:46:11,884 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:46:11,916 bench  DEBUG  qpu: start.
+2023-12-18 22:46:12,119 bench  DEBUG  qpu: finished.
+2023-12-18 22:46:15,098 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0120.json".
+2023-12-18 22:46:15,098 bench  INFO   run 121/667 complete.
+2023-12-18 22:46:15,098 bench  INFO   run start: instance_id=MWC270, args=(1000, None, None).
+2023-12-18 22:46:17,677 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:46:17,724 bench  DEBUG  qpu: start.
+2023-12-18 22:46:17,895 bench  DEBUG  qpu: finished.
+2023-12-18 22:46:20,857 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0121.json".
+2023-12-18 22:46:20,857 bench  INFO   run 122/667 complete.
+2023-12-18 22:46:20,857 bench  INFO   run start: instance_id=MWC34, args=(1000, None, None).
+2023-12-18 22:46:23,365 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:46:23,397 bench  DEBUG  qpu: start.
+2023-12-18 22:46:23,584 bench  DEBUG  qpu: finished.
+2023-12-18 22:46:26,484 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0122.json".
+2023-12-18 22:46:26,484 bench  INFO   run 123/667 complete.
+2023-12-18 22:46:26,484 bench  INFO   run start: instance_id=MWC346, args=(1000, None, None).
+2023-12-18 22:46:29,069 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:46:29,116 bench  DEBUG  qpu: start.
+2023-12-18 22:46:29,303 bench  DEBUG  qpu: finished.
+2023-12-18 22:46:32,421 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0123.json".
+2023-12-18 22:46:32,421 bench  INFO   run 124/667 complete.
+2023-12-18 22:46:32,421 bench  INFO   run start: instance_id=MWC347, args=(1000, None, None).
+2023-12-18 22:46:35,047 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:46:35,078 bench  DEBUG  qpu: start.
+2023-12-18 22:46:35,297 bench  DEBUG  qpu: finished.
+2023-12-18 22:46:38,196 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0124.json".
+2023-12-18 22:46:38,196 bench  INFO   run 125/667 complete.
+2023-12-18 22:46:38,196 bench  INFO   run start: instance_id=MWC348, args=(1000, None, None).
+2023-12-18 22:46:46,007 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:46:46,054 bench  DEBUG  qpu: start.
+2023-12-18 22:46:46,210 bench  DEBUG  qpu: finished.
+2023-12-18 22:46:49,066 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0125.json".
+2023-12-18 22:46:49,066 bench  INFO   run 126/667 complete.
+2023-12-18 22:46:49,066 bench  INFO   run start: instance_id=MWC35, args=(1000, None, None).
+2023-12-18 22:46:51,706 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:46:51,753 bench  DEBUG  qpu: start.
+2023-12-18 22:46:51,941 bench  DEBUG  qpu: finished.
+2023-12-18 22:46:54,888 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0126.json".
+2023-12-18 22:46:54,888 bench  INFO   run 127/667 complete.
+2023-12-18 22:46:54,888 bench  INFO   run start: instance_id=MWC36, args=(1000, None, None).
+2023-12-18 22:46:57,400 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:46:57,447 bench  DEBUG  qpu: start.
+2023-12-18 22:46:57,603 bench  DEBUG  qpu: finished.
+2023-12-18 22:47:00,661 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0127.json".
+2023-12-18 22:47:00,661 bench  INFO   run 128/667 complete.
+2023-12-18 22:47:00,661 bench  INFO   run start: instance_id=UDMIS166, args=(1000, None, None).
+2023-12-18 22:47:03,316 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0128.json".
+2023-12-18 22:47:03,316 bench  INFO   run 129/667 complete.
+2023-12-18 22:47:03,316 bench  INFO   run start: instance_id=UDMIS167, args=(1000, None, None).
+2023-12-18 22:47:05,863 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0129.json".
+2023-12-18 22:47:05,863 bench  INFO   run 130/667 complete.
+2023-12-18 22:47:05,863 bench  INFO   run start: instance_id=UDMIS168, args=(1000, None, None).
+2023-12-18 22:47:08,448 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0130.json".
+2023-12-18 22:47:08,448 bench  INFO   run 131/667 complete.
+2023-12-18 22:47:08,448 bench  INFO   run start: instance_id=UDMIS169, args=(1000, None, None).
+2023-12-18 22:47:11,007 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0131.json".
+2023-12-18 22:47:11,007 bench  INFO   run 132/667 complete.
+2023-12-18 22:47:11,007 bench  INFO   run start: instance_id=UDMIS170, args=(1000, None, None).
+2023-12-18 22:47:13,648 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0132.json".
+2023-12-18 22:47:13,648 bench  INFO   run 133/667 complete.
+2023-12-18 22:47:13,648 bench  INFO   run start: instance_id=UDMIS171, args=(1000, None, None).
+2023-12-18 22:47:16,248 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0133.json".
+2023-12-18 22:47:16,248 bench  INFO   run 134/667 complete.
+2023-12-18 22:47:16,248 bench  INFO   run start: instance_id=UDMIS172, args=(1000, None, None).
+2023-12-18 22:47:18,802 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0134.json".
+2023-12-18 22:47:18,802 bench  INFO   run 135/667 complete.
+2023-12-18 22:47:18,802 bench  INFO   run start: instance_id=UDMIS173, args=(1000, None, None).
+2023-12-18 22:47:21,396 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0135.json".
+2023-12-18 22:47:21,396 bench  INFO   run 136/667 complete.
+2023-12-18 22:47:21,396 bench  INFO   run start: instance_id=UDMIS174, args=(1000, None, None).
+2023-12-18 22:47:24,005 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0136.json".
+2023-12-18 22:47:24,005 bench  INFO   run 137/667 complete.
+2023-12-18 22:47:24,005 bench  INFO   run start: instance_id=UDMIS175, args=(1000, None, None).
+2023-12-18 22:47:26,574 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0137.json".
+2023-12-18 22:47:26,590 bench  INFO   run 138/667 complete.
+2023-12-18 22:47:26,590 bench  INFO   run start: instance_id=UDMIS176, args=(1000, None, None).
+2023-12-18 22:47:29,169 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0138.json".
+2023-12-18 22:47:29,169 bench  INFO   run 139/667 complete.
+2023-12-18 22:47:29,184 bench  INFO   run start: instance_id=UDMIS177, args=(1000, None, None).
+2023-12-18 22:47:31,856 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0139.json".
+2023-12-18 22:47:31,856 bench  INFO   run 140/667 complete.
+2023-12-18 22:47:31,856 bench  INFO   run start: instance_id=UDMIS178, args=(1000, None, None).
+2023-12-18 22:47:34,361 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0140.json".
+2023-12-18 22:47:34,361 bench  INFO   run 141/667 complete.
+2023-12-18 22:47:34,361 bench  INFO   run start: instance_id=UDMIS179, args=(1000, None, None).
+2023-12-18 22:47:36,939 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0141.json".
+2023-12-18 22:47:36,939 bench  INFO   run 142/667 complete.
+2023-12-18 22:47:36,939 bench  INFO   run start: instance_id=UDMIS180, args=(1000, None, None).
+2023-12-18 22:47:39,596 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0142.json".
+2023-12-18 22:47:39,596 bench  INFO   run 143/667 complete.
+2023-12-18 22:47:39,596 bench  INFO   run start: instance_id=UDMIS034EXT, args=(1000, None, None).
+2023-12-18 22:47:42,118 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:47:42,133 bench  DEBUG  qpu: start.
+2023-12-18 22:47:42,165 bench  DEBUG  qpu: finished.
+2023-12-18 22:47:44,935 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0143.json".
+2023-12-18 22:47:44,935 bench  INFO   run 144/667 complete.
+2023-12-18 22:47:44,935 bench  INFO   run start: instance_id=UDMIS035EXT, args=(1000, None, None).
+2023-12-18 22:47:47,402 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:47:47,418 bench  DEBUG  qpu: start.
+2023-12-18 22:47:47,449 bench  DEBUG  qpu: finished.
+2023-12-18 22:47:50,128 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0144.json".
+2023-12-18 22:47:50,128 bench  INFO   run 145/667 complete.
+2023-12-18 22:47:50,128 bench  INFO   run start: instance_id=UDMIS036EXT, args=(1000, None, None).
+2023-12-18 22:47:52,658 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:47:52,673 bench  DEBUG  qpu: start.
+2023-12-18 22:47:52,704 bench  DEBUG  qpu: finished.
+2023-12-18 22:47:55,471 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0145.json".
+2023-12-18 22:47:55,471 bench  INFO   run 146/667 complete.
+2023-12-18 22:47:55,471 bench  INFO   run start: instance_id=UDMIS070EXT, args=(1000, None, None).
+2023-12-18 22:47:57,943 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:47:57,959 bench  DEBUG  qpu: start.
+2023-12-18 22:47:57,990 bench  DEBUG  qpu: finished.
+2023-12-18 22:48:00,709 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0146.json".
+2023-12-18 22:48:00,709 bench  INFO   run 147/667 complete.
+2023-12-18 22:48:00,709 bench  INFO   run start: instance_id=UDMIS071EXT, args=(1000, None, None).
+2023-12-18 22:48:03,191 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:48:03,207 bench  DEBUG  qpu: start.
+2023-12-18 22:48:03,238 bench  DEBUG  qpu: finished.
+2023-12-18 22:48:06,021 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0147.json".
+2023-12-18 22:48:06,021 bench  INFO   run 148/667 complete.
+2023-12-18 22:48:06,021 bench  INFO   run start: instance_id=UDMIS072EXT, args=(1000, None, None).
+2023-12-18 22:48:08,600 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:48:08,615 bench  DEBUG  qpu: start.
+2023-12-18 22:48:08,646 bench  DEBUG  qpu: finished.
+2023-12-18 22:48:11,376 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0148.json".
+2023-12-18 22:48:11,376 bench  INFO   run 149/667 complete.
+2023-12-18 22:48:11,376 bench  INFO   run start: instance_id=UDMIS106EXT, args=(1000, None, None).
+2023-12-18 22:48:13,923 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:48:13,938 bench  DEBUG  qpu: start.
+2023-12-18 22:48:13,970 bench  DEBUG  qpu: finished.
+2023-12-18 22:48:16,694 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0149.json".
+2023-12-18 22:48:16,694 bench  INFO   run 150/667 complete.
+2023-12-18 22:48:16,694 bench  INFO   run start: instance_id=UDMIS107EXT, args=(1000, None, None).
+2023-12-18 22:48:32,510 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:48:32,525 bench  DEBUG  qpu: start.
+2023-12-18 22:48:32,557 bench  DEBUG  qpu: finished.
+2023-12-18 22:48:35,325 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0150.json".
+2023-12-18 22:48:35,325 bench  INFO   run 151/667 complete.
+2023-12-18 22:48:35,325 bench  INFO   run start: instance_id=UDMIS108EXT, args=(1000, None, None).
+2023-12-18 22:48:37,826 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:48:37,842 bench  DEBUG  qpu: start.
+2023-12-18 22:48:37,873 bench  DEBUG  qpu: finished.
+2023-12-18 22:48:40,563 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0151.json".
+2023-12-18 22:48:40,563 bench  INFO   run 152/667 complete.
+2023-12-18 22:48:40,563 bench  INFO   run start: instance_id=UDMIS2TR, args=(1000, None, None).
+2023-12-18 22:48:43,054 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0152.json".
+2023-12-18 22:48:43,054 bench  INFO   run 153/667 complete.
+2023-12-18 22:48:43,054 bench  INFO   run start: instance_id=TSP112, args=(1000, None, None).
+2023-12-18 22:48:45,511 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:48:45,543 bench  DEBUG  qpu: start.
+2023-12-18 22:48:45,699 bench  DEBUG  qpu: finished.
+2023-12-18 22:48:48,611 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0153.json".
+2023-12-18 22:48:48,611 bench  INFO   run 154/667 complete.
+2023-12-18 22:48:48,611 bench  INFO   run start: instance_id=TSP125, args=(1000, None, None).
+2023-12-18 22:48:51,097 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:48:51,112 bench  DEBUG  qpu: start.
+2023-12-18 22:48:51,269 bench  DEBUG  qpu: finished.
+2023-12-18 22:48:54,172 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0154.json".
+2023-12-18 22:48:54,172 bench  INFO   run 155/667 complete.
+2023-12-18 22:48:54,172 bench  INFO   run start: instance_id=TSP138, args=(1000, None, None).
+2023-12-18 22:48:56,654 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:48:56,685 bench  DEBUG  qpu: start.
+2023-12-18 22:48:56,810 bench  DEBUG  qpu: finished.
+2023-12-18 22:48:59,700 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0155.json".
+2023-12-18 22:48:59,700 bench  INFO   run 156/667 complete.
+2023-12-18 22:48:59,700 bench  INFO   run start: instance_id=TSP151, args=(1000, None, None).
+2023-12-18 22:49:02,222 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:49:02,253 bench  DEBUG  qpu: start.
+2023-12-18 22:49:02,394 bench  DEBUG  qpu: finished.
+2023-12-18 22:49:05,288 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0156.json".
+2023-12-18 22:49:05,288 bench  INFO   run 157/667 complete.
+2023-12-18 22:49:05,288 bench  INFO   run start: instance_id=TSP164, args=(1000, None, None).
+2023-12-18 22:49:07,811 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:49:07,842 bench  DEBUG  qpu: start.
+2023-12-18 22:49:08,014 bench  DEBUG  qpu: finished.
+2023-12-18 22:49:11,103 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0157.json".
+2023-12-18 22:49:11,103 bench  INFO   run 158/667 complete.
+2023-12-18 22:49:11,103 bench  INFO   run start: instance_id=TSP177, args=(1000, None, None).
+2023-12-18 22:49:13,641 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:49:13,673 bench  DEBUG  qpu: start.
+2023-12-18 22:49:13,844 bench  DEBUG  qpu: finished.
+2023-12-18 22:49:16,762 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0158.json".
+2023-12-18 22:49:16,762 bench  INFO   run 159/667 complete.
+2023-12-18 22:49:16,762 bench  INFO   run start: instance_id=TSP190, args=(1000, None, None).
+2023-12-18 22:49:19,246 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:49:19,277 bench  DEBUG  qpu: start.
+2023-12-18 22:49:19,418 bench  DEBUG  qpu: finished.
+2023-12-18 22:49:22,565 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0159.json".
+2023-12-18 22:49:22,565 bench  INFO   run 160/667 complete.
+2023-12-18 22:49:22,565 bench  INFO   run start: instance_id=TSP21, args=(1000, None, None).
+2023-12-18 22:49:25,063 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:49:25,094 bench  DEBUG  qpu: start.
+2023-12-18 22:49:25,235 bench  DEBUG  qpu: finished.
+2023-12-18 22:49:28,112 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0160.json".
+2023-12-18 22:49:28,112 bench  INFO   run 161/667 complete.
+2023-12-18 22:49:28,112 bench  INFO   run start: instance_id=TSP34, args=(1000, None, None).
+2023-12-18 22:49:30,800 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:49:30,847 bench  DEBUG  qpu: start.
+2023-12-18 22:49:31,004 bench  DEBUG  qpu: finished.
+2023-12-18 22:49:34,174 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0161.json".
+2023-12-18 22:49:34,174 bench  INFO   run 162/667 complete.
+2023-12-18 22:49:34,174 bench  INFO   run start: instance_id=TSP47, args=(1000, None, None).
+2023-12-18 22:49:36,735 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:49:36,766 bench  DEBUG  qpu: start.
+2023-12-18 22:49:36,922 bench  DEBUG  qpu: finished.
+2023-12-18 22:49:39,831 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0162.json".
+2023-12-18 22:49:39,831 bench  INFO   run 163/667 complete.
+2023-12-18 22:49:39,831 bench  INFO   run start: instance_id=TSP60, args=(1000, None, None).
+2023-12-18 22:49:42,315 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:49:42,346 bench  DEBUG  qpu: start.
+2023-12-18 22:49:42,502 bench  DEBUG  qpu: finished.
+2023-12-18 22:49:45,406 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0163.json".
+2023-12-18 22:49:45,406 bench  INFO   run 164/667 complete.
+2023-12-18 22:49:45,406 bench  INFO   run start: instance_id=TSP73, args=(1000, None, None).
+2023-12-18 22:49:47,831 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:49:47,846 bench  DEBUG  qpu: start.
+2023-12-18 22:49:48,003 bench  DEBUG  qpu: finished.
+2023-12-18 22:49:50,879 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0164.json".
+2023-12-18 22:49:50,879 bench  INFO   run 165/667 complete.
+2023-12-18 22:49:50,879 bench  INFO   run start: instance_id=TSP8, args=(1000, None, None).
+2023-12-18 22:49:53,472 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:49:53,503 bench  DEBUG  qpu: start.
+2023-12-18 22:49:53,644 bench  DEBUG  qpu: finished.
+2023-12-18 22:49:56,604 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0165.json".
+2023-12-18 22:49:56,604 bench  INFO   run 166/667 complete.
+2023-12-18 22:49:56,604 bench  INFO   run start: instance_id=TSP86, args=(1000, None, None).
+2023-12-18 22:49:59,145 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:49:59,176 bench  DEBUG  qpu: start.
+2023-12-18 22:49:59,332 bench  DEBUG  qpu: finished.
+2023-12-18 22:50:02,237 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0166.json".
+2023-12-18 22:50:02,237 bench  INFO   run 167/667 complete.
+2023-12-18 22:50:02,237 bench  INFO   run start: instance_id=TSP99, args=(1000, None, None).
+2023-12-18 22:50:04,697 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:50:04,729 bench  DEBUG  qpu: start.
+2023-12-18 22:50:04,885 bench  DEBUG  qpu: finished.
+2023-12-18 22:50:07,814 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0167.json".
+2023-12-18 22:50:07,814 bench  INFO   run 168/667 complete.
+2023-12-18 22:50:07,814 bench  INFO   run start: instance_id=MWC115, args=(1000, None, None).
+2023-12-18 22:50:10,314 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:50:10,345 bench  DEBUG  qpu: start.
+2023-12-18 22:50:10,626 bench  DEBUG  qpu: finished.
+2023-12-18 22:50:13,598 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0168.json".
+2023-12-18 22:50:13,598 bench  INFO   run 169/667 complete.
+2023-12-18 22:50:13,598 bench  INFO   run start: instance_id=MWC116, args=(1000, None, None).
+2023-12-18 22:50:16,183 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:50:16,214 bench  DEBUG  qpu: start.
+2023-12-18 22:50:16,433 bench  DEBUG  qpu: finished.
+2023-12-18 22:50:19,706 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0169.json".
+2023-12-18 22:50:19,706 bench  INFO   run 170/667 complete.
+2023-12-18 22:50:19,706 bench  INFO   run start: instance_id=MWC117, args=(1000, None, None).
+2023-12-18 22:50:22,213 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:50:22,244 bench  DEBUG  qpu: start.
+2023-12-18 22:50:22,432 bench  DEBUG  qpu: finished.
+2023-12-18 22:50:25,520 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0170.json".
+2023-12-18 22:50:25,520 bench  INFO   run 171/667 complete.
+2023-12-18 22:50:25,520 bench  INFO   run start: instance_id=MWC193, args=(1000, None, None).
+2023-12-18 22:50:28,037 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:50:28,068 bench  DEBUG  qpu: start.
+2023-12-18 22:50:28,318 bench  DEBUG  qpu: finished.
+2023-12-18 22:50:31,360 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0171.json".
+2023-12-18 22:50:31,360 bench  INFO   run 172/667 complete.
+2023-12-18 22:50:31,360 bench  INFO   run start: instance_id=MWC194, args=(1000, None, None).
+2023-12-18 22:50:33,851 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:50:33,882 bench  DEBUG  qpu: start.
+2023-12-18 22:50:34,133 bench  DEBUG  qpu: finished.
+2023-12-18 22:50:37,254 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0172.json".
+2023-12-18 22:50:37,254 bench  INFO   run 173/667 complete.
+2023-12-18 22:50:37,254 bench  INFO   run start: instance_id=MWC195, args=(1000, None, None).
+2023-12-18 22:50:39,794 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:50:39,840 bench  DEBUG  qpu: start.
+2023-12-18 22:50:40,028 bench  DEBUG  qpu: finished.
+2023-12-18 22:50:43,131 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0173.json".
+2023-12-18 22:50:43,131 bench  INFO   run 174/667 complete.
+2023-12-18 22:50:43,131 bench  INFO   run start: instance_id=MWC271, args=(1000, None, None).
+2023-12-18 22:50:45,581 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:50:45,613 bench  DEBUG  qpu: start.
+2023-12-18 22:50:45,863 bench  DEBUG  qpu: finished.
+2023-12-18 22:50:48,747 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0174.json".
+2023-12-18 22:50:48,747 bench  INFO   run 175/667 complete.
+2023-12-18 22:50:48,747 bench  INFO   run start: instance_id=MWC272, args=(1000, None, None).
+2023-12-18 22:50:51,255 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:50:51,286 bench  DEBUG  qpu: start.
+2023-12-18 22:50:51,505 bench  DEBUG  qpu: finished.
+2023-12-18 22:50:54,613 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0175.json".
+2023-12-18 22:50:54,613 bench  INFO   run 176/667 complete.
+2023-12-18 22:50:54,613 bench  INFO   run start: instance_id=MWC273, args=(1000, None, None).
+2023-12-18 22:50:57,099 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:50:57,129 bench  DEBUG  qpu: start.
+2023-12-18 22:50:57,301 bench  DEBUG  qpu: finished.
+2023-12-18 22:51:00,238 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0176.json".
+2023-12-18 22:51:00,238 bench  INFO   run 177/667 complete.
+2023-12-18 22:51:00,238 bench  INFO   run start: instance_id=MWC349, args=(1000, None, None).
+2023-12-18 22:51:02,754 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:51:02,801 bench  DEBUG  qpu: start.
+2023-12-18 22:51:03,114 bench  DEBUG  qpu: finished.
+2023-12-18 22:51:06,817 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0177.json".
+2023-12-18 22:51:06,817 bench  INFO   run 178/667 complete.
+2023-12-18 22:51:06,817 bench  INFO   run start: instance_id=MWC350, args=(1000, None, None).
+2023-12-18 22:51:09,332 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:51:09,363 bench  DEBUG  qpu: start.
+2023-12-18 22:51:09,613 bench  DEBUG  qpu: finished.
+2023-12-18 22:51:12,723 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0178.json".
+2023-12-18 22:51:12,723 bench  INFO   run 179/667 complete.
+2023-12-18 22:51:12,723 bench  INFO   run start: instance_id=MWC351, args=(1000, None, None).
+2023-12-18 22:51:15,254 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:51:15,301 bench  DEBUG  qpu: start.
+2023-12-18 22:51:15,473 bench  DEBUG  qpu: finished.
+2023-12-18 22:51:18,817 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0179.json".
+2023-12-18 22:51:18,817 bench  INFO   run 180/667 complete.
+2023-12-18 22:51:18,817 bench  INFO   run start: instance_id=MWC37, args=(1000, None, None).
+2023-12-18 22:51:21,348 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:51:21,379 bench  DEBUG  qpu: start.
+2023-12-18 22:51:21,629 bench  DEBUG  qpu: finished.
+2023-12-18 22:51:24,598 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0180.json".
+2023-12-18 22:51:24,598 bench  INFO   run 181/667 complete.
+2023-12-18 22:51:24,598 bench  INFO   run start: instance_id=MWC38, args=(1000, None, None).
+2023-12-18 22:51:27,035 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:51:27,067 bench  DEBUG  qpu: start.
+2023-12-18 22:51:27,286 bench  DEBUG  qpu: finished.
+2023-12-18 22:51:30,458 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0181.json".
+2023-12-18 22:51:30,458 bench  INFO   run 182/667 complete.
+2023-12-18 22:51:30,458 bench  INFO   run start: instance_id=MWC39, args=(1000, None, None).
+2023-12-18 22:51:32,926 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:51:32,957 bench  DEBUG  qpu: start.
+2023-12-18 22:51:33,145 bench  DEBUG  qpu: finished.
+2023-12-18 22:51:36,114 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0182.json".
+2023-12-18 22:51:36,114 bench  INFO   run 183/667 complete.
+2023-12-18 22:51:36,114 bench  INFO   run start: instance_id=UDMIS181, args=(1000, None, None).
+2023-12-18 22:51:38,567 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0183.json".
+2023-12-18 22:51:38,567 bench  INFO   run 184/667 complete.
+2023-12-18 22:51:38,567 bench  INFO   run start: instance_id=UDMIS182, args=(1000, None, None).
+2023-12-18 22:51:52,911 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0184.json".
+2023-12-18 22:51:52,911 bench  INFO   run 185/667 complete.
+2023-12-18 22:51:52,911 bench  INFO   run start: instance_id=UDMIS183, args=(1000, None, None).
+2023-12-18 22:51:55,395 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0185.json".
+2023-12-18 22:51:55,395 bench  INFO   run 186/667 complete.
+2023-12-18 22:51:55,395 bench  INFO   run start: instance_id=UDMIS184, args=(1000, None, None).
+2023-12-18 22:51:57,936 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0186.json".
+2023-12-18 22:51:57,936 bench  INFO   run 187/667 complete.
+2023-12-18 22:51:57,936 bench  INFO   run start: instance_id=UDMIS185, args=(1000, None, None).
+2023-12-18 22:52:00,431 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0187.json".
+2023-12-18 22:52:00,431 bench  INFO   run 188/667 complete.
+2023-12-18 22:52:00,431 bench  INFO   run start: instance_id=UDMIS186, args=(1000, None, None).
+2023-12-18 22:52:03,002 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0188.json".
+2023-12-18 22:52:03,002 bench  INFO   run 189/667 complete.
+2023-12-18 22:52:03,002 bench  INFO   run start: instance_id=UDMIS187, args=(1000, None, None).
+2023-12-18 22:52:05,486 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0189.json".
+2023-12-18 22:52:05,486 bench  INFO   run 190/667 complete.
+2023-12-18 22:52:05,486 bench  INFO   run start: instance_id=UDMIS188, args=(1000, None, None).
+2023-12-18 22:52:08,002 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0190.json".
+2023-12-18 22:52:08,002 bench  INFO   run 191/667 complete.
+2023-12-18 22:52:08,002 bench  INFO   run start: instance_id=UDMIS189, args=(1000, None, None).
+2023-12-18 22:52:10,472 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0191.json".
+2023-12-18 22:52:10,472 bench  INFO   run 192/667 complete.
+2023-12-18 22:52:10,472 bench  INFO   run start: instance_id=UDMIS190, args=(1000, None, None).
+2023-12-18 22:52:12,927 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0192.json".
+2023-12-18 22:52:12,927 bench  INFO   run 193/667 complete.
+2023-12-18 22:52:12,927 bench  INFO   run start: instance_id=UDMIS191, args=(1000, None, None).
+2023-12-18 22:52:15,418 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0193.json".
+2023-12-18 22:52:15,418 bench  INFO   run 194/667 complete.
+2023-12-18 22:52:15,418 bench  INFO   run start: instance_id=UDMIS192, args=(1000, None, None).
+2023-12-18 22:52:17,997 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0194.json".
+2023-12-18 22:52:17,997 bench  INFO   run 195/667 complete.
+2023-12-18 22:52:17,997 bench  INFO   run start: instance_id=UDMIS193, args=(1000, None, None).
+2023-12-18 22:52:20,528 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0195.json".
+2023-12-18 22:52:20,528 bench  INFO   run 196/667 complete.
+2023-12-18 22:52:20,528 bench  INFO   run start: instance_id=UDMIS194, args=(1000, None, None).
+2023-12-18 22:52:23,014 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0196.json".
+2023-12-18 22:52:23,014 bench  INFO   run 197/667 complete.
+2023-12-18 22:52:23,014 bench  INFO   run start: instance_id=UDMIS195, args=(1000, None, None).
+2023-12-18 22:52:25,483 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0197.json".
+2023-12-18 22:52:25,483 bench  INFO   run 198/667 complete.
+2023-12-18 22:52:25,483 bench  INFO   run start: instance_id=MWC118, args=(1000, None, None).
+2023-12-18 22:52:27,937 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:52:27,968 bench  DEBUG  qpu: start.
+2023-12-18 22:52:28,249 bench  DEBUG  qpu: finished.
+2023-12-18 22:52:31,329 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0198.json".
+2023-12-18 22:52:31,329 bench  INFO   run 199/667 complete.
+2023-12-18 22:52:31,329 bench  INFO   run start: instance_id=MWC119, args=(1000, None, None).
+2023-12-18 22:52:33,876 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:52:33,907 bench  DEBUG  qpu: start.
+2023-12-18 22:52:34,188 bench  DEBUG  qpu: finished.
+2023-12-18 22:52:37,312 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0199.json".
+2023-12-18 22:52:37,312 bench  INFO   run 200/667 complete.
+2023-12-18 22:52:37,312 bench  INFO   run start: instance_id=MWC120, args=(1000, None, None).
+2023-12-18 22:52:39,797 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:52:39,844 bench  DEBUG  qpu: start.
+2023-12-18 22:52:40,031 bench  DEBUG  qpu: finished.
+2023-12-18 22:52:43,103 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0200.json".
+2023-12-18 22:52:43,103 bench  INFO   run 201/667 complete.
+2023-12-18 22:52:43,103 bench  INFO   run start: instance_id=MWC196, args=(1000, None, None).
+2023-12-18 22:52:46,072 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:52:46,119 bench  DEBUG  qpu: start.
+2023-12-18 22:52:46,400 bench  DEBUG  qpu: finished.
+2023-12-18 22:52:49,492 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0201.json".
+2023-12-18 22:52:49,492 bench  INFO   run 202/667 complete.
+2023-12-18 22:52:49,492 bench  INFO   run start: instance_id=MWC197, args=(1000, None, None).
+2023-12-18 22:52:52,059 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:52:52,090 bench  DEBUG  qpu: start.
+2023-12-18 22:52:52,340 bench  DEBUG  qpu: finished.
+2023-12-18 22:52:55,453 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0202.json".
+2023-12-18 22:52:55,453 bench  INFO   run 203/667 complete.
+2023-12-18 22:52:55,453 bench  INFO   run start: instance_id=MWC198, args=(1000, None, None).
+2023-12-18 22:52:57,908 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:52:57,955 bench  DEBUG  qpu: start.
+2023-12-18 22:52:58,173 bench  DEBUG  qpu: finished.
+2023-12-18 22:53:01,257 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0203.json".
+2023-12-18 22:53:01,257 bench  INFO   run 204/667 complete.
+2023-12-18 22:53:01,257 bench  INFO   run start: instance_id=MWC274, args=(1000, None, None).
+2023-12-18 22:53:03,764 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:53:03,795 bench  DEBUG  qpu: start.
+2023-12-18 22:53:04,077 bench  DEBUG  qpu: finished.
+2023-12-18 22:53:07,189 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0204.json".
+2023-12-18 22:53:07,189 bench  INFO   run 205/667 complete.
+2023-12-18 22:53:07,189 bench  INFO   run start: instance_id=MWC275, args=(1000, None, None).
+2023-12-18 22:53:09,767 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:53:09,799 bench  DEBUG  qpu: start.
+2023-12-18 22:53:10,064 bench  DEBUG  qpu: finished.
+2023-12-18 22:53:13,140 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0205.json".
+2023-12-18 22:53:13,140 bench  INFO   run 206/667 complete.
+2023-12-18 22:53:13,140 bench  INFO   run start: instance_id=MWC276, args=(1000, None, None).
+2023-12-18 22:53:15,623 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:53:15,670 bench  DEBUG  qpu: start.
+2023-12-18 22:53:15,982 bench  DEBUG  qpu: finished.
+2023-12-18 22:53:19,062 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0206.json".
+2023-12-18 22:53:19,062 bench  INFO   run 207/667 complete.
+2023-12-18 22:53:19,062 bench  INFO   run start: instance_id=MWC352, args=(1000, None, None).
+2023-12-18 22:53:21,547 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:53:21,594 bench  DEBUG  qpu: start.
+2023-12-18 22:53:21,860 bench  DEBUG  qpu: finished.
+2023-12-18 22:53:24,935 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0207.json".
+2023-12-18 22:53:24,935 bench  INFO   run 208/667 complete.
+2023-12-18 22:53:24,935 bench  INFO   run start: instance_id=MWC353, args=(1000, None, None).
+2023-12-18 22:53:27,436 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:53:27,483 bench  DEBUG  qpu: start.
+2023-12-18 22:53:27,733 bench  DEBUG  qpu: finished.
+2023-12-18 22:53:30,871 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0208.json".
+2023-12-18 22:53:30,871 bench  INFO   run 209/667 complete.
+2023-12-18 22:53:30,871 bench  INFO   run start: instance_id=MWC354, args=(1000, None, None).
+2023-12-18 22:53:33,338 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:53:33,400 bench  DEBUG  qpu: start.
+2023-12-18 22:53:33,619 bench  DEBUG  qpu: finished.
+2023-12-18 22:53:36,720 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0209.json".
+2023-12-18 22:53:36,720 bench  INFO   run 210/667 complete.
+2023-12-18 22:53:36,720 bench  INFO   run start: instance_id=MWC40, args=(1000, None, None).
+2023-12-18 22:53:39,158 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:53:39,189 bench  DEBUG  qpu: start.
+2023-12-18 22:53:39,486 bench  DEBUG  qpu: finished.
+2023-12-18 22:53:42,616 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0210.json".
+2023-12-18 22:53:42,616 bench  INFO   run 211/667 complete.
+2023-12-18 22:53:42,616 bench  INFO   run start: instance_id=MWC41, args=(1000, None, None).
+2023-12-18 22:53:45,101 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:53:45,132 bench  DEBUG  qpu: start.
+2023-12-18 22:53:45,398 bench  DEBUG  qpu: finished.
+2023-12-18 22:53:48,496 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0211.json".
+2023-12-18 22:53:48,496 bench  INFO   run 212/667 complete.
+2023-12-18 22:53:48,511 bench  INFO   run start: instance_id=MWC42, args=(1000, None, None).
+2023-12-18 22:53:51,011 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:53:51,043 bench  DEBUG  qpu: start.
+2023-12-18 22:53:51,261 bench  DEBUG  qpu: finished.
+2023-12-18 22:53:54,343 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0212.json".
+2023-12-18 22:53:54,343 bench  INFO   run 213/667 complete.
+2023-12-18 22:53:54,343 bench  INFO   run start: instance_id=UDMIS196, args=(1000, None, None).
+2023-12-18 22:53:56,905 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0213.json".
+2023-12-18 22:53:56,905 bench  INFO   run 214/667 complete.
+2023-12-18 22:53:56,905 bench  INFO   run start: instance_id=UDMIS197, args=(1000, None, None).
+2023-12-18 22:53:59,405 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0214.json".
+2023-12-18 22:53:59,405 bench  INFO   run 215/667 complete.
+2023-12-18 22:53:59,405 bench  INFO   run start: instance_id=UDMIS198, args=(1000, None, None).
+2023-12-18 22:54:01,890 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0215.json".
+2023-12-18 22:54:01,890 bench  INFO   run 216/667 complete.
+2023-12-18 22:54:01,890 bench  INFO   run start: instance_id=UDMIS199, args=(1000, None, None).
+2023-12-18 22:54:04,437 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0216.json".
+2023-12-18 22:54:04,437 bench  INFO   run 217/667 complete.
+2023-12-18 22:54:04,437 bench  INFO   run start: instance_id=UDMIS200, args=(1000, None, None).
+2023-12-18 22:54:07,030 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0217.json".
+2023-12-18 22:54:07,030 bench  INFO   run 218/667 complete.
+2023-12-18 22:54:07,030 bench  INFO   run start: instance_id=UDMIS201, args=(1000, None, None).
+2023-12-18 22:54:09,546 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0218.json".
+2023-12-18 22:54:09,546 bench  INFO   run 219/667 complete.
+2023-12-18 22:54:09,546 bench  INFO   run start: instance_id=UDMIS202, args=(1000, None, None).
+2023-12-18 22:54:12,124 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0219.json".
+2023-12-18 22:54:12,124 bench  INFO   run 220/667 complete.
+2023-12-18 22:54:12,124 bench  INFO   run start: instance_id=UDMIS203, args=(1000, None, None).
+2023-12-18 22:54:14,553 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0220.json".
+2023-12-18 22:54:14,553 bench  INFO   run 221/667 complete.
+2023-12-18 22:54:14,553 bench  INFO   run start: instance_id=UDMIS204, args=(1000, None, None).
+2023-12-18 22:54:22,037 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0221.json".
+2023-12-18 22:54:22,037 bench  INFO   run 222/667 complete.
+2023-12-18 22:54:22,037 bench  INFO   run start: instance_id=UDMIS205, args=(1000, None, None).
+2023-12-18 22:54:24,613 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0222.json".
+2023-12-18 22:54:24,613 bench  INFO   run 223/667 complete.
+2023-12-18 22:54:24,613 bench  INFO   run start: instance_id=UDMIS206, args=(1000, None, None).
+2023-12-18 22:54:27,079 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0223.json".
+2023-12-18 22:54:27,079 bench  INFO   run 224/667 complete.
+2023-12-18 22:54:27,079 bench  INFO   run start: instance_id=UDMIS207, args=(1000, None, None).
+2023-12-18 22:54:29,533 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0224.json".
+2023-12-18 22:54:29,533 bench  INFO   run 225/667 complete.
+2023-12-18 22:54:29,533 bench  INFO   run start: instance_id=UDMIS208, args=(1000, None, None).
+2023-12-18 22:54:32,197 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0225.json".
+2023-12-18 22:54:32,197 bench  INFO   run 226/667 complete.
+2023-12-18 22:54:32,197 bench  INFO   run start: instance_id=UDMIS209, args=(1000, None, None).
+2023-12-18 22:54:34,931 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0226.json".
+2023-12-18 22:54:34,931 bench  INFO   run 227/667 complete.
+2023-12-18 22:54:34,931 bench  INFO   run start: instance_id=UDMIS210, args=(1000, None, None).
+2023-12-18 22:54:37,716 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0227.json".
+2023-12-18 22:54:37,716 bench  INFO   run 228/667 complete.
+2023-12-18 22:54:37,716 bench  INFO   run start: instance_id=TSP100, args=(1000, None, None).
+2023-12-18 22:54:40,278 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:54:40,325 bench  DEBUG  qpu: start.
+2023-12-18 22:54:40,544 bench  DEBUG  qpu: finished.
+2023-12-18 22:54:43,626 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0228.json".
+2023-12-18 22:54:43,626 bench  INFO   run 229/667 complete.
+2023-12-18 22:54:43,626 bench  INFO   run start: instance_id=TSP113, args=(1000, None, None).
+2023-12-18 22:54:46,092 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:54:46,123 bench  DEBUG  qpu: start.
+2023-12-18 22:54:46,326 bench  DEBUG  qpu: finished.
+2023-12-18 22:54:49,443 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0229.json".
+2023-12-18 22:54:49,443 bench  INFO   run 230/667 complete.
+2023-12-18 22:54:49,443 bench  INFO   run start: instance_id=TSP126, args=(1000, None, None).
+2023-12-18 22:55:11,187 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:55:12,140 bench  DEBUG  qpu: start.
+2023-12-18 22:55:12,343 bench  DEBUG  qpu: finished.
+2023-12-18 22:55:15,550 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0230.json".
+2023-12-18 22:55:15,550 bench  INFO   run 231/667 complete.
+2023-12-18 22:55:15,550 bench  INFO   run start: instance_id=TSP139, args=(1000, None, None).
+2023-12-18 22:55:18,892 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:55:18,923 bench  DEBUG  qpu: start.
+2023-12-18 22:55:19,157 bench  DEBUG  qpu: finished.
+2023-12-18 22:55:22,260 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0231.json".
+2023-12-18 22:55:22,260 bench  INFO   run 232/667 complete.
+2023-12-18 22:55:22,260 bench  INFO   run start: instance_id=TSP152, args=(1000, None, None).
+2023-12-18 22:55:29,526 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:55:29,541 bench  DEBUG  qpu: start.
+2023-12-18 22:55:30,073 bench  DEBUG  qpu: finished.
+2023-12-18 22:55:33,149 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0232.json".
+2023-12-18 22:55:33,149 bench  INFO   run 233/667 complete.
+2023-12-18 22:55:33,149 bench  INFO   run start: instance_id=TSP165, args=(1000, None, None).
+2023-12-18 22:55:49,227 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:55:49,493 bench  DEBUG  qpu: start.
+2023-12-18 22:55:49,712 bench  DEBUG  qpu: finished.
+2023-12-18 22:55:52,853 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0233.json".
+2023-12-18 22:55:52,853 bench  INFO   run 234/667 complete.
+2023-12-18 22:55:52,853 bench  INFO   run start: instance_id=TSP178, args=(1000, None, None).
+2023-12-18 22:56:01,697 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:56:01,728 bench  DEBUG  qpu: start.
+2023-12-18 22:56:01,932 bench  DEBUG  qpu: finished.
+2023-12-18 22:56:05,081 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0234.json".
+2023-12-18 22:56:05,081 bench  INFO   run 235/667 complete.
+2023-12-18 22:56:05,081 bench  INFO   run start: instance_id=TSP191, args=(1000, None, None).
+2023-12-18 22:56:11,958 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:56:12,004 bench  DEBUG  qpu: start.
+2023-12-18 22:56:12,270 bench  DEBUG  qpu: finished.
+2023-12-18 22:56:16,287 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0235.json".
+2023-12-18 22:56:16,287 bench  INFO   run 236/667 complete.
+2023-12-18 22:56:16,287 bench  INFO   run start: instance_id=TSP22, args=(1000, None, None).
+2023-12-18 22:56:22,691 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:56:22,722 bench  DEBUG  qpu: start.
+2023-12-18 22:56:22,925 bench  DEBUG  qpu: finished.
+2023-12-18 22:56:26,029 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0236.json".
+2023-12-18 22:56:26,029 bench  INFO   run 237/667 complete.
+2023-12-18 22:56:26,029 bench  INFO   run start: instance_id=TSP35, args=(1000, None, None).
+2023-12-18 22:56:28,527 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:56:28,558 bench  DEBUG  qpu: start.
+2023-12-18 22:56:28,793 bench  DEBUG  qpu: finished.
+2023-12-18 22:56:32,112 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0237.json".
+2023-12-18 22:56:32,112 bench  INFO   run 238/667 complete.
+2023-12-18 22:56:32,112 bench  INFO   run start: instance_id=TSP48, args=(1000, None, None).
+2023-12-18 22:56:34,556 bench  DEBUG  embedding: loaded precalculated embedding.
+2023-12-18 22:56:34,587 bench  DEBUG  qpu: start.
+2023-12-18 22:56:34,790 bench  DEBUG  qpu: finished.
+2023-12-18 22:56:38,056 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0238.json".
+2023-12-18 22:56:38,056 bench  INFO   run 239/667 complete.
+2023-12-18 22:56:38,056 bench  INFO   run start: instance_id=TSP61, args=(1000, None, None).
+2023-12-18 22:56:40,188 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0239.json".
+2023-12-18 22:56:40,188 bench  INFO   run 240/667 complete.
+2023-12-18 22:56:40,188 bench  INFO   run start: instance_id=TSP74, args=(1000, None, None).
+2023-12-18 22:56:42,305 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0240.json".
+2023-12-18 22:56:42,305 bench  INFO   run 241/667 complete.
+2023-12-18 22:56:42,305 bench  INFO   run start: instance_id=TSP87, args=(1000, None, None).
+2023-12-18 22:56:44,414 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0241.json".
+2023-12-18 22:56:44,414 bench  INFO   run 242/667 complete.
+2023-12-18 22:56:44,414 bench  INFO   run start: instance_id=TSP9, args=(1000, None, None).
+2023-12-18 22:56:46,546 bench  INFO   run finished: failure, saved to "result/dwave-1000shots-full-4/dwave-1000shots-full-4_dwave_2.0.2_1702935246.817566_0242.json".
+2023-12-18 22:56:46,546 bench  INFO   run 243/667 complete.
+2023-12-18 22:56:46,546 bench  INFO   run start: instance_id=MWC121, args=(1000, None, None).

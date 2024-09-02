@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Raw data formats &mdash; qopt-overview  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/autoclasstoc.css?v=08871587" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=3dd0334f" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="post_processing.select_runs" href="_autosummary/post_processing.select_runs.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            qopt-overview
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html#computational-pipeline">Computational pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html#implementation-details">Implementation details</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Raw data formats</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#problem-instances">Problem instances</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#qubo-formulations">QUBO formulations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tsp-instances">TSP instances.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mwc-maxcut-instances">MWC (MaxCut) instances.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ud-mis-instances">UD-MIS instances</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#qpu-run-logs">QPU run logs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#computed-summaries">Computed summaries</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">qopt-overview</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Raw data formats</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/raw-data.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="raw-data-formats">
+<h1>Raw data formats<a class="headerlink" href="#raw-data-formats" title="Link to this heading"></a></h1>
+<p>This section briefly discusses the relevant internal data formats. Most of the
+source data, namely, instance data and raw QPU logs, are saved in JSON format.
+Intermediate computation results are usually stored as comma separated values
+(i.e., plain text tables in <code class="docutils literal notranslate"><span class="pre">.csv</span></code> files).</p>
+<section id="problem-instances">
+<span id="sec-formats"></span><h2>Problem instances<a class="headerlink" href="#problem-instances" title="Link to this heading"></a></h2>
+<p>For each problem, we store an original instance data (in <code class="docutils literal notranslate"><span class="pre">📁</span> <span class="pre">instances/orig</span></code>
+folder) and a respective QUBO formulation (in <code class="docutils literal notranslate"><span class="pre">📁</span> <span class="pre">instances/QUBO</span></code> folder).
+These two files have the same basename and different suffixes: for example, TSP
+instance with <code class="docutils literal notranslate"><span class="pre">TSP1</span></code> is represented by two files:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">./instances/orig/TSP1_5_pr107.orig.json</span></code> with original instance data, and</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">./instances/QUBO/TSP1_16_5_pr107.qubo.json</span></code> with QUBO formulation.</p></li>
+</ul>
+<p>Both files are in the standard <a class="reference external" href="https://en.wikipedia.org/wiki/JSON">JSON</a>
+format, which can be parsed by <a class="reference external" href="https://docs.python.org/3/library/json.html#module-json">json</a> python package or,
+for example, <a class="reference external" href="https://jqlang.github.io/jq/">jq</a> command line utility. Besides
+<code class="docutils literal notranslate"><span class="pre">jq</span></code> command, one can use any JSON editor/viewer for visual inspection, one
+notable example being the standard JSON viewer built into <a class="reference external" href="https://www.mozilla.org/en-US/firefox/">Firefox</a> browser.</p>
+<p>Below we specify the structure of the respective JSON files.</p>
+<section id="qubo-formulations">
+<h3>QUBO formulations<a class="headerlink" href="#qubo-formulations" title="Link to this heading"></a></h3>
+<p><strong>Filenames:</strong> <code class="docutils literal notranslate"><span class="pre">./instances/QUBO/*.qubo.json*</span></code></p>
+<p>JSON files corresponding to QUBO formulations have universal format, regardless
+of the problem type:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><strong>Field</strong></p></td>
+<td><p><strong>Description</strong></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Q</span></code></p></td>
+<td><p>quadratic coefficients matrix</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">P</span></code></p></td>
+<td><p>linear coefficients vector</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Const</span></code></p></td>
+<td><p>constant (a number)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">description</span></code></p></td>
+<td><p>metadata in subfields:</p></td>
+</tr>
+<tr class="row-even"><td><p>┖ <code class="docutils literal notranslate"><span class="pre">instance_id</span></code></p></td>
+<td><p>a unique instance ID</p></td>
+</tr>
+<tr class="row-odd"><td><p>┖ <code class="docutils literal notranslate"><span class="pre">instance_type</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TSP</span></code>, <code class="docutils literal notranslate"><span class="pre">UDMIS</span></code>, or <code class="docutils literal notranslate"><span class="pre">MWC</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>┖ <code class="docutils literal notranslate"><span class="pre">original_instance_name</span></code></p></td>
+<td><p>original instance name
+(e.g., for TSP — from TSP Lib)</p></td>
+</tr>
+<tr class="row-odd"><td><p>┖ <code class="docutils literal notranslate"><span class="pre">original_instance_file</span></code></p></td>
+<td><p>filename for the original instance</p></td>
+</tr>
+<tr class="row-even"><td><p>┖ <code class="docutils literal notranslate"><span class="pre">contents</span></code></p></td>
+<td><p>constant value <code class="docutils literal notranslate"><span class="pre">QUBO</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>┖ <code class="docutils literal notranslate"><span class="pre">comment</span></code></p></td>
+<td><p>a free-form string comment.</p></td>
+</tr>
+</tbody>
+</table>
+<p>Note that internally in the code, we assume the following QUBO format:</p>
+<div class="math notranslate nohighlight">
+\[\min \frac{1}{2} x^\prime Q x + x^\prime P + \text{Const}\]</div>
+</section>
+<section id="tsp-instances">
+<h3>TSP instances.<a class="headerlink" href="#tsp-instances" title="Link to this heading"></a></h3>
+<p><strong>Filenames:</strong> <code class="docutils literal notranslate"><span class="pre">instances/orig/TSP*.orig.json</span></code>.</p>
+<p>TSP instances are generated from the original <a class="reference external" href="http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/">TSPLIB</a> instances.
+Namely, in our dataset we have the instances sampled from the following
+collection of TSPLIB instances:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">att48</span><span class="p">,</span> <span class="n">brazil58</span><span class="p">,</span> <span class="n">eil101</span><span class="p">,</span> <span class="n">gr666</span><span class="p">,</span> <span class="n">hk48</span><span class="p">,</span> <span class="n">kroA100</span><span class="p">,</span> <span class="n">kroB100</span><span class="p">,</span> <span class="n">kroC100</span><span class="p">,</span> <span class="n">lin105</span><span class="p">,</span>
+<span class="n">pa561</span><span class="o">.</span><span class="n">tsp</span><span class="p">,</span> <span class="n">pr107</span><span class="p">,</span> <span class="n">pr299</span><span class="p">,</span> <span class="n">rat575</span><span class="p">,</span> <span class="n">swiss42</span><span class="p">,</span> <span class="n">tsp225</span><span class="o">.</span>
+</pre></div>
+</div>
+<p>Each original instance file (present in <code class="docutils literal notranslate"><span class="pre">📁</span> <span class="pre">instances/orig</span></code> folder) has the
+following structure:</p>
+<blockquote>
+<div><table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><strong>Field</strong></p></td>
+<td><p><strong>Description</strong></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">D</span></code></p></td>
+<td><p>distance matrix</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">description</span></code></p></td>
+<td><p>metadata in
+subfields:</p></td>
+</tr>
+<tr class="row-even"><td><p>┖ <code class="docutils literal notranslate"><span class="pre">instance_id</span></code></p></td>
+<td><p>unique instance ID</p></td>
+</tr>
+<tr class="row-odd"><td><p>┖ <code class="docutils literal notranslate"><span class="pre">instance_type</span></code></p></td>
+<td><p>value <code class="docutils literal notranslate"><span class="pre">TSP</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>┖
+<code class="docutils literal notranslate"><span class="pre">original_instance_name</span></code></p></td>
+<td><p>reference to the
+original instance
+(from TSPLIB)</p></td>
+</tr>
+<tr class="row-odd"><td><p>┖ <code class="docutils literal notranslate"><span class="pre">contents</span></code></p></td>
+<td><p>value <code class="docutils literal notranslate"><span class="pre">Distance</span>
+<span class="pre">matrix</span> <span class="pre">D.</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>┖ <code class="docutils literal notranslate"><span class="pre">comments</span></code></p></td>
+<td><p>a free-form string
+comment.</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</section>
+<section id="mwc-maxcut-instances">
+<h3>MWC (MaxCut) instances.<a class="headerlink" href="#mwc-maxcut-instances" title="Link to this heading"></a></h3>
+<p><strong>Filenames:</strong> <code class="docutils literal notranslate"><span class="pre">instances/orig/MWC*.json</span></code></p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><strong>Field</strong></p></td>
+<td><p><strong>Description</strong></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">nodes</span></code></p></td>
+<td><p>a list of node IDs (numbers)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">edges</span></code></p></td>
+<td><p>list of tuples (one per edge):</p></td>
+</tr>
+<tr class="row-even"><td><p>┖ (int)</p></td>
+<td><p>node id: edge tail</p></td>
+</tr>
+<tr class="row-odd"><td><p>┖ (int)</p></td>
+<td><p>node id: edge head</p></td>
+</tr>
+<tr class="row-even"><td><p>┖ (float)</p></td>
+<td><p>edge weight</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">description</span></code></p></td>
+<td><p>metadata in subfields:</p></td>
+</tr>
+<tr class="row-even"><td><p>┖ <code class="docutils literal notranslate"><span class="pre">instance_id</span></code></p></td>
+<td><p>a unique instance ID</p></td>
+</tr>
+<tr class="row-odd"><td><p>┖ <code class="docutils literal notranslate"><span class="pre">instance_type</span></code></p></td>
+<td><p>value <code class="docutils literal notranslate"><span class="pre">MWC</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>┖ <code class="docutils literal notranslate"><span class="pre">original_instance_name</span></code></p></td>
+<td><p>original instance name
+(N&lt;nodes&gt;E&lt;edges&gt;_ERG_p&lt;P&gt;</p></td>
+</tr>
+<tr class="row-odd"><td><p>┖ <code class="docutils literal notranslate"><span class="pre">contents</span></code></p></td>
+<td><p>value <code class="docutils literal notranslate"><span class="pre">orig_MWC_G</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>┖ <code class="docutils literal notranslate"><span class="pre">comment</span></code></p></td>
+<td><p>a free-form string comment.</p></td>
+</tr>
+</tbody>
+</table>
+<p>Note that in the <code class="docutils literal notranslate"><span class="pre">original_instance_name</span></code>, the parts <code class="docutils literal notranslate"><span class="pre">N</span></code> and <code class="docutils literal notranslate"><span class="pre">E</span></code> denote
+number of nodes and edges, respectively while <code class="docutils literal notranslate"><span class="pre">p</span></code> stands for the random graph
+model parameter for edge probabilities (in Erdos-Renyi model).</p>
+</section>
+<section id="ud-mis-instances">
+<h3>UD-MIS instances<a class="headerlink" href="#ud-mis-instances" title="Link to this heading"></a></h3>
+<p><strong>Filenames:</strong> <code class="docutils literal notranslate"><span class="pre">instances/orig/UDMIS*.json</span></code></p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><strong>Field</strong></p></td>
+<td><p><strong>Description</strong></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">nodes</span></code></p></td>
+<td><p>nodes in the graph</p></td>
+</tr>
+<tr class="row-odd"><td><p>┖ list[int]</p></td>
+<td><p>(list of integer labels)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">edges</span></code></p></td>
+<td><p>list of edges</p></td>
+</tr>
+<tr class="row-odd"><td><p>┖ tuple (int, int)</p></td>
+<td><p>(pairs of node labels)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">description</span></code></p></td>
+<td><p>metadata in subfields:</p></td>
+</tr>
+<tr class="row-odd"><td><p>┖ <code class="docutils literal notranslate"><span class="pre">instance_id</span></code></p></td>
+<td><p>a unique instance ID</p></td>
+</tr>
+<tr class="row-even"><td><p>┖ <code class="docutils literal notranslate"><span class="pre">instance_type</span></code></p></td>
+<td><p>value <code class="docutils literal notranslate"><span class="pre">UDMIS</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>┖ <code class="docutils literal notranslate"><span class="pre">original_instance_name</span></code></p></td>
+<td><p>original instance name
+(N&lt;nodes&gt;W&lt;width to height&gt;_R&lt;R / size&gt;</p></td>
+</tr>
+<tr class="row-even"><td><p>┖ <code class="docutils literal notranslate"><span class="pre">contents</span></code></p></td>
+<td><p>value <code class="docutils literal notranslate"><span class="pre">orig_UDMIS</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>┖ <code class="docutils literal notranslate"><span class="pre">wwidth</span></code></p></td>
+<td><p>Max x-coordinate of a point (for generation)</p></td>
+</tr>
+<tr class="row-even"><td><p>┖ <code class="docutils literal notranslate"><span class="pre">wheight</span></code></p></td>
+<td><p>Max y-coordinate of a point (for generation)</p></td>
+</tr>
+<tr class="row-odd"><td><p>┖ <code class="docutils literal notranslate"><span class="pre">R</span></code></p></td>
+<td><p>Radius parameter (for generation)</p></td>
+</tr>
+<tr class="row-even"><td><p>┖ <code class="docutils literal notranslate"><span class="pre">points</span></code></p></td>
+<td><p>Points corresponding to vertices:</p></td>
+</tr>
+<tr class="row-odd"><td><p>┖ “(node_id)”:   (x, y)</p></td>
+<td><p>a dict of point coordinates (x,y) keyed by
+by the respective node ID.</p></td>
+</tr>
+<tr class="row-even"><td><p>┖ <code class="docutils literal notranslate"><span class="pre">comment</span></code></p></td>
+<td><p>A free-form string comment.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="qpu-run-logs">
+<h2>QPU run logs<a class="headerlink" href="#qpu-run-logs" title="Link to this heading"></a></h2>
+<p>Raw QPU run logs also constitute JSON files, however, the format is relatively
+involved, as we tried to preserve as much data from each QPU run as possible.
+Specific fields from the raw log files that were used in our analysis can be
+devised from the log parsing source code, namely, the following functions:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="_autosummary/post_processing.logparser.html#post_processing.logparser.QuEraLogParser._extract_successful_line" title="post_processing.logparser.QuEraLogParser._extract_successful_line"><code class="xref py py-func docutils literal notranslate"><span class="pre">post_processing.logparser.QuEraLogParser._extract_successful_line()</span></code></a></p></li>
+<li><p><a class="reference internal" href="_autosummary/post_processing.logparser.html#post_processing.logparser.QuEraLogParser.extract_samples" title="post_processing.logparser.QuEraLogParser.extract_samples"><code class="xref py py-func docutils literal notranslate"><span class="pre">post_processing.logparser.QuEraLogParser.extract_samples()</span></code></a></p></li>
+<li><p><a class="reference internal" href="_autosummary/post_processing.logparser.html#post_processing.logparser.DWaveLogParser._extract_successful_line" title="post_processing.logparser.DWaveLogParser._extract_successful_line"><code class="xref py py-func docutils literal notranslate"><span class="pre">post_processing.logparser.DWaveLogParser._extract_successful_line()</span></code></a></p></li>
+<li><p><a class="reference internal" href="_autosummary/post_processing.logparser.html#post_processing.logparser.DWaveLogParser.extract_samples" title="post_processing.logparser.DWaveLogParser.extract_samples"><code class="xref py py-func docutils literal notranslate"><span class="pre">post_processing.logparser.DWaveLogParser.extract_samples()</span></code></a></p></li>
+<li><p><a class="reference internal" href="_autosummary/post_processing.logparser.html#post_processing.logparser.IBMLogParser._extract_successful_line" title="post_processing.logparser.IBMLogParser._extract_successful_line"><code class="xref py py-func docutils literal notranslate"><span class="pre">post_processing.logparser.IBMLogParser._extract_successful_line()</span></code></a></p></li>
+<li><p><a class="reference internal" href="_autosummary/post_processing.logparser.html#post_processing.logparser.IBMLogParser.extract_samples" title="post_processing.logparser.IBMLogParser.extract_samples"><code class="xref py py-func docutils literal notranslate"><span class="pre">post_processing.logparser.IBMLogParser.extract_samples()</span></code></a></p></li>
+<li><p><a class="reference internal" href="_autosummary/post_processing.logparser.html#post_processing.logparser.IBMLogParser.extract_convergence_data" title="post_processing.logparser.IBMLogParser.extract_convergence_data"><code class="xref py py-func docutils literal notranslate"><span class="pre">post_processing.logparser.IBMLogParser.extract_convergence_data()</span></code></a></p></li>
+</ul>
+</div></blockquote>
+</section>
+<section id="computed-summaries">
+<h2>Computed summaries<a class="headerlink" href="#computed-summaries" title="Link to this heading"></a></h2>
+<p>Intermediary summary tables in <code class="docutils literal notranslate"><span class="pre">📁</span> <span class="pre">run_logs</span></code> folder, including the QPU shots
+data in <code class="docutils literal notranslate"><span class="pre">run_logs/*/samples-csv</span></code> essentially always constitute plain text
+tables with comma separated values, which can be easily manipulated with <a class="reference external" href="https://pandas.pydata.org/">pandas</a> (in Python), <a class="reference external" href="https://dplyr.tidyverse.org/">dplyr</a> (in R), or basically any spreadsheets software
+for quick visual inspection, such as <a class="reference external" href="https://www.libreoffice.org">LibreOffice</a>.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Bochkarev, Heese, Jäger, Schiewe, and Schöbel.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

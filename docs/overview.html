@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Overview &mdash; qopt-overview  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/autoclasstoc.css?v=08871587" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=3dd0334f" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="TSP_inst" href="_autosummary/TSP_inst.html" />
+    <link rel="prev" title="QC for discrete optimization: code documentation." href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            qopt-overview
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#computational-pipeline">Computational pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#implementation-details">Implementation details</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/TSP_inst.html">TSP_inst</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/MWC_inst.html">MWC_inst</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/MIS_inst.html">MIS_inst</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/classic_solve_UDMISes.html">classic_solve_UDMISes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/classic_solve_MWC_QUBO_only.html">classic_solve_MWC_QUBO_only</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/classic_solve_MWCs.html">classic_solve_MWCs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/classic_solve_TSPs_MTZ.html">classic_solve_TSPs_MTZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/post_processing.logparser.html">post_processing.logparser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/post_processing.select_runs.html">post_processing.select_runs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#preparing-python-and-r-environments">Preparing python and R environments</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="raw-data.html">Raw data formats</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">qopt-overview</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Overview</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/overview.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="overview">
+<h1>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h1>
+<p>This archive is organized as follows. The <code class="docutils literal notranslate"><span class="pre">📁</span> <span class="pre">docs</span></code> folder contains HTML documents
+with this description, and the rest of the root directory represents a snapshot from
+our source code repository with the following structure:</p>
+<table class="docutils align-default" id="id3">
+<caption><span class="caption-text">Repository structure</span><a class="headerlink" href="#id3" title="Link to this table"></a></caption>
+<colgroup>
+<col style="width: 41.7%" />
+<col style="width: 58.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>File / folder</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>📁 /
+├── 📁 benchmark
+|    ├── *.py
+|    ├── AquilaMISRunnerv4.ipynb
+├── precompute_embeddings.py
+</pre></div>
+</div>
+</td>
+<td><p>The code implementing QPU calculations: python implementation files for
+IBM and D-Wave devices (including the script for local D-Wave embeddings
+preparation) and the <a class="reference external" href="https://jupyter.org/">Jupyter notebook</a> used to
+run the experiments on the QuEra device.</p></td>
+</tr>
+<tr class="row-odd"><td><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>├── 📁 instances
+|    ├── orig_instances.zip
+|    ├── QUBO_formulations.zip
+</pre></div>
+</div>
+</td>
+<td><p>Problem instances (see format <a class="reference internal" href="raw-data.html#sec-formats"><span class="std std-ref">descriptions</span></a>). Two
+archives correspond to the original instances and the respective QUBO
+formulations (extracted to <code class="docutils literal notranslate"><span class="pre">📁</span> <span class="pre">orig</span></code> and <code class="docutils literal notranslate"><span class="pre">📁</span> <span class="pre">QUBO</span></code> subdirectories,
+respectively)</p></td>
+</tr>
+<tr class="row-even"><td><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>├── 📁 figures
+|    ├── *.png
+|    ├── *.tex
+</pre></div>
+</div>
+</td>
+<td><p>Calculation outputs: generated figures, including the <code class="docutils literal notranslate"><span class="pre">png</span></code> pictures
+and the tables in <code class="docutils literal notranslate"><span class="pre">.tex</span></code> format; see <a class="reference internal" href="#sec-reproducibility"><span class="std std-ref">below</span></a>).</p></td>
+</tr>
+<tr class="row-odd"><td><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>├── 📁 run_logs
+|    ├── 📁 dwave
+|    |   ├── 📁 samples-csv
+|    |   ├── embeddings.zip
+|    |   ├── raw_logs.zip
+|    ├── 📁 quera
+|    |   ├── 📁 samples-csv
+|    |   ├── raw_logs.zip
+|    ├── 📁 ibm-qpu
+|    |   ├── 📁 samples-csv
+|    |   ├── raw_logs.zip
+|    ├── 📁 ibm-sim
+|    |   ├── 📁 samples-csv
+|    |   ├── raw_logs.zip
+|    ├── 📁 summaries
+|    ├── 📁 classic_solutions
+</pre></div>
+</div>
+</td>
+<td><p>Run logs, results of the computations. This includes the raw QPU outputs
+(in dedicated <code class="docutils literal notranslate"><span class="pre">.zip</span></code> files), extracted samples data for selected runs
+(in <code class="docutils literal notranslate"><span class="pre">📁</span> <span class="pre">samples-csv</span></code> subdirectories), and the summaries of these data
+in a few <code class="docutils literal notranslate"><span class="pre">.csv</span></code> files in the <code class="docutils literal notranslate"><span class="pre">📁</span> <span class="pre">summaries</span></code> folder. Baseline solutions
+obtained with a classical solver are stored in the <code class="docutils literal notranslate"><span class="pre">📁</span> <span class="pre">classic_solutions</span></code>
+folder, in the form of summary <code class="docutils literal notranslate"><span class="pre">.csv</span></code> files and raw <code class="docutils literal notranslate"><span class="pre">.log</span></code> files
+capturing the solver output.</p></td>
+</tr>
+<tr class="row-even"><td><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>├── 📁 post_processing
+├── qubo_utils.py
+├── make_suppl_sample_figures.sh
+├── compress_images.sh
+</pre></div>
+</div>
+</td>
+<td><p>Auxiliary scripts for post-processing, including summarizing the
+logfiles and the production of figures.</p></td>
+</tr>
+<tr class="row-odd"><td><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>├── MWC_inst.py
+├── MIS_inst.py
+├── TSP_inst.py
+├── download-and-extract-TSP.sh
+</pre></div>
+</div>
+</td>
+<td><p>Instance generation code. Note that for the TSP-related code to work, we
+need the original <a class="reference external" href="http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/">TSPLIB</a> instance
+collection. The last file contains commands used to download and unpack
+such instances on our GNU/Linux-based system.</p></td>
+</tr>
+<tr class="row-even"><td><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>├── classic_solve_UDMISes.py
+├── classic_solve_MWCs.py
+├── classic_solve_MWC_QUBO_only.py
+├── classic_solve_TSPs_MTZ.py
+</pre></div>
+</div>
+</td>
+<td><p>Baseline computations implementation (with <a class="reference external" href="https://www.gurobi.com">Gurobi</a>)</p></td>
+</tr>
+<tr class="row-odd"><td><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>├── quera_suppl_samples.ids
+├── dwave_suppl_samples.ids
+├── ibm-qpu_suppl_samples.ids
+├── ibm-sim_suppl_samples.ids
+</pre></div>
+</div>
+</td>
+<td><p>Instance IDs used to create the “sample output” figures in the appendix.
+(Corresponding files with <code class="docutils literal notranslate"><span class="pre">.logfiles</span></code> suffix in the name are created
+automatically and contain names for respective log files from <code class="docutils literal notranslate"><span class="pre">📁</span>
+<span class="pre">run_logs</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>├── data_sel.ipynb
+├── instance_figs.ipynb
+</pre></div>
+</div>
+</td>
+<td><p>A few examples for dataset visualisation in the format of <a class="reference external" href="https://jupyter.org/">Jupyter
+notebooks</a> (not critical for results
+reproducibility).</p></td>
+</tr>
+<tr class="row-odd"><td><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>├── Makefile
+</pre></div>
+</div>
+</td>
+<td><p>A makefile with all computational recipes relevant to the
+post-processing (i.e., production of figures from the log files).</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="computational-pipeline">
+<span id="sec-reproducibility"></span><h1>Computational pipeline<a class="headerlink" href="#computational-pipeline" title="Link to this heading"></a></h1>
+<p>Most of the figures in the paper are generated automatically, as discussed
+below. The figures are created using dedicated post-processing scripts from
+intermediate summary data tables. These tables are in turn constructed from the
+raw log files (in JSON format) obtained from the QPUs. Assuming the necessary
+software is present and instances and run logs are unpacked, one can rebuild any
+figure by issuing a <code class="docutils literal notranslate"><span class="pre">make</span></code> command from the root directory. <a class="reference external" href="https://www.gnu.org/software/make">GNU make</a> will consider the files’ timestamps and
+re-run the calculations as necessary. For example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>figures/inst_summary.png<span class="w">  </span><span class="c1"># to rebuild Figure 4, or</span>
+make<span class="w"> </span>figures<span class="w">                   </span><span class="c1"># to rebuild all figures for the paper</span>
+</pre></div>
+</div>
+<p>Interactions with QPU are specific to the devices and both formats and
+procedures might be subject to updates. (Notably, <code class="docutils literal notranslate"><span class="pre">qiskit</span></code> API and remote
+access guidelines have changed since the moment we ran our computational
+experiments.) However, we believe that the code presented in the <code class="docutils literal notranslate"><span class="pre">📁</span>
+<span class="pre">benchmark</span></code> directory provides a good starting point to build upon these
+results.</p>
+<p>The key figures in the paper are produced as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Figure or table</p></th>
+<th class="head"><p>Filename</p></th>
+<th class="head"><p>Plotting code</p></th>
+<th class="head"><p>Data files</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Fig. 4</p></td>
+<td><p>inst_summary.png</p></td>
+<td><p>inst_summary.R</p></td>
+<td><p>quera_stats.csv,</p>
+<p>quera_summary.csv,</p>
+<p>dwave_stats.csv,</p>
+<p>dwave_summary.csv,</p>
+<p>embeddings.csv,</p>
+<p>ibm-qpu_stats.csv,</p>
+<p>ibm-qpu_summary.csv,</p>
+<p>ibm-sim_stats.csv,</p>
+<p>ibm-sim_summary.csv,</p>
+<p>solutions_all.csv</p>
+</td>
+</tr>
+<tr class="row-odd"><td><p>Fig. 5a,</p>
+<p>Fig. 5b,</p>
+<p>Table 5</p>
+</td>
+<td><p>qpu_vs_cpu_runtimes.png,</p>
+<p>hard_instances.png</p>
+<p>qpu_vs_cpu.tex</p>
+</td>
+<td><p>QPU_vs_classic_figures.R</p></td>
+<td><p>TSP_MTZ.csv,</p>
+<p>UDMIS.csv,</p>
+<p>MWC_QUBO.csv,</p>
+<p>ibm-qpu_summary.csv,</p>
+<p>ibm-sim_summary.csv,</p>
+<p>dwave_summary.csv,</p>
+<p>embeddings.csv,</p>
+<p>quera_summary.csv</p>
+</td>
+</tr>
+<tr class="row-even"><td><p>Fig. 6,</p>
+<p>Fig. 11,
+Table 7</p>
+<p>Fig. 18</p>
+</td>
+<td><p>runtime_vs_embtime_TSP.png,</p>
+<p>runtime_vs_embtime_MWC.png,</p>
+<p>runtime_vs_embtime_UDMIS.png</p>
+<p>dwave_qubit_cost_logs_regline.png
+regression_summary.tex</p>
+<p>dwave_soltimes_noemb.png</p>
+<p>dwave_embtime_share.png</p>
+</td>
+<td><p>dwave.R</p></td>
+<td><p>dwave_summary.csv,</p>
+<p>embeddings.csv</p>
+</td>
+</tr>
+<tr class="row-odd"><td><p>Fig. 9</p></td>
+<td><p>nonzeros_vs_size.png</p></td>
+<td><p>igs_draw_nonzeros.R</p></td>
+<td><p>instances.csv</p>
+<p>all_devices_stats.csv</p>
+</td>
+</tr>
+<tr class="row-even"><td><p>Fig. 10</p></td>
+<td><p>runs_summary.png</p></td>
+<td><p>inst_summary_by_inst.R</p></td>
+<td><p>quera_summary_full.csv</p>
+<p>dwave_summary_full.csv,</p>
+<p>embeddings.csv,</p>
+<p>ibm-qpu_summary_full.csv,</p>
+<p>ibm-sim_summary_full.csv,</p>
+<p>solutions_all.csv</p>
+</td>
+</tr>
+<tr class="row-odd"><td><p>Fig. 12,
+13,
+and 15</p></td>
+<td><p>files *.json.hist.png in
+<code class="docutils literal notranslate"><span class="pre">📁</span> <span class="pre">figures</span></code> folder</p></td>
+<td><p>make_suppl_sample_figures.sh</p></td>
+<td><p>(raw QPU logfiles)</p></td>
+</tr>
+</tbody>
+</table>
+<p>Figures 7, 8, and 14 (instance examples) are made with ad-hoc code illustrated
+in the Jupyter notebook <code class="docutils literal notranslate"><span class="pre">data_sel.ipynb</span></code>.</p>
+<p>Please refer to <code class="docutils literal notranslate"><span class="pre">Makefile</span></code> for more details on the computational recipes.</p>
+</section>
+<section id="implementation-details">
+<h1>Implementation details<a class="headerlink" href="#implementation-details" title="Link to this heading"></a></h1>
+<p>Our experimental setup broadly comprises five parts:</p>
+<ol class="arabic">
+<li><p>Instance generation code is written in Python and executed locally on a
+laptop. The relevant modules are:</p>
+<blockquote>
+<div><table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/TSP_inst.html#module-TSP_inst" title="TSP_inst"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TSP_inst</span></code></a></p></td>
+<td><p>Generates TSP instances by sampling nodes from TSPLIB files.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/MWC_inst.html#module-MWC_inst" title="MWC_inst"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MWC_inst</span></code></a></p></td>
+<td><p>Generates MaxCut (&quot;MWC&quot;) instances by generating random graphs.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/MIS_inst.html#module-MIS_inst" title="MIS_inst"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MIS_inst</span></code></a></p></td>
+<td><p>Generates Unit Disc Max Independent Set (UDMIS) instances.</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p>Baseline calculations (solving the problems with the classical solver) is
+done using <a class="reference external" href="https://www.gurobi.com">Gurobi</a> in the following modules:</p>
+<blockquote>
+<div><table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/classic_solve_UDMISes.html#module-classic_solve_UDMISes" title="classic_solve_UDMISes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">classic_solve_UDMISes</span></code></a></p></td>
+<td><p>Solves UDMIS instances with Gurobi, recording the objectives and solution times.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/classic_solve_MWC_QUBO_only.html#module-classic_solve_MWC_QUBO_only" title="classic_solve_MWC_QUBO_only"><code class="xref py py-obj docutils literal notranslate"><span class="pre">classic_solve_MWC_QUBO_only</span></code></a></p></td>
+<td><p>Solves MaxCut instances with Gurobi, recording the objectives and solution times.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/classic_solve_MWCs.html#module-classic_solve_MWCs" title="classic_solve_MWCs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">classic_solve_MWCs</span></code></a></p></td>
+<td><p>Illustration: compares QUBO and LBOP formulations for MaxCut.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/classic_solve_TSPs_MTZ.html#module-classic_solve_TSPs_MTZ" title="classic_solve_TSPs_MTZ"><code class="xref py py-obj docutils literal notranslate"><span class="pre">classic_solve_TSPs_MTZ</span></code></a></p></td>
+<td><p>Solves TSP in MTZ formulation with Gurobi, saving the objectives and solution times.</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p>Interactions with QPUs are programmed in Python and implemented via remote
+interfaces. The relevant code for D-Wave and IBM is stored in <code class="docutils literal notranslate"><span class="pre">📁</span>
+<span class="pre">benchmark</span></code> folder:</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/bench.html#module-bench" title="bench"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bench</span></code></a></p></td>
+<td><p>Implements abstract interfaces for instance storage and QPU solvers.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/bench_qubo.html#module-bench_qubo" title="bench_qubo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bench_qubo</span></code></a></p></td>
+<td><p>Contains core QPU-interaction code.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/runner.html#module-runner" title="runner"><code class="xref py py-obj docutils literal notranslate"><span class="pre">runner</span></code></a></p></td>
+<td><p>An example top-level script used to run QPU experiments for IBM and D-Wave.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/run_dwave.html#module-run_dwave" title="run_dwave"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run_dwave</span></code></a></p></td>
+<td><p>An example wrapper script for running experiments on D-Wave machine.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/run_ibm.html#module-run_ibm" title="run_ibm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run_ibm</span></code></a></p></td>
+<td><p>An example wrapper script for running experiments on IBM machines.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/run_ibm_sim.html#module-run_ibm_sim" title="run_ibm_sim"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run_ibm_sim</span></code></a></p></td>
+<td><p>An example wrapper script for running experiments on IBM (simulator) machines.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/precompute_embeddings.html#module-precompute_embeddings" title="precompute_embeddings"><code class="xref py py-obj docutils literal notranslate"><span class="pre">precompute_embeddings</span></code></a></p></td>
+<td><p>Precomputes (DWave) embeddings for the instances in QUBO folder.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/notebook.html#module-notebook" title="notebook"><code class="xref py py-obj docutils literal notranslate"><span class="pre">notebook</span></code></a></p></td>
+<td><p>The Jupyter HTML Notebook</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p>Post-processing of the log files (summarizing the raw data) is done locally
+in Python, with the following two modules:</p>
+<blockquote>
+<div><table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/post_processing.logparser.html#module-post_processing.logparser" title="post_processing.logparser"><code class="xref py py-obj docutils literal notranslate"><span class="pre">post_processing.logparser</span></code></a></p></td>
+<td><p>Implements JSON pasers, summarizing the raw QPU output files.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/post_processing.select_runs.html#module-post_processing.select_runs" title="post_processing.select_runs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">post_processing.select_runs</span></code></a></p></td>
+<td><p>Utility script: selects instance attempts (&quot;runs&quot;) for the main text figures/tables.</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p>Figures production from <code class="docutils literal notranslate"><span class="pre">.csv</span></code>-files, including the necessary technical
+data transformations are made using <a class="reference external" href="https://www.r-project.org">R language</a>,
+the respective code comprises <code class="docutils literal notranslate"><span class="pre">.R</span></code>-files in <code class="docutils literal notranslate"><span class="pre">📁</span> <span class="pre">post_processing</span></code>
+directory.</p></li>
+</ol>
+<section id="preparing-python-and-r-environments">
+<h2>Preparing python and R environments<a class="headerlink" href="#preparing-python-and-r-environments" title="Link to this heading"></a></h2>
+<p>To run the code, minimal environment setup might be necessary, for Python and R.
+This section aims to provide a basic guideline, note that other software might
+(theoretically) be needed, depending on your system.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For the (python) environment management we used the recommended
+<cite>venv &lt;https://docs.python.org/3/library/venv.html&gt;</cite>-way. For example, the
+virtual environment can be created and activated with:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>python3.10<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>.venv
+$<span class="w"> </span><span class="nb">source</span><span class="w"> </span>.venv/bin/activate
+
+$<span class="w"> </span><span class="c1"># then, we can install the necessary packages there with:</span>
+
+$<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<p>Python code relies on the packages specified in the standard <a class="reference download internal" download="" href="_downloads/b4ef698db8ca845e5845c4618278f29a/requirements.txt"><code class="xref download docutils literal notranslate"><span class="pre">packages</span>
+<span class="pre">list</span></code></a> format.</p>
+<p>Note that the code for solving the problems on the classical CPU relies on the
+<a class="reference external" href="https://www.gurobi.com">Gurobi</a> stand-alone solver.</p>
+<p>Notably, for accessing QPU hardware you will need to supply your own access
+tokens. What is, certainly, <strong>not</strong> present in <code class="docutils literal notranslate"><span class="pre">📁</span> <span class="pre">benchmark</span></code> folder is the
+file <code class="docutils literal notranslate"><span class="pre">private.py</span></code>, where one should supply an individual access token in the
+form of:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">DWave_token</span> <span class="o">=</span> <span class="s1">&#39;&lt;your-access-token&gt;&#39;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>To install the necessary R libraries, from within R session run:</p>
+<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="nf">install.packages</span><span class="p">(</span><span class="s">&quot;dplyr&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;plyr&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;forcats&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;ggplot2&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;gridExtra&quot;</span><span class="p">,</span>
+<span class="s">&quot;Hmisc&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;kableExtra&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;knitr&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;optparse&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;stargazer&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;stringr&quot;</span><span class="p">,</span>
+<span class="s">&quot;tidyr&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;viridis&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;ggh4x&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Bochkarev, Heese, Jäger, Schiewe, and Schöbel.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

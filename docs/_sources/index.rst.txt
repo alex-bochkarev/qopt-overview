@@ -1,0 +1,34 @@
+QC for discrete optimization: code documentation.
+=================================================
+
+These supplementary materials document the numerical experiments for the
+research project:
+
+-----
+
+.. rst-class:: center
+
+**"Quantum computing for discrete optimization:
+a highlight of three technologies"**
+
+by A. Bochkarev, R. Heese, S. Jäger, P. Schiewe, and A. Schöbel.
+
+-----
+
+Here we present our computational setup, source code, and the data with format
+descriptions. Please do not hesitate to `reach out
+<https://www.bochkarev.io/contact>`_ if you have any further questions.
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Contents:
+
+   overview
+   raw-data
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`

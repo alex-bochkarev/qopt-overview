@@ -1,0 +1,352 @@
+Overview
+--------
+
+This archive is organized as follows. The ``📁 docs`` folder contains HTML documents
+with this description, and the rest of the root directory represents a snapshot from
+our source code repository with the following structure:
+
+.. list-table:: Repository structure
+    :widths: 25 35
+    :header-rows: 1
+
+    * - File / folder
+      - Description
+    * - ::
+
+            📁 /
+            ├── 📁 benchmark
+            |    ├── *.py
+            |    ├── AquilaMISRunnerv4.ipynb
+            ├── precompute_embeddings.py
+
+      - The code implementing QPU calculations: python implementation files for
+        IBM and D-Wave devices (including the script for local D-Wave embeddings
+        preparation) and the `Jupyter notebook <https://jupyter.org/>`_ used to
+        run the experiments on the QuEra device.
+
+    * - ::
+
+            ├── 📁 instances
+            |    ├── orig_instances.zip
+            |    ├── QUBO_formulations.zip
+
+      - Problem instances (see format :ref:`descriptions<sec-formats>`). Two
+        archives correspond to the original instances and the respective QUBO
+        formulations (extracted to ``📁 orig`` and ``📁 QUBO`` subdirectories,
+        respectively)
+
+    * - ::
+
+            ├── 📁 figures
+            |    ├── *.png
+            |    ├── *.tex
+
+      - Calculation outputs: generated figures, including the ``png`` pictures
+        and the tables in ``.tex`` format; see :ref:`below
+        <sec-reproducibility>`).
+
+    * - ::
+
+            ├── 📁 run_logs
+            |    ├── 📁 dwave
+            |    |   ├── 📁 samples-csv
+            |    |   ├── embeddings.zip
+            |    |   ├── raw_logs.zip
+            |    ├── 📁 quera
+            |    |   ├── 📁 samples-csv
+            |    |   ├── raw_logs.zip
+            |    ├── 📁 ibm-qpu
+            |    |   ├── 📁 samples-csv
+            |    |   ├── raw_logs.zip
+            |    ├── 📁 ibm-sim
+            |    |   ├── 📁 samples-csv
+            |    |   ├── raw_logs.zip
+            |    ├── 📁 summaries
+            |    ├── 📁 classic_solutions
+
+      - Run logs, results of the computations. This includes the raw QPU outputs
+        (in dedicated ``.zip`` files), extracted samples data for selected runs
+        (in ``📁 samples-csv`` subdirectories), and the summaries of these data
+        in a few ``.csv`` files in the ``📁 summaries`` folder. Baseline solutions
+        obtained with a classical solver are stored in the ``📁 classic_solutions``
+        folder, in the form of summary ``.csv`` files and raw ``.log`` files
+        capturing the solver output.
+
+    * - ::
+
+            ├── 📁 post_processing
+            ├── qubo_utils.py
+            ├── make_suppl_sample_figures.sh
+            ├── compress_images.sh
+
+      - Auxiliary scripts for post-processing, including summarizing the
+        logfiles and the production of figures.
+
+    * - ::
+
+            ├── MWC_inst.py
+            ├── MIS_inst.py
+            ├── TSP_inst.py
+            ├── download-and-extract-TSP.sh
+
+      - Instance generation code. Note that for the TSP-related code to work, we
+        need the original `TSPLIB
+        <http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/>`_ instance
+        collection. The last file contains commands used to download and unpack
+        such instances on our GNU/Linux-based system.
+
+    * - ::
+
+            ├── classic_solve_UDMISes.py
+            ├── classic_solve_MWCs.py
+            ├── classic_solve_MWC_QUBO_only.py
+            ├── classic_solve_TSPs_MTZ.py
+
+      - Baseline computations implementation (with `Gurobi <https://www.gurobi.com>`_)
+
+    * - ::
+
+            ├── quera_suppl_samples.ids
+            ├── dwave_suppl_samples.ids
+            ├── ibm-qpu_suppl_samples.ids
+            ├── ibm-sim_suppl_samples.ids
+
+      - Instance IDs used to create the "sample output" figures in the appendix.
+        (Corresponding files with ``.logfiles`` suffix in the name are created
+        automatically and contain names for respective log files from ``📁
+        run_logs``)
+
+    * - ::
+
+            ├── data_sel.ipynb
+            ├── instance_figs.ipynb
+
+      - A few examples for dataset visualisation in the format of `Jupyter
+        notebooks <https://jupyter.org/>`_ (not critical for results
+        reproducibility).
+
+    * - ::
+
+            ├── Makefile
+
+      - A makefile with all computational recipes relevant to the
+        post-processing (i.e., production of figures from the log files).
+
+
+.. _sec-reproducibility:
+
+Computational pipeline
+----------------------
+
+Most of the figures in the paper are generated automatically, as discussed
+below. The figures are created using dedicated post-processing scripts from
+intermediate summary data tables. These tables are in turn constructed from the
+raw log files (in JSON format) obtained from the QPUs. Assuming the necessary
+software is present and instances and run logs are unpacked, one can rebuild any
+figure by issuing a ``make`` command from the root directory. `GNU make
+<https://www.gnu.org/software/make>`_ will consider the files' timestamps and
+re-run the calculations as necessary. For example:
+
+.. code:: bash
+
+   make figures/inst_summary.png  # to rebuild Figure 4, or
+   make figures                   # to rebuild all figures for the paper
+
+Interactions with QPU are specific to the devices and both formats and
+procedures might be subject to updates. (Notably, ``qiskit`` API and remote
+access guidelines have changed since the moment we ran our computational
+experiments.) However, we believe that the code presented in the ``📁
+benchmark`` directory provides a good starting point to build upon these
+results.
+
+The key figures in the paper are produced as follows:
+
+
+.. |_| unicode:: 0xA0
+   :trim:
+
++--------------------+---------------------------------+-----------------------------+--------------------------+
+|Figure or |_| table |Filename                         |Plotting code                |Data files                |
++====================+=================================+=============================+==========================+
+|Fig. 4              |inst_summary.png                 |inst_summary.R               |quera_stats.csv,          |
+|                    |                                 |                             |                          |
+|                    |                                 |                             |quera_summary.csv,        |
+|                    |                                 |                             |                          |
+|                    |                                 |                             |dwave_stats.csv,          |
+|                    |                                 |                             |                          |
+|                    |                                 |                             |dwave_summary.csv,        |
+|                    |                                 |                             |                          |
+|                    |                                 |                             |embeddings.csv,           |
+|                    |                                 |                             |                          |
+|                    |                                 |                             |ibm-qpu_stats.csv,        |
+|                    |                                 |                             |                          |
+|                    |                                 |                             |ibm-qpu_summary.csv,      |
+|                    |                                 |                             |                          |
+|                    |                                 |                             |ibm-sim_stats.csv,        |
+|                    |                                 |                             |                          |
+|                    |                                 |                             |ibm-sim_summary.csv,      |
+|                    |                                 |                             |                          |
+|                    |                                 |                             |solutions_all.csv         |
++--------------------+---------------------------------+-----------------------------+--------------------------+
+|Fig. 5a,            |qpu_vs_cpu_runtimes.png,         |QPU_vs_classic_figures.R     |TSP_MTZ.csv,              |
+|                    |                                 |                             |                          |
+|Fig. 5b,            |hard_instances.png               |                             |UDMIS.csv,                |
+|                    |                                 |                             |                          |
+|Table 5             |qpu_vs_cpu.tex                   |                             |MWC_QUBO.csv,             |
+|                    |                                 |                             |                          |
+|                    |                                 |                             |ibm-qpu_summary.csv,      |
+|                    |                                 |                             |                          |
+|                    |                                 |                             |ibm-sim_summary.csv,      |
+|                    |                                 |                             |                          |
+|                    |                                 |                             |dwave_summary.csv,        |
+|                    |                                 |                             |                          |
+|                    |                                 |                             |embeddings.csv,           |
+|                    |                                 |                             |                          |
+|                    |                                 |                             |quera_summary.csv         |
++--------------------+---------------------------------+-----------------------------+--------------------------+
+|Fig. 6,             |runtime_vs_embtime_TSP.png,      |dwave.R                      |dwave_summary.csv,        |
+|                    |                                 |                             |                          |
+|                    |runtime_vs_embtime_MWC.png,      |                             |embeddings.csv            |
+|                    |                                 |                             |                          |
+|                    |runtime_vs_embtime_UDMIS.png     |                             |                          |
+|                    |                                 |                             |                          |
+|Fig. 11,            |dwave_qubit_cost_logs_regline.png|                             |                          |
+|Table 7             |regression_summary.tex           |                             |                          |
+|                    |                                 |                             |                          |
+|Fig. 18             |dwave_soltimes_noemb.png         |                             |                          |
+|                    |                                 |                             |                          |
+|                    |dwave_embtime_share.png          |                             |                          |
++--------------------+---------------------------------+-----------------------------+--------------------------+
+|Fig. 9              | nonzeros_vs_size.png            |igs_draw_nonzeros.R          |instances.csv             |
+|                    |                                 |                             |                          |
+|                    |                                 |                             |all_devices_stats.csv     |
++--------------------+---------------------------------+-----------------------------+--------------------------+
+|Fig. 10             |runs_summary.png                 |inst_summary_by_inst.R       |quera_summary_full.csv    |
+|                    |                                 |                             |                          |
+|                    |                                 |                             |dwave_summary_full.csv,   |
+|                    |                                 |                             |                          |
+|                    |                                 |                             |embeddings.csv,           |
+|                    |                                 |                             |                          |
+|                    |                                 |                             |ibm-qpu_summary_full.csv, |
+|                    |                                 |                             |                          |
+|                    |                                 |                             |ibm-sim_summary_full.csv, |
+|                    |                                 |                             |                          |
+|                    |                                 |                             |solutions_all.csv         |
++--------------------+---------------------------------+-----------------------------+--------------------------+
+|Fig. 12,            |files \*.json.hist.png in        |make_suppl_sample_figures.sh |(raw QPU logfiles)        |
+|13,                 |``📁 figures`` folder            |                             |                          |
+|and 15              |                                 |                             |                          |
++--------------------+---------------------------------+-----------------------------+--------------------------+
+
+Figures 7, 8, and 14 (instance examples) are made with ad-hoc code illustrated
+in the Jupyter notebook ``data_sel.ipynb``.
+
+Please refer to ``Makefile`` for more details on the computational recipes.
+
+Implementation details
+----------------------
+
+Our experimental setup broadly comprises five parts:
+
+#. Instance generation code is written in Python and executed locally on a
+   laptop. The relevant modules are:
+
+    .. autosummary::
+        :toctree: _autosummary
+        :recursive:
+
+        TSP_inst
+        MWC_inst
+        MIS_inst
+
+#. Baseline calculations (solving the problems with the classical solver) is
+   done using `Gurobi <https://www.gurobi.com>`_ in the following modules:
+
+    .. autosummary::
+        :toctree: _autosummary
+        :recursive:
+
+        classic_solve_UDMISes
+        classic_solve_MWC_QUBO_only
+        classic_solve_MWCs
+        classic_solve_TSPs_MTZ
+
+#. Interactions with QPUs are programmed in Python and implemented via remote
+   interfaces. The relevant code for D-Wave and IBM is stored in ``📁
+   benchmark`` folder:
+
+   .. autosummary::
+        :toctree: _autosummary
+
+        bench
+        bench_qubo
+        runner
+        run_dwave
+        run_ibm
+        run_ibm_sim
+        precompute_embeddings
+
+    (The code for the neutral atoms computer is stored separately, in a jupyter
+    notebook -- see above.)
+
+#. Post-processing of the log files (summarizing the raw data) is done locally
+   in Python, with the following two modules:
+
+    .. autosummary::
+        :toctree: _autosummary
+        :recursive:
+
+        post_processing.logparser
+        post_processing.select_runs
+
+#. Figures production from ``.csv``-files, including the necessary technical
+   data transformations are made using `R language <https://www.r-project.org>`_,
+   the respective code comprises ``.R``-files in ``📁 post_processing``
+   directory.
+
+
+Preparing python and R environments
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+To run the code, minimal environment setup might be necessary, for Python and R.
+This section aims to provide a basic guideline, note that other software might
+(theoretically) be needed, depending on your system.
+
+.. note::
+
+  For the (python) environment management we used the recommended
+  `venv <https://docs.python.org/3/library/venv.html>`-way. For example, the
+  virtual environment can be created and activated with:
+
+   .. code-block:: bash
+
+                   $ python3.10 -m venv .venv
+                   $ source .venv/bin/activate
+
+                   $ # then, we can install the necessary packages there with:
+
+                   $ pip install -r requirements.txt
+
+Python code relies on the packages specified in the standard :download:`packages
+list <requirements.txt>` format.
+
+Note that the code for solving the problems on the classical CPU relies on the
+`Gurobi <https://www.gurobi.com>`_ stand-alone solver.
+
+Notably, for accessing QPU hardware you will need to supply your own access
+tokens. What is, certainly, **not** present in ``📁 benchmark`` folder is the
+file ``private.py``, where one should supply an individual access token in the
+form of:
+
+    .. code-block:: python
+
+        DWave_token = '<your-access-token>'
+
+To install the necessary R libraries, from within R session run:
+
+.. code-block:: R
+
+          install.packages("dplyr", "plyr", "forcats", "ggplot2", "gridExtra",
+          "Hmisc", "kableExtra", "knitr", "optparse", "stargazer", "stringr",
+          "tidyr", "viridis", "ggh4x")
+

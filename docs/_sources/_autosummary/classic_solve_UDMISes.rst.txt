@@ -1,0 +1,13 @@
+﻿classic\_solve\_UDMISes
+=======================
+
+.. automodule:: classic_solve_UDMISes
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      main
+      solve_UDMIS_classically
+   

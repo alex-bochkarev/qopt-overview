@@ -1,0 +1,214 @@
+Raw data formats
+================
+
+This section briefly discusses the relevant internal data formats. Most of the
+source data, namely, instance data and raw QPU logs, are saved in JSON format.
+Intermediate computation results are usually stored as comma separated values
+(i.e., plain text tables in ``.csv`` files).
+
+.. _sec-formats:
+
+Problem instances
+-----------------
+
+For each problem, we store an original instance data (in ``📁 instances/orig``
+folder) and a respective QUBO formulation (in ``📁 instances/QUBO`` folder).
+These two files have the same basename and different suffixes: for example, TSP
+instance with ``TSP1`` is represented by two files:
+
+- ``./instances/orig/TSP1_5_pr107.orig.json`` with original instance data, and
+- ``./instances/QUBO/TSP1_16_5_pr107.qubo.json`` with QUBO formulation.
+
+Both files are in the standard `JSON <https://en.wikipedia.org/wiki/JSON>`_
+format, which can be parsed by `json
+<https://docs.python.org/3/library/json.html#module-json>`_ python package or,
+for example, `jq <https://jqlang.github.io/jq/>`_ command line utility. Besides
+``jq`` command, one can use any JSON editor/viewer for visual inspection, one
+notable example being the standard JSON viewer built into `Firefox
+<https://www.mozilla.org/en-US/firefox/>`_ browser.
+
+Below we specify the structure of the respective JSON files.
+
+
+QUBO formulations
+^^^^^^^^^^^^^^^^^
+**Filenames:** ``./instances/QUBO/*.qubo.json*``
+
+JSON files corresponding to QUBO formulations have universal format, regardless
+of the problem type:
+
++------------------------------+----------------------------------------+
+|**Field**                     |**Description**                         |
++------------------------------+----------------------------------------+
+| ``Q``                        |quadratic coefficients matrix           |
++------------------------------+----------------------------------------+
+| ``P``                        |linear coefficients vector              |
++------------------------------+----------------------------------------+
+| ``Const``                    |constant (a number)                     |
++------------------------------+----------------------------------------+
+| ``description``              |metadata in subfields:                  |
++------------------------------+----------------------------------------+
+| ┖ ``instance_id``            |a unique instance ID                    |
++------------------------------+----------------------------------------+
+| ┖ ``instance_type``          |``TSP``, ``UDMIS``, or ``MWC``          |
++------------------------------+----------------------------------------+
+| ┖ ``original_instance_name`` |original instance name                  |
+|                              |(e.g., for TSP --- from TSP Lib)        |
++------------------------------+----------------------------------------+
+| ┖ ``original_instance_file`` |filename for the original instance      |
++------------------------------+----------------------------------------+
+| ┖ ``contents``               |constant value ``QUBO``                 |
++------------------------------+----------------------------------------+
+| ┖ ``comment``                |a free-form string comment.             |
++------------------------------+----------------------------------------+
+
+Note that internally in the code, we assume the following QUBO format:
+
+.. math::
+  \min \frac{1}{2} x^\prime Q x + x^\prime P + \text{Const}
+
+TSP instances.
+^^^^^^^^^^^^^^
+**Filenames:** ``instances/orig/TSP*.orig.json``.
+
+
+TSP instances are generated from the original `TSPLIB
+<http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/>`_ instances.
+Namely, in our dataset we have the instances sampled from the following
+collection of TSPLIB instances::
+
+  att48, brazil58, eil101, gr666, hk48, kroA100, kroB100, kroC100, lin105,
+  pa561.tsp, pr107, pr299, rat575, swiss42, tsp225.
+
+Each original instance file (present in ``📁 instances/orig`` folder) has the
+following structure:
+
+    +--------------------------+--------------------+
+    |**Field**                 |**Description**     |
+    +--------------------------+--------------------+
+    |``D``                     |distance matrix     |
+    +--------------------------+--------------------+
+    |``description``           |metadata in         |
+    |                          |subfields:          |
+    +--------------------------+--------------------+
+    |┖ ``instance_id``         |unique instance ID  |
+    +--------------------------+--------------------+
+    |┖ ``instance_type``       |value ``TSP``       |
+    |                          |                    |
+    +--------------------------+--------------------+
+    |┖                         |reference to the    |
+    |``original_instance_name``|original instance   |
+    |                          |(from TSPLIB)       |
+    +--------------------------+--------------------+
+    |┖ ``contents``            |value ``Distance    |
+    |                          |matrix D.``         |
+    +--------------------------+--------------------+
+    |┖ ``comments``            |a free-form string  |
+    |                          |comment.            |
+    +--------------------------+--------------------+
+
+
+MWC (MaxCut) instances.
+^^^^^^^^^^^^^^^^^^^^^^^
+
+**Filenames:** ``instances/orig/MWC*.json``
+
++----------------------------+--------------------------------+
+|**Field**                   |**Description**                 |
++----------------------------+--------------------------------+
+|``nodes``                   |a list of node IDs (numbers)    |
++----------------------------+--------------------------------+
+|``edges``                   |list of tuples (one per edge):  |
++----------------------------+--------------------------------+
+|┖ (int)                     |node id: edge tail              |
++----------------------------+--------------------------------+
+|┖ (int)                     |node id: edge head              |
++----------------------------+--------------------------------+
+|┖ (float)                   |edge weight                     |
++----------------------------+--------------------------------+
+|``description``             |metadata in subfields:          |
++----------------------------+--------------------------------+
+|┖ ``instance_id``           |a unique instance ID            |
++----------------------------+--------------------------------+
+|┖ ``instance_type``         |value ``MWC``                   |
++----------------------------+--------------------------------+
+|┖ ``original_instance_name``|original instance name          |
+|                            |(N<nodes>E<edges>_ERG_p<P>      |
++----------------------------+--------------------------------+
+|┖ ``contents``              |value ``orig_MWC_G``            |
++----------------------------+--------------------------------+
+|┖ ``comment``               |a free-form string comment.     |
++----------------------------+--------------------------------+
+
+Note that in the ``original_instance_name``, the parts ``N`` and ``E`` denote
+number of nodes and edges, respectively while ``p`` stands for the random graph
+model parameter for edge probabilities (in Erdos-Renyi model).
+
+
+UD-MIS instances
+^^^^^^^^^^^^^^^^
+
+**Filenames:** ``instances/orig/UDMIS*.json``
+
++------------------------------+----------------------------------------------+
+|**Field**                     |**Description**                               |
++------------------------------+----------------------------------------------+
+| ``nodes``                    |nodes in the graph                            |
++------------------------------+----------------------------------------------+
+| ┖ list[int]                  |(list of integer labels)                      |
++------------------------------+----------------------------------------------+
+| ``edges``                    |list of edges                                 |
++------------------------------+----------------------------------------------+
+| ┖ tuple (int, int)           |(pairs of node labels)                        |
++------------------------------+----------------------------------------------+
+| ``description``              |metadata in subfields:                        |
++------------------------------+----------------------------------------------+
+| ┖ ``instance_id``            |a unique instance ID                          |
++------------------------------+----------------------------------------------+
+| ┖ ``instance_type``          |value ``UDMIS``                               |
++------------------------------+----------------------------------------------+
+| ┖ ``original_instance_name`` |original instance name                        |
+|                              |(N<nodes>W<width to height>_R<R / size>       |
++------------------------------+----------------------------------------------+
+| ┖ ``contents``               |value ``orig_UDMIS``                          |
++------------------------------+----------------------------------------------+
+| ┖ ``wwidth``                 |Max x-coordinate of a point (for generation)  |
++------------------------------+----------------------------------------------+
+| ┖ ``wheight``                |Max y-coordinate of a point (for generation)  |
++------------------------------+----------------------------------------------+
+| ┖ ``R``                      |Radius parameter (for generation)             |
++------------------------------+----------------------------------------------+
+| ┖ ``points``                 |Points corresponding to vertices:             |
++------------------------------+----------------------------------------------+
+| ┖ "(node_id)":   (x, y)      |a dict of point coordinates (x,y) keyed by    |
+|                              |by the respective node ID.                    |
++------------------------------+----------------------------------------------+
+| ┖ ``comment``                |A free-form string comment.                   |
++------------------------------+----------------------------------------------+
+
+QPU run logs
+------------
+
+Raw QPU run logs also constitute JSON files, however, the format is relatively
+involved, as we tried to preserve as much data from each QPU run as possible.
+Specific fields from the raw log files that were used in our analysis can be
+devised from the log parsing source code, namely, the following functions:
+
+   - :py:func:`post_processing.logparser.QuEraLogParser._extract_successful_line`
+   - :py:func:`post_processing.logparser.QuEraLogParser.extract_samples`
+   - :py:func:`post_processing.logparser.DWaveLogParser._extract_successful_line`
+   - :py:func:`post_processing.logparser.DWaveLogParser.extract_samples`
+   - :py:func:`post_processing.logparser.IBMLogParser._extract_successful_line`
+   - :py:func:`post_processing.logparser.IBMLogParser.extract_samples`
+   - :py:func:`post_processing.logparser.IBMLogParser.extract_convergence_data`
+
+Computed summaries
+------------------
+
+Intermediary summary tables in ``📁 run_logs`` folder, including the QPU shots
+data in ``run_logs/*/samples-csv`` essentially always constitute plain text
+tables with comma separated values, which can be easily manipulated with `pandas
+<https://pandas.pydata.org/>`_ (in Python), `dplyr
+<https://dplyr.tidyverse.org/>`_ (in R), or basically any spreadsheets software
+for quick visual inspection, such as `LibreOffice
+<https://www.libreoffice.org>`_.

@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>bench_qubo &mdash; qopt-overview  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/autoclasstoc.css?v=08871587" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=3dd0334f" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            qopt-overview
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html#computational-pipeline">Computational pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html#implementation-details">Implementation details</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../raw-data.html">Raw data formats</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">qopt-overview</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Module code</a></li>
+      <li class="breadcrumb-item active">bench_qubo</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for bench_qubo</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Contains core QPU-interaction code.</span>
+
+<span class="sd">Implements the abstract interface :py:mod:`bench_qubo.QUBOSolver`, and the</span>
+<span class="sd">related &quot;QPU solver classes&quot; :py:class:`bench_qubo.QUBOSolverDwave` and</span>
+<span class="sd">:py:class:`bench_qubo.QUBOSolverIBM`, along with technical data preprocessing</span>
+<span class="sd">and access code in :py:class:`bench_qubo.DataBaseQUBO`. Most notably, each</span>
+<span class="sd">device-specific class implements ``_run`` method that is used to submit a job to</span>
+<span class="sd">an actual device.</span>
+
+<span class="sd">Relies on abstact descriptions from :py:class:`bench.DataBase` and</span>
+<span class="sd">:py:class:`Solver`.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">hashlib</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">dimod</span> <span class="kn">import</span> <span class="n">BinaryQuadraticModel</span>
+<span class="kn">from</span> <span class="nn">dwave.system</span> <span class="kn">import</span> <span class="n">DWaveSampler</span>
+<span class="kn">from</span> <span class="nn">dwave.system</span> <span class="kn">import</span> <span class="n">FixedEmbeddingComposite</span>
+<span class="kn">from</span> <span class="nn">minorminer</span> <span class="kn">import</span> <span class="n">find_embedding</span>
+<span class="kn">from</span> <span class="nn">qiskit.algorithms.optimizers</span> <span class="kn">import</span> <span class="n">COBYLA</span><span class="p">,</span> <span class="n">SPSA</span><span class="p">,</span> <span class="n">BOBYQA</span>
+<span class="kn">from</span> <span class="nn">qiskit.circuit.library</span> <span class="kn">import</span> <span class="n">QAOAAnsatz</span>
+<span class="kn">from</span> <span class="nn">qiskit_ibm_runtime</span> <span class="kn">import</span> <span class="n">QiskitRuntimeService</span><span class="p">,</span> <span class="n">Session</span><span class="p">,</span> <span class="n">Sampler</span><span class="p">,</span> <span class="n">Estimator</span>
+<span class="kn">from</span> <span class="nn">qiskit_optimization</span> <span class="kn">import</span> <span class="n">QuadraticProgram</span>
+<span class="kn">from</span> <span class="nn">qiskit_optimization.converters</span> <span class="kn">import</span> <span class="n">QuadraticProgramToQubo</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">optimize</span>
+
+<span class="kn">from</span> <span class="nn">bench</span> <span class="kn">import</span> <span class="n">DataBase</span><span class="p">,</span> <span class="n">Solver</span>
+
+<span class="n">__max_bound__</span> <span class="o">=</span> <span class="mi">9999</span>
+
+
+<div class="viewcode-block" id="DataBaseQUBO">
+<a class="viewcode-back" href="../_autosummary/bench_qubo.html#bench_qubo.DataBaseQUBO">[docs]</a>
+<span class="k">class</span> <span class="nc">DataBaseQUBO</span><span class="p">(</span><span class="n">DataBase</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Implements QUBO instance storage.&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">directory</span><span class="p">,</span> <span class="n">file_ext</span><span class="o">=</span><span class="s1">&#39;.json&#39;</span><span class="p">,</span> <span class="n">filter_fun</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sort_fun</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">directory_embeddings</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="n">file_ext</span><span class="p">,</span> <span class="n">filter_fun</span><span class="p">,</span> <span class="n">sort_fun</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">directory_embeddings</span> <span class="o">=</span> <span class="n">directory_embeddings</span>
+
+<div class="viewcode-block" id="DataBaseQUBO._preprocess_qubo_data">
+<a class="viewcode-back" href="../_autosummary/bench_qubo.html#bench_qubo.DataBaseQUBO._preprocess_qubo_data">[docs]</a>
+    <span class="k">def</span> <span class="nf">_preprocess_qubo_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">a</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">b</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Q</span><span class="p">,</span> <span class="n">P</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">a</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">b</span> <span class="o">==</span> <span class="mi">1</span>
+            <span class="n">qubo_matrix</span> <span class="o">=</span> <span class="n">Q</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
+            <span class="n">scaling_factor</span> <span class="o">=</span> <span class="n">a</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">qubo_matrix</span><span class="p">))</span> <span class="o">**</span> <span class="n">b</span>
+            <span class="n">Q_scaled</span> <span class="o">=</span> <span class="n">Q</span> <span class="o">*</span> <span class="n">scaling_factor</span>
+            <span class="n">P_scaled</span> <span class="o">=</span> <span class="n">P</span> <span class="o">*</span> <span class="n">scaling_factor</span>
+            <span class="k">return</span> <span class="n">Q_scaled</span><span class="p">,</span> <span class="n">P_scaled</span></div>
+
+
+<div class="viewcode-block" id="DataBaseQUBO.get_qubo_data">
+<a class="viewcode-back" href="../_autosummary/bench_qubo.html#bench_qubo.DataBaseQUBO.get_qubo_data">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_qubo_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance_id</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+        <span class="n">qubo_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="p">[</span><span class="n">instance_id</span><span class="p">]</span>
+        <span class="c1"># get_data, Const is ignored</span>
+        <span class="n">Q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">qubo_data</span><span class="p">[</span><span class="s1">&#39;Q&#39;</span><span class="p">])</span>
+        <span class="n">P</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">qubo_data</span><span class="p">[</span><span class="s1">&#39;P&#39;</span><span class="p">])</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_preprocess_qubo_data</span><span class="p">(</span><span class="n">Q</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DataBaseQUBO.get_embedding_data">
+<a class="viewcode-back" href="../_autosummary/bench_qubo.html#bench_qubo.DataBaseQUBO.get_embedding_data">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_embedding_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance_id</span><span class="p">,</span> <span class="n">object_hook</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">directory_embeddings</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">emb_filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">directory_embeddings</span><span class="p">,</span> <span class="n">instance_id</span> <span class="o">+</span> <span class="s1">&#39;.emb.json&#39;</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">emb_filename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">embfile</span><span class="p">:</span>
+                <span class="n">emb_precalc</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">embfile</span><span class="p">,</span> <span class="n">object_hook</span><span class="o">=</span><span class="n">object_hook</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">emb_precalc</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="QUBOSolver">
+<a class="viewcode-back" href="../_autosummary/bench_qubo.html#bench_qubo.QUBOSolver">[docs]</a>
+<span class="k">class</span> <span class="nc">QUBOSolver</span><span class="p">(</span><span class="n">Solver</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Describes an abstract QPU solver interface.&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">db</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;QUBO</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">db</span><span class="p">)</span>
+
+<div class="viewcode-block" id="QUBOSolver._run">
+<a class="viewcode-back" href="../_autosummary/bench_qubo.html#bench_qubo.QUBOSolver._run">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">_run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance_id</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+
+<div class="viewcode-block" id="QUBOSolver.get_data">
+<a class="viewcode-back" href="../_autosummary/bench_qubo.html#bench_qubo.QUBOSolver.get_data">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance_id</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">get_qubo_data</span><span class="p">(</span><span class="n">instance_id</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="QUBOSolver.get_embedding_data">
+<a class="viewcode-back" href="../_autosummary/bench_qubo.html#bench_qubo.QUBOSolver.get_embedding_data">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_embedding_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance_id</span><span class="p">,</span> <span class="n">object_hook</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">get_embedding_data</span><span class="p">(</span><span class="n">instance_id</span><span class="p">,</span> <span class="n">object_hook</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="QUBOSolverDwave">
+<a class="viewcode-back" href="../_autosummary/bench_qubo.html#bench_qubo.QUBOSolverDwave">[docs]</a>
+<span class="k">class</span> <span class="nc">QUBOSolverDwave</span><span class="p">(</span><span class="n">QUBOSolver</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Implements D-Wave specific solver code.&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">db</span><span class="p">,</span> <span class="n">token</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s1">&#39;DwaveSolver&#39;</span><span class="p">,</span> <span class="n">db</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">token</span> <span class="o">=</span> <span class="n">token</span>
+
+<div class="viewcode-block" id="QUBOSolverDwave._load_embedding">
+<a class="viewcode-back" href="../_autosummary/bench_qubo.html#bench_qubo.QUBOSolverDwave._load_embedding">[docs]</a>
+    <span class="k">def</span> <span class="nf">_load_embedding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance_id</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Loads precomputed D-Wave embeddings from a file.&quot;&quot;&quot;</span>
+        <span class="c1"># load embedding from file</span>
+        <span class="k">def</span> <span class="nf">fix_ints</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="k">return</span> <span class="p">{</span><span class="nb">int</span><span class="p">(</span><span class="n">key</span><span class="p">):</span> <span class="n">val</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+            <span class="k">return</span> <span class="n">obj</span>
+        <span class="n">emb_precalc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_embedding_data</span><span class="p">(</span><span class="n">instance_id</span><span class="p">,</span> <span class="n">object_hook</span><span class="o">=</span><span class="n">fix_ints</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">emb_precalc</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span>
+        <span class="n">emb_precalc_dt</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;embedding: loaded precalculated embedding.&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">emb_precalc</span><span class="p">,</span> <span class="n">emb_precalc_dt</span></div>
+
+
+<div class="viewcode-block" id="QUBOSolverDwave._calculate_embedding">
+<a class="viewcode-back" href="../_autosummary/bench_qubo.html#bench_qubo.QUBOSolverDwave._calculate_embedding">[docs]</a>
+    <span class="k">def</span> <span class="nf">_calculate_embedding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Q_dict</span> <span class="p">,</span><span class="n">target_edgelist</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Computes D-Wave embedding locally (and tracks the respective time for that).&quot;&quot;&quot;</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">emb_precalc</span> <span class="o">=</span> <span class="n">find_embedding</span><span class="p">(</span><span class="n">Q_dict</span><span class="p">,</span> <span class="n">target_edgelist</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">emb_precalc_dt</span> <span class="o">=</span> <span class="n">end</span> <span class="o">-</span> <span class="n">start</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;embedding: calculated embedding.&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">emb_precalc</span><span class="p">,</span> <span class="n">emb_precalc_dt</span></div>
+
+
+<div class="viewcode-block" id="QUBOSolverDwave._run">
+<a class="viewcode-back" href="../_autosummary/bench_qubo.html#bench_qubo.QUBOSolverDwave._run">[docs]</a>
+    <span class="k">def</span> <span class="nf">_run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance_id</span><span class="p">,</span> <span class="n">num_reads</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+        <span class="n">Q</span><span class="p">,</span> <span class="n">P</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_data</span><span class="p">(</span><span class="n">instance_id</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+        <span class="n">job_label</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">hashlib</span><span class="o">.</span><span class="n">sha1</span><span class="p">(</span><span class="n">Q</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">))</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">hashlib</span><span class="o">.</span><span class="n">sha1</span><span class="p">(</span><span class="n">P</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">))</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span><span class="si">}</span><span class="s1">&#39;</span>
+
+        <span class="c1"># setup model</span>
+        <span class="n">bqm</span> <span class="o">=</span> <span class="n">BinaryQuadraticModel</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">Q</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">vartype</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">})</span>
+
+        <span class="c1"># setup sampler</span>
+        <span class="n">sampler</span> <span class="o">=</span> <span class="n">DWaveSampler</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">)</span>
+
+        <span class="c1"># find embedding</span>
+        <span class="n">Q_dict</span><span class="p">,</span> <span class="n">Q_const</span> <span class="o">=</span> <span class="n">bqm</span><span class="o">.</span><span class="n">to_qubo</span><span class="p">()</span>
+        <span class="n">__</span><span class="p">,</span> <span class="n">target_edgelist</span><span class="p">,</span> <span class="n">target_adjacency</span> <span class="o">=</span> <span class="n">sampler</span><span class="o">.</span><span class="n">structure</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">emb_precalc</span><span class="p">,</span> <span class="n">emb_precalc_dt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_embedding</span><span class="p">(</span><span class="n">instance_id</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">emb_precalc</span><span class="p">,</span> <span class="n">emb_precalc_dt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_embedding</span><span class="p">(</span><span class="n">Q_dict</span> <span class="p">,</span><span class="n">target_edgelist</span><span class="p">)</span>
+
+        <span class="c1"># recall embedding</span>
+        <span class="n">emb</span> <span class="o">=</span> <span class="n">FixedEmbeddingComposite</span><span class="p">(</span><span class="n">sampler</span><span class="p">,</span>
+                                      <span class="n">emb_precalc</span><span class="p">)</span>  <span class="c1"># https://support.dwavesys.com/hc/en-us/community/posts/15574739345047-EmbeddingComposite-get-Time-and-Mapping</span>
+
+        <span class="c1"># run on dwave</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;qpu: start.&#39;</span><span class="p">)</span>
+        <span class="n">sample_start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">emb</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">bqm</span><span class="p">,</span> <span class="n">num_reads</span><span class="o">=</span><span class="n">num_reads</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">job_label</span><span class="p">)</span>
+        <span class="n">sample_end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;qpu: finished.&#39;</span><span class="p">)</span>
+        <span class="n">sample_dt</span> <span class="o">=</span> <span class="n">sample_end</span> <span class="o">-</span> <span class="n">sample_start</span>
+
+        <span class="c1"># compile results</span>
+        <span class="n">options</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">num_reads</span><span class="o">=</span><span class="n">num_reads</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">b</span><span class="p">)</span>
+        <span class="n">outcome</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">job_label</span><span class="o">=</span><span class="n">job_label</span><span class="p">,</span> <span class="n">emb_precalc</span><span class="o">=</span><span class="n">emb_precalc</span><span class="p">,</span> <span class="n">emb_precalc_dt</span><span class="o">=</span><span class="n">emb_precalc_dt</span><span class="p">,</span> <span class="n">sample_dt</span><span class="o">=</span><span class="n">sample_dt</span><span class="p">,</span>
+                       <span class="n">Q_dict</span><span class="o">=</span><span class="n">Q_dict</span><span class="p">,</span> <span class="n">Q_const</span><span class="o">=</span><span class="n">Q_const</span><span class="p">,</span> <span class="n">target_edgelist</span><span class="o">=</span><span class="n">target_edgelist</span><span class="p">,</span>
+                       <span class="n">target_adjacency</span><span class="o">=</span><span class="n">target_adjacency</span><span class="p">,</span> <span class="n">emb_properties</span><span class="o">=</span><span class="n">emb</span><span class="o">.</span><span class="n">properties</span><span class="p">,</span>
+                       <span class="n">response</span><span class="o">=</span><span class="n">response</span><span class="o">.</span><span class="n">to_serializable</span><span class="p">(),</span>
+                       <span class="n">samples</span><span class="o">=</span><span class="p">[</span><span class="nb">dict</span><span class="p">(</span><span class="n">sample</span><span class="o">=</span><span class="n">s</span><span class="o">.</span><span class="n">sample</span><span class="p">,</span> <span class="n">energy</span><span class="o">=</span><span class="n">s</span><span class="o">.</span><span class="n">energy</span><span class="p">,</span> <span class="n">num_occurrences</span><span class="o">=</span><span class="n">s</span><span class="o">.</span><span class="n">num_occurrences</span><span class="p">,</span>
+                                     <span class="n">chain_break_fraction</span><span class="o">=</span><span class="n">s</span><span class="o">.</span><span class="n">chain_break_fraction</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="p">()])</span>
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">,</span> <span class="n">outcome</span><span class="o">=</span><span class="n">outcome</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="QUBOSolverIBM">
+<a class="viewcode-back" href="../_autosummary/bench_qubo.html#bench_qubo.QUBOSolverIBM">[docs]</a>
+<span class="k">class</span> <span class="nc">QUBOSolverIBM</span><span class="p">(</span><span class="n">QUBOSolver</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Implements IBM-specific solver code.&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">db</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s1">&#39;IBMSolver&#39;</span><span class="p">,</span> <span class="n">db</span><span class="p">)</span>
+
+<div class="viewcode-block" id="QUBOSolverIBM._run_qpu_estimator">
+<a class="viewcode-back" href="../_autosummary/bench_qubo.html#bench_qubo.QUBOSolverIBM._run_qpu_estimator">[docs]</a>
+    <span class="k">def</span> <span class="nf">_run_qpu_estimator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">estimator_options</span><span class="p">,</span> <span class="n">optimizer_name</span><span class="p">,</span> <span class="n">optimizer_kwargs</span><span class="p">,</span> <span class="n">optimizer_obj</span><span class="p">,</span>
+                           <span class="n">optimizer_obj_kwargs</span><span class="p">,</span> <span class="n">cost_func</span><span class="p">,</span> <span class="n">ansatz</span><span class="p">,</span> <span class="n">qubitOp</span><span class="p">,</span> <span class="n">x0</span><span class="p">):</span>
+        <span class="n">estimator</span> <span class="o">=</span> <span class="n">Estimator</span><span class="p">(</span><span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">estimator_options</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">optimizer_name</span> <span class="o">==</span> <span class="s1">&#39;SPSA&#39;</span><span class="p">:</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">optimizer_obj</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">fun</span><span class="o">=</span><span class="k">lambda</span> <span class="n">params</span><span class="p">:</span> <span class="n">cost_func</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">ansatz</span><span class="p">,</span> <span class="n">qubitOp</span><span class="p">,</span> <span class="n">estimator</span><span class="p">),</span> <span class="n">x0</span><span class="o">=</span><span class="n">x0</span><span class="p">,</span>
+                                         <span class="o">**</span><span class="n">optimizer_obj_kwargs</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">optimizer_name</span> <span class="o">==</span> <span class="s1">&#39;BOBYQA&#39;</span><span class="p">:</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">optimizer_obj</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">fun</span><span class="o">=</span><span class="k">lambda</span> <span class="n">params</span><span class="p">:</span> <span class="n">cost_func</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">ansatz</span><span class="p">,</span> <span class="n">qubitOp</span><span class="p">,</span> <span class="n">estimator</span><span class="p">),</span> <span class="n">x0</span><span class="o">=</span><span class="n">x0</span><span class="p">,</span>
+                                         <span class="o">**</span><span class="n">optimizer_obj_kwargs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">optimize</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">cost_func</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">ansatz</span><span class="p">,</span> <span class="n">qubitOp</span><span class="p">,</span> <span class="n">estimator</span><span class="p">),</span> <span class="n">method</span><span class="o">=</span><span class="n">optimizer_name</span><span class="p">,</span>
+                                    <span class="n">options</span><span class="o">=</span><span class="n">optimizer_kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">res</span></div>
+
+
+<div class="viewcode-block" id="QUBOSolverIBM._run_qpu_sampler">
+<a class="viewcode-back" href="../_autosummary/bench_qubo.html#bench_qubo.QUBOSolverIBM._run_qpu_sampler">[docs]</a>
+    <span class="k">def</span> <span class="nf">_run_qpu_sampler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">sampler_options</span><span class="p">,</span> <span class="n">ansatz</span><span class="p">,</span> <span class="n">res</span><span class="p">):</span>
+        <span class="n">sampler</span> <span class="o">=</span> <span class="n">Sampler</span><span class="p">(</span><span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">sampler_options</span><span class="p">)</span>
+        <span class="n">qc</span> <span class="o">=</span> <span class="n">ansatz</span><span class="o">.</span><span class="n">assign_parameters</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">qc</span><span class="o">.</span><span class="n">measure_all</span><span class="p">()</span>
+        <span class="n">samp_dist</span> <span class="o">=</span> <span class="n">sampler</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">qc</span><span class="p">)</span><span class="o">.</span><span class="n">result</span><span class="p">()</span><span class="o">.</span><span class="n">quasi_dists</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">samp_dist</span></div>
+
+
+<div class="viewcode-block" id="QUBOSolverIBM._run">
+<a class="viewcode-back" href="../_autosummary/bench_qubo.html#bench_qubo.QUBOSolverIBM._run">[docs]</a>
+    <span class="k">def</span> <span class="nf">_run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance_id</span><span class="p">,</span> <span class="n">optimizer_kwargs</span><span class="p">,</span> <span class="n">optimizer_name</span><span class="p">,</span> <span class="n">sampler_optimization_level</span><span class="p">,</span> <span class="n">sampler_resilience_level</span><span class="p">,</span>
+             <span class="n">estimator_optimization_level</span><span class="p">,</span> <span class="n">estimator_resilience_level</span><span class="p">,</span> <span class="n">reps</span><span class="p">,</span> <span class="n">sampler_shots</span><span class="p">,</span>
+             <span class="n">estimator_shots</span><span class="p">,</span> <span class="n">backend_name</span><span class="p">,</span> <span class="n">service_channel</span><span class="p">,</span> <span class="n">service_instance</span><span class="p">,</span> <span class="n">max_time</span><span class="p">,</span> <span class="n">recover_on_exception</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+        <span class="c1"># optimizer ~ COBYLA, SPSA</span>
+        <span class="c1"># reps</span>
+        <span class="c1"># optimization level, resilience level</span>
+        <span class="n">Q</span><span class="p">,</span> <span class="n">P</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_data</span><span class="p">(</span><span class="n">instance_id</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+
+        <span class="c1"># build ising qubo</span>
+        <span class="n">qp</span> <span class="o">=</span> <span class="n">QuadraticProgram</span><span class="p">()</span>
+        <span class="n">qp</span><span class="o">.</span><span class="n">binary_var_list</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">P</span><span class="p">))</span>
+        <span class="n">qp</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">constant</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">linear</span><span class="o">=</span><span class="n">P</span><span class="p">,</span> <span class="n">quadratic</span><span class="o">=</span><span class="n">Q</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">qp2qubo</span> <span class="o">=</span> <span class="n">QuadraticProgramToQubo</span><span class="p">()</span>
+        <span class="n">qubo</span> <span class="o">=</span> <span class="n">qp2qubo</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="n">qp</span><span class="p">)</span>
+        <span class="n">qubitOp</span><span class="p">,</span> <span class="n">qubitOffset</span> <span class="o">=</span> <span class="n">qubo</span><span class="o">.</span><span class="n">to_ising</span><span class="p">()</span>
+
+        <span class="c1"># fixed parameters</span>
+        <span class="n">qiskit_runtime_service_channel</span> <span class="o">=</span> <span class="n">service_channel</span>
+        <span class="n">qiskit_runtime_service_instance</span> <span class="o">=</span> <span class="n">service_instance</span>
+
+        <span class="c1"># setup quantum</span>
+        <span class="n">sampler_options</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">optimization_level</span><span class="o">=</span><span class="n">sampler_optimization_level</span><span class="p">,</span> <span class="n">resilience_level</span><span class="o">=</span><span class="n">sampler_resilience_level</span><span class="p">,</span>
+                               <span class="n">shots</span><span class="o">=</span><span class="n">sampler_shots</span><span class="p">)</span>
+        <span class="n">estimator_options</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">optimization_level</span><span class="o">=</span><span class="n">estimator_optimization_level</span><span class="p">,</span>
+                                 <span class="n">resilience_level</span><span class="o">=</span><span class="n">estimator_resilience_level</span><span class="p">,</span> <span class="n">shots</span><span class="o">=</span><span class="n">estimator_shots</span><span class="p">)</span>
+        <span class="n">solver_history</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="p">[],</span> <span class="n">cost</span><span class="o">=</span><span class="p">[],</span> <span class="n">metadata</span><span class="o">=</span><span class="p">[],</span> <span class="n">timestamp</span><span class="o">=</span><span class="p">[])</span>
+
+        <span class="k">def</span> <span class="nf">cost_func</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">ansatz</span><span class="p">,</span> <span class="n">hamiltonian</span><span class="p">,</span> <span class="n">estimator</span><span class="p">):</span>
+            <span class="n">estimator_result</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">ansatz</span><span class="p">,</span> <span class="n">hamiltonian</span><span class="p">,</span> <span class="n">parameter_values</span><span class="o">=</span><span class="n">params</span><span class="p">)</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+            <span class="n">cost</span> <span class="o">=</span> <span class="n">estimator_result</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">metadata</span> <span class="o">=</span> <span class="n">estimator_result</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">solver_history</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+            <span class="n">solver_history</span><span class="p">[</span><span class="s1">&#39;cost&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cost</span><span class="p">)</span>
+            <span class="n">solver_history</span><span class="p">[</span><span class="s1">&#39;metadata&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">metadata</span><span class="p">)</span>
+            <span class="n">solver_history</span><span class="p">[</span><span class="s1">&#39;timestamp&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">timestamp</span><span class="p">())</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;solver: cost=</span><span class="si">{</span><span class="n">cost</span><span class="si">}</span><span class="s1">, params=</span><span class="si">{</span><span class="n">params</span><span class="si">}</span><span class="s1">, index=</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">solver_history</span><span class="p">[</span><span class="s2">&quot;params&quot;</span><span class="p">])</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">cost</span>
+
+        <span class="n">ansatz</span> <span class="o">=</span> <span class="n">QAOAAnsatz</span><span class="p">(</span><span class="n">qubitOp</span><span class="p">,</span> <span class="n">reps</span><span class="o">=</span><span class="n">reps</span><span class="p">)</span>
+        <span class="n">x0</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">ansatz</span><span class="o">.</span><span class="n">num_parameters</span><span class="p">)</span>
+
+        <span class="n">service</span> <span class="o">=</span> <span class="n">QiskitRuntimeService</span><span class="p">(</span><span class="n">channel</span><span class="o">=</span><span class="n">qiskit_runtime_service_channel</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="n">qiskit_runtime_service_instance</span><span class="p">)</span>
+        <span class="n">backend</span> <span class="o">=</span> <span class="n">service</span><span class="o">.</span><span class="n">backend</span><span class="p">(</span><span class="n">backend_name</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">optimizer_name</span> <span class="o">==</span> <span class="s1">&#39;COBYLA&#39;</span><span class="p">:</span>
+            <span class="n">optimizer_obj</span> <span class="o">=</span> <span class="n">COBYLA</span><span class="p">(</span><span class="o">**</span><span class="n">optimizer_kwargs</span><span class="p">)</span>
+            <span class="n">optimizer_obj_kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">optimizer_name</span> <span class="o">==</span> <span class="s1">&#39;SPSA&#39;</span><span class="p">:</span>
+            <span class="n">optimizer_obj</span> <span class="o">=</span> <span class="n">SPSA</span><span class="p">(</span><span class="o">**</span><span class="n">optimizer_kwargs</span><span class="p">)</span>
+            <span class="n">optimizer_obj_kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">optimizer_name</span> <span class="o">==</span> <span class="s1">&#39;BOBYQA&#39;</span><span class="p">:</span>
+            <span class="n">optimizer_obj</span> <span class="o">=</span> <span class="n">BOBYQA</span><span class="p">(</span><span class="o">**</span><span class="n">optimizer_kwargs</span><span class="p">)</span>
+            <span class="n">optimizer_obj_kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">jac</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="p">[</span>
+                <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">l</span><span class="p">)</span> <span class="k">if</span> <span class="n">l</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="o">-</span><span class="n">__max_bound__</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="k">if</span> <span class="n">u</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">__max_bound__</span><span class="p">)</span> <span class="k">for</span> <span class="n">l</span><span class="p">,</span> <span class="n">u</span>
+                <span class="ow">in</span>
+                <span class="n">ansatz</span><span class="o">.</span><span class="n">parameter_bounds</span><span class="p">])</span>
+
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;optimizer_obj_kwargs</span><span class="se">\n\t</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">optimizer_obj_kwargs</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">optimizer_obj</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">optimizer_obj_kwargs</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># solve quantum</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;session start.&#39;</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">Session</span><span class="p">(</span><span class="n">service</span><span class="o">=</span><span class="n">service</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="n">backend</span><span class="p">,</span> <span class="n">max_time</span><span class="o">=</span><span class="n">max_time</span><span class="p">)</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;estimator start.&#39;</span><span class="p">)</span>
+            <span class="n">optimization_loop_finished</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">while</span> <span class="ow">not</span> <span class="n">optimization_loop_finished</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_qpu_estimator</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">estimator_options</span><span class="p">,</span> <span class="n">optimizer_name</span><span class="p">,</span> <span class="n">optimizer_kwargs</span><span class="p">,</span>
+                                                  <span class="n">optimizer_obj</span><span class="p">,</span> <span class="n">optimizer_obj_kwargs</span><span class="p">,</span> <span class="n">cost_func</span><span class="p">,</span> <span class="n">ansatz</span><span class="p">,</span> <span class="n">qubitOp</span><span class="p">,</span> <span class="n">x0</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">recover_on_exception</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="n">e</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;estimator exception: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s1">, try to recover from history.&#39;</span><span class="p">)</span>
+                    <span class="n">x0</span> <span class="o">=</span> <span class="n">solver_history</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">optimization_loop_finished</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;sampler start.&#39;</span><span class="p">)</span>
+            <span class="n">sampling_finished</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">while</span> <span class="ow">not</span> <span class="n">sampling_finished</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">samp_dist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_qpu_sampler</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">sampler_options</span><span class="p">,</span> <span class="n">ansatz</span><span class="p">,</span> <span class="n">res</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">recover_on_exception</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="n">e</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;sampler exception: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s1">, try to repeat.&#39;</span><span class="p">)</span>
+                <span class="n">sampling_finished</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;session end.&#39;</span><span class="p">)</span>
+
+        <span class="c1"># retrieve result</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">res</span><span class="o">=</span><span class="n">res</span><span class="p">,</span> <span class="n">samp_dist</span><span class="o">=</span><span class="n">samp_dist</span><span class="p">)</span>
+        <span class="n">session_data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">session_id</span><span class="o">=</span><span class="n">session</span><span class="o">.</span><span class="n">session_id</span><span class="p">,</span> <span class="n">job_data</span><span class="o">=</span><span class="nb">dict</span><span class="p">())</span>
+        <span class="k">for</span> <span class="n">job</span> <span class="ow">in</span> <span class="n">session</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">jobs</span><span class="p">():</span>
+            <span class="n">job_result</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+            <span class="c1"># filename = &#39;tmp_circuits.qpy&#39;</span>
+            <span class="c1"># circuits = job.inputs[&#39;circuits&#39;]</span>
+            <span class="c1"># with open(filename, &#39;wb&#39;) as fh:</span>
+            <span class="c1">#    qpy.dump(circuits, fh)</span>
+            <span class="c1"># with open(filename, &#39;rb&#39;) as fh:</span>
+            <span class="c1">#    file_contents = fh.readlines()</span>
+            <span class="c1"># circuit_strings = [str(circuit) for circuit in job.inputs[&#39;circuits&#39;]]</span>
+            <span class="c1"># num_circuits = len(circuits)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">quasi_dists</span> <span class="o">=</span> <span class="n">job_result</span><span class="o">.</span><span class="n">quasi_dists</span><span class="p">,</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">quasi_dists</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">values</span> <span class="o">=</span> <span class="n">job_result</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">values</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">session_data</span><span class="p">[</span><span class="s1">&#39;job_data&#39;</span><span class="p">][</span><span class="n">job</span><span class="o">.</span><span class="n">job_id</span><span class="p">()]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+                <span class="c1"># circuits=dict(n=num_circuits, qpy=file_contents),</span>
+                <span class="n">quasi_dists</span><span class="o">=</span><span class="n">quasi_dists</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="n">values</span><span class="p">,</span>
+                <span class="n">metadata</span><span class="o">=</span><span class="n">job_result</span><span class="o">.</span><span class="n">metadata</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="n">job</span><span class="o">.</span><span class="n">metrics</span><span class="p">(),</span>
+                <span class="n">timestamp</span><span class="o">=</span><span class="n">job</span><span class="o">.</span><span class="n">creation_date</span><span class="o">.</span><span class="n">timestamp</span><span class="p">(),</span>
+                <span class="c1"># logs=job.logs()</span>
+            <span class="p">)</span>
+
+        <span class="c1"># query backend</span>
+        <span class="n">backend_properties</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">properties</span><span class="p">()</span>
+        <span class="n">backend_properties</span> <span class="o">=</span> <span class="n">backend_properties</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span> <span class="k">if</span> <span class="n">backend_properties</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">{}</span>
+
+        <span class="c1"># compile results</span>
+        <span class="n">options</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">optimizer_kwargs</span><span class="o">=</span><span class="n">optimizer_kwargs</span><span class="p">,</span> <span class="n">optimizer_name</span><span class="o">=</span><span class="n">optimizer_name</span><span class="p">,</span>
+                       <span class="n">sampler_optimization_level</span><span class="o">=</span><span class="n">sampler_optimization_level</span><span class="p">,</span>
+                       <span class="n">sampler_resilience_level</span><span class="o">=</span><span class="n">sampler_resilience_level</span><span class="p">,</span>
+                       <span class="n">estimator_optimization_level</span><span class="o">=</span><span class="n">estimator_optimization_level</span><span class="p">,</span>
+                       <span class="n">estimator_resilience_level</span><span class="o">=</span><span class="n">estimator_resilience_level</span><span class="p">,</span>
+                       <span class="n">reps</span><span class="o">=</span><span class="n">reps</span><span class="p">,</span> <span class="n">sampler_shots</span><span class="o">=</span><span class="n">sampler_shots</span><span class="p">,</span> <span class="n">estimator_shots</span><span class="o">=</span><span class="n">estimator_shots</span><span class="p">,</span>
+                       <span class="n">backend_name</span><span class="o">=</span><span class="n">backend_name</span><span class="p">,</span>
+                       <span class="n">qiskit_runtime_service_channel</span><span class="o">=</span><span class="n">qiskit_runtime_service_channel</span><span class="p">,</span>
+                       <span class="n">qiskit_runtime_service_instance</span><span class="o">=</span><span class="n">qiskit_runtime_service_instance</span><span class="p">,</span>
+                       <span class="n">max_time</span><span class="o">=</span><span class="n">max_time</span><span class="p">,</span> <span class="n">recover_on_exception</span><span class="o">=</span><span class="n">recover_on_exception</span><span class="p">,</span>
+                       <span class="n">a</span><span class="o">=</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">b</span><span class="p">)</span>
+        <span class="n">outcome</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">result</span><span class="o">=</span><span class="n">result</span><span class="p">,</span> <span class="n">session_data</span><span class="o">=</span><span class="n">session_data</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="n">x0</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+                       <span class="n">solver_history</span><span class="o">=</span><span class="n">solver_history</span><span class="p">,</span> <span class="n">backend_properties</span><span class="o">=</span><span class="n">backend_properties</span><span class="p">,</span>
+                       <span class="n">op</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">qubitOp</span><span class="o">=</span><span class="nb">repr</span><span class="p">(</span><span class="n">qubitOp</span><span class="p">),</span> <span class="n">qubitOffset</span><span class="o">=</span><span class="n">qubitOffset</span><span class="p">))</span>
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">,</span> <span class="n">outcome</span><span class="o">=</span><span class="n">outcome</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Alexey Bochkarev et al..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

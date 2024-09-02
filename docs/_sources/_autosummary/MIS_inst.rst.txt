@@ -1,0 +1,31 @@
+﻿MIS\_inst
+=========
+
+.. automodule:: MIS_inst
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      assert_UDMIS_MIP
+      check_QuEra_geometry
+      create_MIS_QUBO
+      create_UDMIS_name
+      create_grid_points
+      create_orig_MIS_IP
+      create_random_points
+      draw_IDs_grid
+      draw_inst_grid
+      extract_G_from_json
+      generate_TG_inst
+      generate_UDMIS_instances
+      generate_main_dataset
+      is_IS
+      load_instance_by_ID
+      load_orig_MIS
+      main
+      points_to_graph
+      save_orig_UDMIS
+      visualize_graph
+   

@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>post_processing.logparser &mdash; qopt-overview  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/autoclasstoc.css?v=08871587" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=3dd0334f" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            qopt-overview
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html#computational-pipeline">Computational pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html#implementation-details">Implementation details</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../raw-data.html">Raw data formats</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">qopt-overview</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">post_processing.logparser</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for post_processing.logparser</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Implements JSON pasers, summarizing the raw QPU output files.</span>
+
+<span class="sd">USAGE:</span>
+<span class="sd">    | python -m post_processing.logparser summarize_dwave ./run_logs/dwave   ./run_logs/summaries/dwave_summary.csv   ./run_logs/summaries/dwave_stats.csv dwave</span>
+<span class="sd">    |</span>
+<span class="sd">    | python -m post_processing.logparser summarize_ibm   ./run_logs/ibm-qpu ./run_logs/summaries/ibm-qpu_summary.csv ./run_logs/summaries/ibm-qpu_stats.csv &quot;IBM-QPU&quot;</span>
+<span class="sd">    |</span>
+<span class="sd">    | python -m post_processing.logparser summarize_quera ./run_logs/quera   ./run_logs/summaries/quera_summary.csv   ./run_logs/summaries/quera_stats.csv</span>
+<span class="sd">    |</span>
+<span class="sd">    | python -m post_processing.logparser extract_samples dwave ./run_logs/dwave/&lt;instance&gt;.json ./run_logs/dwave/samples-csv/&lt;instance&gt;.sample.csv ./instances/QUBO ./instances/orig</span>
+
+<span class="sd">The module implements the abstract parser class befining a universal interface</span>
+<span class="sd">:py:class:`post_processing.logparser.QPULogParser` and the three derived classes</span>
+<span class="sd">for device-specific code. Each of these most notably implements the</span>
+<span class="sd">method ``extract_samples`` used to extract the data regarding individual QPU</span>
+<span class="sd">shots, which allows to recover a solution and is then used to calculate the</span>
+<span class="sd">objective values with the helper functions :py:func:`calculate_QUBO_objective`</span>
+<span class="sd">and :py:func:`calculate_orig_objective`.</span>
+
+<span class="sd">When run from the command line as presented above, the function specified in the</span>
+<span class="sd">first argument is run. Therefore, log parser interface is wrapped into several</span>
+<span class="sd">functions accessible from the command line.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">glob</span> <span class="kn">import</span> <span class="n">glob</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">sys</span> <span class="kn">import</span> <span class="n">argv</span>
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span> <span class="nn">ast</span> <span class="kn">import</span> <span class="n">literal_eval</span> <span class="k">as</span> <span class="n">make_tuple</span>
+
+<span class="kn">from</span> <span class="nn">TSP_inst</span> <span class="kn">import</span> <span class="n">load_instance_by_ID</span> <span class="k">as</span> <span class="n">load_TSP_by_ID</span>
+<span class="kn">from</span> <span class="nn">TSP_inst</span> <span class="kn">import</span> <span class="n">unpack_tour_QUBO_bitstring</span><span class="p">,</span> <span class="n">obj_val</span>
+<span class="kn">from</span> <span class="nn">TSP_inst</span> <span class="kn">import</span> <span class="n">is_feasible</span> <span class="k">as</span> <span class="n">TSP_is_feasible</span>
+
+<span class="kn">from</span> <span class="nn">MWC_inst</span> <span class="kn">import</span> <span class="n">load_instance_by_ID</span> <span class="k">as</span> <span class="n">load_MWC_by_ID</span>
+<span class="kn">from</span> <span class="nn">MWC_inst</span> <span class="kn">import</span> <span class="n">get_objective_from_sol</span> <span class="k">as</span> <span class="n">get_MWC_objective</span>
+
+<span class="kn">from</span> <span class="nn">UDMWIS_inst</span> <span class="kn">import</span> <span class="n">load_instance_by_ID</span> <span class="k">as</span> <span class="n">load_UDMWIS_by_ID</span>
+<span class="kn">from</span> <span class="nn">UDMWIS_inst</span> <span class="kn">import</span> <span class="n">get_objective_from_sol</span> <span class="k">as</span> <span class="n">get_UDMWIS_objective</span>
+
+<span class="kn">from</span> <span class="nn">MIS_inst</span> <span class="kn">import</span> <span class="n">is_IS</span><span class="p">,</span> <span class="n">extract_G_from_json</span>
+<span class="kn">from</span> <span class="nn">MIS_inst</span> <span class="kn">import</span> <span class="n">load_instance_by_ID</span> <span class="k">as</span> <span class="n">load_UDMIS_by_ID</span>
+
+<span class="kn">from</span> <span class="nn">qubo_utils</span> <span class="kn">import</span> <span class="n">get_instance_size_by_ID</span><span class="p">,</span> <span class="n">get_QUBO_by_ID</span><span class="p">,</span> <span class="n">load_QUBO</span>
+<span class="kn">from</span> <span class="nn">qubo_utils</span> <span class="kn">import</span> <span class="n">instance_present_in_folder</span>
+
+<span class="c1">######################################################################</span>
+<span class="c1"># Helper functions</span>
+
+<div class="viewcode-block" id="get_inst_type">
+<a class="viewcode-back" href="../../_autosummary/post_processing.logparser.html#post_processing.logparser.get_inst_type">[docs]</a>
+<span class="k">def</span> <span class="nf">get_inst_type</span><span class="p">(</span><span class="n">inst_id</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Helper: Extracts the instance type from ``inst_id``.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">inst_id</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;TSP&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;TSP&quot;</span>
+    <span class="k">elif</span> <span class="n">inst_id</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;MWC&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;MWC&quot;</span>
+    <span class="k">elif</span> <span class="n">inst_id</span><span class="p">[:</span><span class="mi">6</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;UDMWIS&quot;</span><span class="p">:</span>
+       <span class="k">return</span> <span class="s2">&quot;UDMWIS&quot;</span>
+    <span class="k">elif</span> <span class="n">inst_id</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;UDMIS&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;UDMIS&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">inst_id</span><span class="si">}</span><span class="s2">: wrong ID; unexpected instance type marker (TSP/MWC/UDMWIS expected).&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="calculate_QUBO_objective">
+<a class="viewcode-back" href="../../_autosummary/post_processing.logparser.html#post_processing.logparser.calculate_QUBO_objective">[docs]</a>
+<span class="k">def</span> <span class="nf">calculate_QUBO_objective</span><span class="p">(</span><span class="n">inst_id</span><span class="p">,</span> <span class="n">top_samples</span><span class="p">,</span>
+                       <span class="n">orig_dir</span><span class="o">=</span><span class="s2">&quot;./instances/orig&quot;</span><span class="p">,</span>
+                       <span class="n">qubo_dir</span><span class="o">=</span><span class="s2">&quot;./instances/QUBO&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Helper: Returns the QUBO objective and the feasibility flag from a collection of samples.</span>
+
+<span class="sd">    Calculates the objective values using the QUBO machinery</span>
+<span class="sd">    and assesses the feasibility of each respective solution.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        inst_id(str): instance id,</span>
+<span class="sd">        top_samples(list): best samples to choose from (list of bitstrings).</span>
+<span class="sd">        orig_dir(str): directory with original instance JSONs,</span>
+<span class="sd">        qubo_dir(str): directory with QUBO instance JSONs,</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A tuple of ``(obj, feas)``, where ``obj`` is the best (minimum)</span>
+<span class="sd">        feasible QUBO objective value (just minimum if no feasible solutions</span>
+<span class="sd">        found among ``top_samples``) and ``feas`` = ``True`` if it is feasible,</span>
+<span class="sd">        and ``False`` otherwise.</span>
+
+<span class="sd">    Notes:</span>
+<span class="sd">        - ``top_samples`` must contain a list of bitstrings, where higher</span>
+<span class="sd">            ranking qubits are on the left: e.g., ``[b3, b2, b1, b0]``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="n">get_QUBO_by_ID</span><span class="p">(</span><span class="n">inst_id</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="n">qubo_dir</span><span class="p">)</span>
+    <span class="n">Q</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">qubojs</span> <span class="o">=</span> <span class="n">load_QUBO</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="n">int_samples</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">x</span><span class="p">)])</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">top_samples</span><span class="p">]</span>
+    <span class="n">QUBO_objectives</span> <span class="o">=</span> <span class="p">[(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">x</span> <span class="o">@</span> <span class="n">Q</span> <span class="o">@</span> <span class="n">x</span> <span class="o">+</span> <span class="n">P</span> <span class="o">@</span> <span class="n">x</span> <span class="o">+</span> <span class="n">C</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">int_samples</span><span class="p">]</span>
+
+    <span class="k">match</span> <span class="n">get_inst_type</span><span class="p">(</span><span class="n">inst_id</span><span class="p">):</span>
+        <span class="k">case</span> <span class="s2">&quot;TSP&quot;</span><span class="p">:</span>
+            <span class="n">D</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_TSP_by_ID</span><span class="p">(</span><span class="n">inst_id</span><span class="p">,</span> <span class="n">directory</span><span class="o">=</span><span class="n">orig_dir</span><span class="p">)</span>
+            <span class="n">tours</span> <span class="o">=</span> <span class="p">[</span><span class="n">unpack_tour_QUBO_bitstring</span><span class="p">([</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">sol</span><span class="p">)],</span> <span class="nb">len</span><span class="p">(</span><span class="n">D</span><span class="p">))</span>
+                     <span class="k">for</span> <span class="n">sol</span> <span class="ow">in</span> <span class="n">top_samples</span><span class="p">]</span>
+            <span class="n">feasible</span> <span class="o">=</span> <span class="p">[</span><span class="n">TSP_is_feasible</span><span class="p">(</span><span class="n">tour</span><span class="p">,</span> <span class="n">D</span><span class="p">)</span> <span class="k">for</span> <span class="n">tour</span> <span class="ow">in</span> <span class="n">tours</span><span class="p">]</span>
+        <span class="k">case</span> <span class="s2">&quot;MWC&quot;</span><span class="p">:</span>
+            <span class="n">G</span> <span class="o">=</span> <span class="n">load_MWC_by_ID</span><span class="p">(</span><span class="n">inst_id</span><span class="p">,</span> <span class="n">directory</span><span class="o">=</span><span class="n">orig_dir</span><span class="p">)</span>
+            <span class="n">feasible</span> <span class="o">=</span> <span class="p">[</span><span class="kc">True</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">top_samples</span><span class="p">]</span>
+
+        <span class="k">case</span> <span class="s2">&quot;UDMIS&quot;</span><span class="p">:</span>
+            <span class="n">G</span><span class="p">,</span> <span class="n">js</span> <span class="o">=</span> <span class="n">load_UDMIS_by_ID</span><span class="p">(</span><span class="n">inst_id</span><span class="p">,</span> <span class="n">directory</span><span class="o">=</span><span class="n">orig_dir</span><span class="p">)</span>
+            <span class="c1"># Note that this order of nodes is correct</span>
+            <span class="c1"># because ``int_samples`` is already reversed above</span>
+            <span class="c1"># (as compared to ``top_samples``)</span>
+            <span class="n">feasible</span> <span class="o">=</span> <span class="p">[</span><span class="n">is_IS</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">sol</span><span class="p">)</span> <span class="k">for</span> <span class="n">sol</span> <span class="ow">in</span> <span class="n">int_samples</span><span class="p">]</span>
+        <span class="k">case</span> <span class="n">other</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">inst_id</span><span class="si">}</span><span class="s2">: wrong instance ID (get_inst_type returned type </span><span class="si">{</span><span class="n">get_inst_type</span><span class="p">(</span><span class="n">inst_id</span><span class="p">)</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+
+
+    <span class="n">feasible_objs</span> <span class="o">=</span> <span class="p">[</span><span class="n">QUBO_objectives</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">QUBO_objectives</span><span class="p">))</span>
+                     <span class="k">if</span> <span class="n">feasible</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">feasible_objs</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">QUBO_objectives</span><span class="p">),</span> <span class="kc">False</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">feasible_objs</span><span class="p">),</span> <span class="kc">True</span></div>
+
+
+
+<div class="viewcode-block" id="calculate_orig_objective">
+<a class="viewcode-back" href="../../_autosummary/post_processing.logparser.html#post_processing.logparser.calculate_orig_objective">[docs]</a>
+<span class="k">def</span> <span class="nf">calculate_orig_objective</span><span class="p">(</span><span class="n">inst_id</span><span class="p">,</span> <span class="n">top_samples</span><span class="p">,</span> <span class="n">orig_dir</span><span class="o">=</span><span class="s2">&quot;./instances/orig&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Helper: Calculates the objective given the instance ID and the collection of bitstrings.</span>
+
+<span class="sd">    Uses the logic of the original problem, not the universal QUBO code.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        inst_id(str): instance id,</span>
+<span class="sd">        top_samples(list): best samples to choose from (bitstrings).</span>
+
+<span class="sd">    Notes:</span>
+<span class="sd">        - ``top_samples`` must contain a list of bitstrings, where higher</span>
+<span class="sd">            ranking qubits are on the left: e.g., ``[b3, b2, b1, b0]``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">match</span> <span class="n">get_inst_type</span><span class="p">(</span><span class="n">inst_id</span><span class="p">):</span>
+        <span class="k">case</span> <span class="s2">&quot;TSP&quot;</span><span class="p">:</span>
+            <span class="n">D</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_TSP_by_ID</span><span class="p">(</span><span class="n">inst_id</span><span class="p">,</span> <span class="n">directory</span><span class="o">=</span><span class="n">orig_dir</span><span class="p">)</span>
+            <span class="n">objs</span> <span class="o">=</span> <span class="p">[</span><span class="n">obj_val</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="n">unpack_tour_QUBO_bitstring</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">sol</span><span class="p">)],</span>
+                <span class="nb">len</span><span class="p">(</span><span class="n">D</span><span class="p">)))</span>
+                        <span class="k">for</span> <span class="n">sol</span> <span class="ow">in</span> <span class="n">top_samples</span> <span class="k">if</span> <span class="n">sol</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span>
+            <span class="n">objs</span> <span class="o">=</span> <span class="p">[</span><span class="n">obj</span> <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">objs</span> <span class="k">if</span> <span class="n">obj</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">objs</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="n">objs</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">case</span> <span class="s2">&quot;MWC&quot;</span><span class="p">:</span>
+            <span class="n">G</span> <span class="o">=</span> <span class="n">load_MWC_by_ID</span><span class="p">(</span><span class="n">inst_id</span><span class="p">,</span> <span class="n">directory</span><span class="o">=</span><span class="n">orig_dir</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">max</span><span class="p">([</span><span class="n">get_MWC_objective</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="p">[</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">sol</span><span class="p">)])</span>
+                           <span class="k">for</span> <span class="n">sol</span> <span class="ow">in</span> <span class="n">top_samples</span><span class="p">])</span>
+        <span class="k">case</span> <span class="s2">&quot;UDMIS&quot;</span><span class="p">:</span>
+            <span class="n">G</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_UDMIS_by_ID</span><span class="p">(</span><span class="n">inst_id</span><span class="p">,</span> <span class="n">directory</span><span class="o">=</span><span class="n">orig_dir</span><span class="p">)</span>
+            <span class="n">int_sols</span> <span class="o">=</span> <span class="p">[[</span><span class="nb">int</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">sol</span><span class="p">)]</span>
+                        <span class="k">for</span> <span class="n">sol</span> <span class="ow">in</span> <span class="n">top_samples</span><span class="p">]</span>
+            <span class="n">objs</span> <span class="o">=</span> <span class="p">[</span><span class="nb">sum</span><span class="p">(</span><span class="n">int_sol</span><span class="p">)</span> <span class="k">for</span> <span class="n">int_sol</span> <span class="ow">in</span> <span class="n">int_sols</span>
+                        <span class="k">if</span> <span class="n">is_IS</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">int_sol</span><span class="p">)]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">objs</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">objs</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">case</span> <span class="n">other</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">inst_id</span><span class="si">}</span><span class="s2">: unknown instance type &#39;</span><span class="si">{</span><span class="n">get_inst_type</span><span class="p">(</span><span class="n">inst_id</span><span class="p">)</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span></div>
+
+
+
+<span class="c1">######################################################################</span>
+<span class="c1"># Base log parser class</span>
+<div class="viewcode-block" id="QPULogParser">
+<a class="viewcode-back" href="../../_autosummary/post_processing.logparser.html#post_processing.logparser.QPULogParser">[docs]</a>
+<span class="k">class</span> <span class="nc">QPULogParser</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Implements the basic JSON log parser interface.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        files(list): list of processed files (filenames)</span>
+<span class="sd">        df(pd.DataFrame): the data accumulated</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">files</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">orig_dir</span><span class="o">=</span><span class="s2">&quot;./instances/orig&quot;</span><span class="p">,</span> <span class="n">qubo_dir</span><span class="o">=</span><span class="s2">&quot;./instances/QUBO&quot;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">files</span> <span class="o">=</span> <span class="n">files</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span> <span class="o">=</span> <span class="n">log</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inst_stats</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logtype</span><span class="o">=</span><span class="s2">&quot;UNDEFINED&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">orig_dir</span> <span class="o">=</span> <span class="n">orig_dir</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qubo_dir</span> <span class="o">=</span> <span class="n">qubo_dir</span>
+
+<div class="viewcode-block" id="QPULogParser._extract_successful_line">
+<a class="viewcode-back" href="../../_autosummary/post_processing.logparser.html#post_processing.logparser.QPULogParser._extract_successful_line">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">_extract_successful_line</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">js</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extracts a single successful instance run (from a single JSON).&quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+
+<div class="viewcode-block" id="QPULogParser._extract_failed_line">
+<a class="viewcode-back" href="../../_autosummary/post_processing.logparser.html#post_processing.logparser.QPULogParser._extract_failed_line">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">_extract_failed_line</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">js</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">statsfile</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extracts a single failed instance run (from a single JSON).&quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+
+<div class="viewcode-block" id="QPULogParser.save">
+<a class="viewcode-back" href="../../_autosummary/post_processing.logparser.html#post_processing.logparser.QPULogParser.save">[docs]</a>
+    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">outfile</span><span class="p">,</span> <span class="n">statsfile</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Helper: saves the statistics on the processed files.</span>
+
+<span class="sd">        This generates ``*_stats.csv`` type of files, which summarize the</span>
+<span class="sd">        number of successful and failed runs per instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">outfile</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Saved </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">)</span><span class="si">}</span><span class="s2"> entries to </span><span class="si">{</span><span class="n">outfile</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">statsfile</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">stats</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+                <span class="s2">&quot;logtype&quot;</span><span class="p">:</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">logtype</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">inst_stats</span><span class="p">],</span>
+                <span class="s2">&quot;instance_id&quot;</span> <span class="p">:</span> <span class="p">[</span><span class="n">inst_id</span> <span class="k">for</span> <span class="n">inst_id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">inst_stats</span><span class="p">],</span>
+                <span class="s2">&quot;instance_type&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">get_inst_type</span><span class="p">(</span><span class="n">inst_id</span><span class="p">)</span> <span class="k">for</span> <span class="n">inst_id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">inst_stats</span><span class="p">],</span>
+                <span class="s2">&quot;qubo_vars&quot;</span> <span class="p">:</span> <span class="p">[</span><span class="n">get_instance_size_by_ID</span><span class="p">(</span><span class="n">inst_id</span><span class="p">)</span> <span class="k">for</span> <span class="n">inst_id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">inst_stats</span><span class="p">],</span>
+                <span class="s2">&quot;success_runs&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">stats</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">stats</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">inst_stats</span><span class="o">.</span><span class="n">items</span><span class="p">()],</span>
+                <span class="s2">&quot;failed_runs&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">stats</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">stats</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">inst_stats</span><span class="o">.</span><span class="n">items</span><span class="p">()],</span>
+            <span class="p">})</span>
+            <span class="n">stats</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">statsfile</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Saved </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">stats</span><span class="p">)</span><span class="si">}</span><span class="s2"> unique instances stats to </span><span class="si">{</span><span class="n">statsfile</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="QPULogParser.process_files">
+<a class="viewcode-back" href="../../_autosummary/post_processing.logparser.html#post_processing.logparser.QPULogParser.process_files">[docs]</a>
+    <span class="k">def</span> <span class="nf">process_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filenames</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">outfile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">statsfile</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Processes the list of JSON raw log files (in ``filenames``).</span>
+
+<span class="sd">        A universal high-level procedure, which relies on</span>
+<span class="sd">        `_extract_successful_line` and `_extract_failed_line` methods</span>
+<span class="sd">        implemented for each respective log file type (device type).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">filenames</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">filenames</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">files</span>
+
+        <span class="n">failed_instances</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">notfound_instances</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">filenames</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Adding: </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">infile</span><span class="p">:</span>
+                <span class="n">js</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">infile</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="s1">&#39;instance_id&#39;</span> <span class="ow">in</span> <span class="n">js</span><span class="p">:</span>
+                <span class="n">inst_id</span> <span class="o">=</span> <span class="n">js</span><span class="p">[</span><span class="s1">&#39;instance_id&#39;</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="s1">&#39;problem&#39;</span> <span class="ow">in</span> <span class="n">js</span><span class="p">:</span>
+                <span class="c1"># this is a QuEra logfile</span>
+                <span class="c1"># it has slightly different format ( :-/ )</span>
+                <span class="n">inst_name</span> <span class="o">=</span> <span class="n">js</span><span class="p">[</span><span class="s1">&#39;problem&#39;</span><span class="p">][</span><span class="s2">&quot;instance_name&quot;</span><span class="p">]</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">orig_dir</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">inst_name</span> <span class="o">+</span> <span class="s2">&quot;.json&quot;</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">ofile</span><span class="p">:</span>
+                    <span class="n">origjs</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">ofile</span><span class="p">)</span>
+
+                <span class="n">inst_id</span> <span class="o">=</span> <span class="n">origjs</span><span class="p">[</span><span class="s1">&#39;description&#39;</span><span class="p">][</span><span class="s1">&#39;instance_id&#39;</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">: instance ID not found.&quot;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">instance_present_in_folder</span><span class="p">(</span><span class="n">inst_id</span><span class="p">):</span>
+                <span class="n">notfound_instances</span> <span class="o">+=</span> <span class="p">[</span><span class="n">inst_id</span><span class="p">]</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">inst_id</span><span class="si">}</span><span class="s2"> (file </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">): not found in &#39;instances/&#39;, skipping.&quot;</span><span class="p">)</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">inst_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">inst_stats</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">inst_stats</span><span class="p">[</span><span class="n">inst_id</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="s1">&#39;success&#39;</span> <span class="ow">in</span> <span class="n">js</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">js</span><span class="p">[</span><span class="s1">&#39;success&#39;</span><span class="p">]:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">)]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_successful_line</span><span class="p">(</span><span class="n">js</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">inst_stats</span><span class="p">[</span><span class="n">js</span><span class="p">[</span><span class="s1">&#39;instance_id&#39;</span><span class="p">]][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">)]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_failed_line</span><span class="p">(</span><span class="n">js</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+                    <span class="n">failed_instances</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">inst_stats</span><span class="p">[</span><span class="n">js</span><span class="p">[</span><span class="s1">&#39;instance_id&#39;</span><span class="p">]][</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># this is a QuEra log file (hopefully)</span>
+                <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;qpu_result&#39;</span> <span class="ow">in</span> <span class="n">js</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">js</span><span class="p">[</span><span class="s1">&#39;qpu_result&#39;</span><span class="p">][</span><span class="s1">&#39;qpu_counts&#39;</span><span class="p">])</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">)]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_successful_line</span><span class="p">(</span><span class="n">js</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">inst_stats</span><span class="p">[</span><span class="n">inst_id</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">)]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_failed_line</span><span class="p">(</span><span class="n">js</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+                    <span class="n">failed_instances</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">inst_stats</span><span class="p">[</span><span class="n">inst_id</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✅ Processed </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">filenames</span><span class="p">)</span><span class="si">}</span><span class="s2"> json files.&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">failed_instances</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;❌ Including the following </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">failed_instances</span><span class="p">)</span><span class="si">}</span><span class="s2"> failed runs:</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>
+                      <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">failed_instances</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;(No failed instances in the list.)&quot;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">notfound_instances</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;❌ Skipped the following </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">failed_instances</span><span class="p">)</span><span class="si">}</span><span class="s2"> instances (no data found in &#39;instances/&#39;):</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>
+                      <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">notfound_instances</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;(All instances in the list were found in &#39;instances/&#39;.)&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">outfile</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">outfile</span><span class="p">,</span> <span class="n">statsfile</span><span class="p">)</span></div>
+</div>
+
+
+<span class="c1">######################################################################</span>
+<span class="c1"># QPU-specific parsers</span>
+
+<div class="viewcode-block" id="DWaveLogParser">
+<a class="viewcode-back" href="../../_autosummary/post_processing.logparser.html#post_processing.logparser.DWaveLogParser">[docs]</a>
+<span class="k">class</span> <span class="nc">DWaveLogParser</span><span class="p">(</span><span class="n">QPULogParser</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Implements the D-Wave specific log parsing code.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">files</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">log</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logtype</span><span class="o">=</span><span class="s2">&quot;DWave&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;filename&quot;</span><span class="p">,</span> <span class="s2">&quot;start_timestamp&quot;</span><span class="p">,</span>
+                                          <span class="s2">&quot;end_timestamp&quot;</span><span class="p">,</span> <span class="s2">&quot;instance_id&quot;</span><span class="p">,</span>
+                                          <span class="s2">&quot;instance_type&quot;</span><span class="p">,</span> <span class="s2">&quot;qubo_vars&quot;</span><span class="p">,</span> <span class="s2">&quot;sol_time&quot;</span><span class="p">,</span>
+                                          <span class="s2">&quot;obj_from_QPU_sol&quot;</span><span class="p">,</span> <span class="s2">&quot;success&quot;</span><span class="p">,</span>
+                                          <span class="s2">&quot;solver_name&quot;</span><span class="p">,</span> <span class="s2">&quot;chip_id&quot;</span><span class="p">,</span> <span class="s2">&quot;chip_type&quot;</span><span class="p">,</span>
+                                          <span class="s2">&quot;topology&quot;</span><span class="p">,</span> <span class="s2">&quot;num_reads&quot;</span><span class="p">,</span>
+                                          <span class="s2">&quot;binary_vars&quot;</span><span class="p">,</span> <span class="s2">&quot;emb_qubits&quot;</span><span class="p">,</span>
+                                          <span class="s2">&quot;embedding_time&quot;</span><span class="p">])</span>
+
+<div class="viewcode-block" id="DWaveLogParser._extract_successful_line">
+<a class="viewcode-back" href="../../_autosummary/post_processing.logparser.html#post_processing.logparser.DWaveLogParser._extract_successful_line">[docs]</a>
+    <span class="k">def</span> <span class="nf">_extract_successful_line</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">js</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extracts a summary for a single DWave&#39;s log.</span>
+
+<span class="sd">        This function extracts a &quot;successful&quot; summary line: the one corresponding</span>
+<span class="sd">        to an experiment that yielded some solutions (feasible or not).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">n_log_qubits</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">n_act_qubits</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">embedding</span> <span class="o">=</span> <span class="n">js</span><span class="p">[</span><span class="s1">&#39;solver&#39;</span><span class="p">][</span><span class="s1">&#39;outcome&#39;</span><span class="p">][</span><span class="s1">&#39;emb_properties&#39;</span><span class="p">][</span><span class="s1">&#39;embedding&#39;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">qubit</span> <span class="ow">in</span> <span class="n">embedding</span><span class="p">:</span>
+            <span class="n">n_log_qubits</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">n_act_qubits</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">embedding</span><span class="p">[</span><span class="n">qubit</span><span class="p">])</span>
+
+        <span class="n">samples</span> <span class="o">=</span> <span class="n">DWaveLogParser</span><span class="o">.</span><span class="n">extract_samples</span><span class="p">(</span><span class="n">js</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">samples</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+
+        <span class="n">best_sols</span> <span class="o">=</span> <span class="n">samples</span><span class="p">[</span><span class="s2">&quot;solution&quot;</span><span class="p">]</span>  <span class="c1"># choose the best from *all* samples</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="n">filename</span><span class="p">,</span>
+                <span class="n">js</span><span class="p">[</span><span class="s1">&#39;timestamps&#39;</span><span class="p">][</span><span class="s1">&#39;start&#39;</span><span class="p">],</span>
+                <span class="n">js</span><span class="p">[</span><span class="s1">&#39;timestamps&#39;</span><span class="p">][</span><span class="s1">&#39;end&#39;</span><span class="p">],</span>
+                <span class="n">js</span><span class="p">[</span><span class="s1">&#39;instance_id&#39;</span><span class="p">],</span>
+                <span class="n">get_inst_type</span><span class="p">(</span><span class="n">js</span><span class="p">[</span><span class="s1">&#39;instance_id&#39;</span><span class="p">]),</span>
+                <span class="n">get_instance_size_by_ID</span><span class="p">(</span><span class="n">js</span><span class="p">[</span><span class="s1">&#39;instance_id&#39;</span><span class="p">]),</span>
+                <span class="p">(</span><span class="n">js</span><span class="p">[</span><span class="s1">&#39;timestamps&#39;</span><span class="p">][</span><span class="s1">&#39;end&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">js</span><span class="p">[</span><span class="s1">&#39;timestamps&#39;</span><span class="p">][</span><span class="s1">&#39;start&#39;</span><span class="p">]),</span>
+                <span class="n">calculate_orig_objective</span><span class="p">(</span><span class="n">js</span><span class="p">[</span><span class="s2">&quot;instance_id&quot;</span><span class="p">],</span> <span class="n">best_sols</span><span class="p">,</span> <span class="n">orig_dir</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">orig_dir</span><span class="p">),</span>
+                <span class="n">js</span><span class="p">[</span><span class="s2">&quot;success&quot;</span><span class="p">],</span>
+                <span class="n">js</span><span class="p">[</span><span class="s1">&#39;solver_name&#39;</span><span class="p">],</span>
+                <span class="n">js</span><span class="p">[</span><span class="s2">&quot;solver&quot;</span><span class="p">][</span><span class="s2">&quot;outcome&quot;</span><span class="p">][</span><span class="s2">&quot;emb_properties&quot;</span><span class="p">][</span><span class="s2">&quot;child_properties&quot;</span><span class="p">][</span><span class="s2">&quot;chip_id&quot;</span><span class="p">],</span>
+                <span class="n">js</span><span class="p">[</span><span class="s2">&quot;solver&quot;</span><span class="p">][</span><span class="s2">&quot;outcome&quot;</span><span class="p">][</span><span class="s2">&quot;emb_properties&quot;</span><span class="p">][</span><span class="s2">&quot;child_properties&quot;</span><span class="p">][</span><span class="s2">&quot;category&quot;</span><span class="p">],</span>
+                <span class="n">js</span><span class="p">[</span><span class="s2">&quot;solver&quot;</span><span class="p">][</span><span class="s2">&quot;outcome&quot;</span><span class="p">][</span><span class="s2">&quot;emb_properties&quot;</span><span class="p">][</span><span class="s2">&quot;child_properties&quot;</span><span class="p">][</span><span class="s2">&quot;topology&quot;</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">],</span>
+                <span class="n">js</span><span class="p">[</span><span class="s1">&#39;solver&#39;</span><span class="p">][</span><span class="s1">&#39;options&#39;</span><span class="p">][</span><span class="s1">&#39;num_reads&#39;</span><span class="p">],</span>
+                <span class="n">n_log_qubits</span><span class="p">,</span>
+                <span class="n">n_act_qubits</span><span class="p">,</span>
+                <span class="n">js</span><span class="p">[</span><span class="s1">&#39;solver&#39;</span><span class="p">][</span><span class="s1">&#39;outcome&#39;</span><span class="p">][</span><span class="s1">&#39;emb_precalc_dt&#39;</span><span class="p">]]</span></div>
+
+
+<div class="viewcode-block" id="DWaveLogParser._extract_failed_line">
+<a class="viewcode-back" href="../../_autosummary/post_processing.logparser.html#post_processing.logparser.DWaveLogParser._extract_failed_line">[docs]</a>
+    <span class="k">def</span> <span class="nf">_extract_failed_line</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">js</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extracts a summary for a single D-Wave&#39;s log.</span>
+
+<span class="sd">        This function extracts a &quot;failed&quot; summary line: the one corresponding</span>
+<span class="sd">        to an experiment that yielded no solutions. (A separate function</span>
+<span class="sd">        is needed as some fields might be absent from such logfile,</span>
+<span class="sd">        as compared to a &quot;successful&quot; one.)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">filename</span><span class="p">,</span>
+                <span class="n">js</span><span class="p">[</span><span class="s1">&#39;timestamps&#39;</span><span class="p">][</span><span class="s1">&#39;start&#39;</span><span class="p">],</span>
+                <span class="n">js</span><span class="p">[</span><span class="s1">&#39;timestamps&#39;</span><span class="p">][</span><span class="s1">&#39;end&#39;</span><span class="p">],</span>
+                <span class="n">js</span><span class="p">[</span><span class="s1">&#39;instance_id&#39;</span><span class="p">],</span>
+                <span class="n">get_inst_type</span><span class="p">(</span><span class="n">js</span><span class="p">[</span><span class="s1">&#39;instance_id&#39;</span><span class="p">]),</span>
+                <span class="n">get_instance_size_by_ID</span><span class="p">(</span><span class="n">js</span><span class="p">[</span><span class="s1">&#39;instance_id&#39;</span><span class="p">]),</span>
+                <span class="p">(</span><span class="n">js</span><span class="p">[</span><span class="s1">&#39;timestamps&#39;</span><span class="p">][</span><span class="s1">&#39;end&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">js</span><span class="p">[</span><span class="s1">&#39;timestamps&#39;</span><span class="p">][</span><span class="s1">&#39;start&#39;</span><span class="p">]),</span>
+                <span class="n">pd</span><span class="o">.</span><span class="n">NA</span><span class="p">,</span>
+                <span class="kc">False</span><span class="p">,</span>
+                <span class="n">js</span><span class="p">[</span><span class="s1">&#39;solver_name&#39;</span><span class="p">],</span>
+                <span class="n">pd</span><span class="o">.</span><span class="n">NA</span><span class="p">,</span>
+                <span class="n">pd</span><span class="o">.</span><span class="n">NA</span><span class="p">,</span>
+                <span class="n">pd</span><span class="o">.</span><span class="n">NA</span><span class="p">,</span>
+                <span class="n">pd</span><span class="o">.</span><span class="n">NA</span><span class="p">,</span>
+                <span class="n">pd</span><span class="o">.</span><span class="n">NA</span><span class="p">,</span>
+                <span class="n">pd</span><span class="o">.</span><span class="n">NA</span><span class="p">,</span>
+                <span class="n">pd</span><span class="o">.</span><span class="n">NA</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="DWaveLogParser.extract_samples">
+<a class="viewcode-back" href="../../_autosummary/post_processing.logparser.html#post_processing.logparser.DWaveLogParser.extract_samples">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">extract_samples</span><span class="p">(</span><span class="n">js</span><span class="p">,</span> <span class="n">logfile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">qubo_dir</span><span class="o">=</span><span class="s2">&quot;./instances/QUBO&quot;</span><span class="p">,</span> <span class="n">orig_dir</span><span class="o">=</span><span class="s2">&quot;./instances/orig&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extracts the sample data from JSON (DWave).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            js: loaded JSON,</span>
+<span class="sd">            logfile: log file name (to save into the output)</span>
+<span class="sd">            qubo_dir, orig_dir(str): respective JSON files directories</span>
+<span class="sd">                    (for objective calculations)</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            - resulting solution bitstrings are in **reverse** order:</span>
+<span class="sd">              e.g., ``[b3, b2, b1, b0]``.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            a ``pd.DataFrame`` with the samples, or ``None`` if corresponding</span>
+<span class="sd">            JSON files are not found in either of ``qubo_dir`` or ``orig_dir``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sols</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">energies</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">true_objs</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># values calculated as QUBO values (incl. penalties)</span>
+        <span class="n">num_occs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">chain_breaks</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">true_objs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">feasibility</span><span class="o">=</span><span class="p">[]</span>
+        <span class="n">orig_objs</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># values calculated using the original instance-specific code</span>
+
+        <span class="n">inst_id</span> <span class="o">=</span> <span class="n">js</span><span class="p">[</span><span class="s2">&quot;instance_id&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">instance_present_in_folder</span><span class="p">(</span><span class="n">inst_id</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">inst_id</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">logfile</span><span class="si">}</span><span class="s2">): not found in &#39;</span><span class="si">{</span><span class="n">qubo_dir</span><span class="si">}</span><span class="s2">&#39; or &#39;</span><span class="si">{</span><span class="n">orig_dir</span><span class="si">}</span><span class="s2">&#39;, skipping.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">for</span> <span class="n">sample</span> <span class="ow">in</span> <span class="n">js</span><span class="p">[</span><span class="s2">&quot;solver&quot;</span><span class="p">][</span><span class="s2">&quot;outcome&quot;</span><span class="p">][</span><span class="s2">&quot;samples&quot;</span><span class="p">]:</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">sample</span><span class="p">[</span><span class="s1">&#39;sample&#39;</span><span class="p">]</span>  <span class="c1"># sample data (solution)</span>
+            <span class="k">assert</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">s</span><span class="p">]</span> <span class="o">==</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">j</span><span class="p">)</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">))]</span>
+            <span class="c1"># if sample[&#39;chain_break_fraction&#39;]&gt;0:</span>
+            <span class="c1">#     continue</span>
+            <span class="n">bitstring</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)])</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)])</span>
+            <span class="n">sols</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bitstring</span><span class="p">)</span>
+            <span class="n">energies</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sample</span><span class="p">[</span><span class="s2">&quot;energy&quot;</span><span class="p">])</span>
+            <span class="n">num_occs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">sample</span><span class="p">[</span><span class="s2">&quot;num_occurrences&quot;</span><span class="p">]))</span>
+            <span class="n">chain_breaks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">sample</span><span class="p">[</span><span class="s2">&quot;chain_break_fraction&quot;</span><span class="p">]))</span>
+
+            <span class="n">obj</span><span class="p">,</span> <span class="n">feasible</span> <span class="o">=</span> <span class="n">calculate_QUBO_objective</span><span class="p">(</span><span class="n">inst_id</span><span class="p">,</span> <span class="p">[</span><span class="n">bitstring</span><span class="p">],</span>
+                                                     <span class="n">orig_dir</span><span class="o">=</span><span class="n">orig_dir</span><span class="p">,</span>
+                                                     <span class="n">qubo_dir</span><span class="o">=</span><span class="n">qubo_dir</span><span class="p">)</span>
+            <span class="n">true_objs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+            <span class="n">feasibility</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">feasible</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">feasible</span><span class="p">:</span>
+                <span class="n">orig_obj</span> <span class="o">=</span> <span class="n">calculate_orig_objective</span><span class="p">(</span><span class="n">inst_id</span><span class="p">,</span> <span class="p">[</span><span class="n">bitstring</span><span class="p">],</span>
+                                                    <span class="n">orig_dir</span><span class="o">=</span><span class="n">orig_dir</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">orig_obj</span> <span class="o">=</span> <span class="kc">None</span>
+
+            <span class="n">orig_objs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">orig_obj</span><span class="p">)</span>
+
+
+        <span class="n">inst_ids</span> <span class="o">=</span> <span class="p">[</span><span class="n">inst_id</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sols</span><span class="p">))]</span>
+        <span class="n">inst_type</span> <span class="o">=</span> <span class="p">[</span><span class="n">get_inst_type</span><span class="p">(</span><span class="n">inst_id</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sols</span><span class="p">))]</span>
+        <span class="n">inst_size</span> <span class="o">=</span> <span class="p">[</span><span class="n">get_instance_size_by_ID</span><span class="p">(</span><span class="n">inst_id</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="n">qubo_dir</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sols</span><span class="p">))]</span>
+        <span class="n">logfiles</span> <span class="o">=</span> <span class="p">[</span><span class="n">logfile</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sols</span><span class="p">))]</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">logfiles</span><span class="p">,</span> <span class="n">inst_ids</span><span class="p">,</span> <span class="n">inst_type</span><span class="p">,</span> <span class="n">inst_size</span><span class="p">,</span> <span class="n">sols</span><span class="p">,</span>
+                                <span class="n">feasibility</span><span class="p">,</span> <span class="n">energies</span><span class="p">,</span> <span class="n">num_occs</span><span class="p">,</span> <span class="n">chain_breaks</span><span class="p">,</span>
+                                <span class="n">true_objs</span><span class="p">,</span> <span class="n">orig_objs</span><span class="p">),</span>
+                            <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;logfile&#39;</span><span class="p">,</span> <span class="s1">&#39;inst_id&#39;</span><span class="p">,</span> <span class="s1">&#39;inst_type&#39;</span><span class="p">,</span>
+                                     <span class="s1">&#39;inst_size&#39;</span><span class="p">,</span><span class="s1">&#39;solution&#39;</span><span class="p">,</span> <span class="s1">&#39;sol_feasible&#39;</span><span class="p">,</span>
+                                     <span class="s1">&#39;energy&#39;</span><span class="p">,</span> <span class="s1">&#39;no_occ&#39;</span><span class="p">,</span> <span class="s2">&quot;chain_break_frac&quot;</span><span class="p">,</span>
+                                     <span class="s2">&quot;objective&quot;</span><span class="p">,</span> <span class="s2">&quot;orig_obj&quot;</span><span class="p">])</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="IBMLogParser">
+<a class="viewcode-back" href="../../_autosummary/post_processing.logparser.html#post_processing.logparser.IBMLogParser">[docs]</a>
+<span class="k">class</span> <span class="nc">IBMLogParser</span> <span class="p">(</span><span class="n">QPULogParser</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Implements the IBM specific log parsing code.&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">files</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">logtype</span><span class="o">=</span><span class="s2">&quot;IBM&quot;</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">log</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logtype</span><span class="o">=</span><span class="n">logtype</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;logfile&quot;</span><span class="p">,</span>
+                                          <span class="s2">&quot;start_timestamp&quot;</span><span class="p">,</span>
+                                          <span class="s2">&quot;end_timestamp&quot;</span><span class="p">,</span>
+                                          <span class="s2">&quot;instance_id&quot;</span><span class="p">,</span>
+                                          <span class="s2">&quot;instance_type&quot;</span><span class="p">,</span>
+                                          <span class="s2">&quot;qubo_vars&quot;</span><span class="p">,</span>
+                                          <span class="s2">&quot;success&quot;</span><span class="p">,</span>
+                                          <span class="s2">&quot;sol_time&quot;</span><span class="p">,</span>
+                                          <span class="s2">&quot;obj_from_QPU_sol&quot;</span><span class="p">,</span>
+                                          <span class="s2">&quot;classic_solver&quot;</span><span class="p">,</span>
+                                          <span class="s2">&quot;classic_solver_params&quot;</span><span class="p">,</span>
+                                          <span class="s2">&quot;backend_name&quot;</span><span class="p">,</span>
+                                          <span class="s2">&quot;sampler_shots&quot;</span><span class="p">,</span>
+                                          <span class="s2">&quot;est_shots&quot;</span><span class="p">])</span>
+
+<div class="viewcode-block" id="IBMLogParser._extract_successful_line">
+<a class="viewcode-back" href="../../_autosummary/post_processing.logparser.html#post_processing.logparser.IBMLogParser._extract_successful_line">[docs]</a>
+    <span class="k">def</span> <span class="nf">_extract_successful_line</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">js</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extracts a single instance run, parsing a single IBM&#39;s log.</span>
+
+<span class="sd">        This function extract a &quot;successful&quot; line: the one corresponding</span>
+<span class="sd">        to an experiment that yielded some solutions (feasible or not).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">samples</span> <span class="o">=</span> <span class="n">IBMLogParser</span><span class="o">.</span><span class="n">extract_samples</span><span class="p">(</span><span class="n">js</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">samples</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">best_sols</span> <span class="o">=</span> <span class="n">samples</span><span class="p">[</span><span class="s2">&quot;solution&quot;</span><span class="p">]</span>  <span class="c1"># choose the best from *all* samples</span>
+
+            <span class="k">return</span> <span class="p">[</span><span class="n">filename</span><span class="p">,</span>
+                    <span class="n">js</span><span class="p">[</span><span class="s1">&#39;timestamps&#39;</span><span class="p">][</span><span class="s1">&#39;start&#39;</span><span class="p">],</span>
+                    <span class="n">js</span><span class="p">[</span><span class="s1">&#39;timestamps&#39;</span><span class="p">][</span><span class="s1">&#39;end&#39;</span><span class="p">],</span>
+                    <span class="n">js</span><span class="p">[</span><span class="s1">&#39;instance_id&#39;</span><span class="p">],</span>
+                    <span class="n">get_inst_type</span><span class="p">(</span><span class="n">js</span><span class="p">[</span><span class="s1">&#39;instance_id&#39;</span><span class="p">]),</span>
+                    <span class="n">get_instance_size_by_ID</span><span class="p">(</span><span class="n">js</span><span class="p">[</span><span class="s1">&#39;instance_id&#39;</span><span class="p">]),</span>
+                    <span class="n">js</span><span class="p">[</span><span class="s2">&quot;success&quot;</span><span class="p">],</span>
+                    <span class="p">(</span><span class="n">js</span><span class="p">[</span><span class="s1">&#39;timestamps&#39;</span><span class="p">][</span><span class="s1">&#39;end&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">js</span><span class="p">[</span><span class="s1">&#39;timestamps&#39;</span><span class="p">][</span><span class="s1">&#39;start&#39;</span><span class="p">]),</span>
+                    <span class="n">calculate_orig_objective</span><span class="p">(</span><span class="n">js</span><span class="p">[</span><span class="s2">&quot;instance_id&quot;</span><span class="p">],</span> <span class="n">best_sols</span><span class="p">,</span> <span class="n">orig_dir</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">orig_dir</span><span class="p">),</span>
+                    <span class="n">js</span><span class="p">[</span><span class="s1">&#39;args&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
+                    <span class="n">js</span><span class="p">[</span><span class="s1">&#39;solver&#39;</span><span class="p">][</span><span class="s1">&#39;options&#39;</span><span class="p">][</span><span class="s1">&#39;optimizer_kwargs&#39;</span><span class="p">],</span>
+                    <span class="n">js</span><span class="p">[</span><span class="s1">&#39;solver&#39;</span><span class="p">][</span><span class="s1">&#39;options&#39;</span><span class="p">][</span><span class="s1">&#39;backend_name&#39;</span><span class="p">],</span>
+                    <span class="n">js</span><span class="p">[</span><span class="s1">&#39;solver&#39;</span><span class="p">][</span><span class="s1">&#39;options&#39;</span><span class="p">][</span><span class="s1">&#39;sampler_shots&#39;</span><span class="p">],</span>
+                    <span class="n">js</span><span class="p">[</span><span class="s1">&#39;solver&#39;</span><span class="p">][</span><span class="s1">&#39;options&#39;</span><span class="p">][</span><span class="s1">&#39;estimator_shots&#39;</span><span class="p">]]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># not quite successful run:</span>
+            <span class="c1"># This is a case when the sample contains no data for some</span>
+            <span class="c1"># reason. Still, some more information is available,</span>
+            <span class="c1"># as compared to the case processed by</span>
+            <span class="c1"># :py:func:`IBMLogParser._extract_failed_line`</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">filename</span><span class="p">,</span>
+                    <span class="n">js</span><span class="p">[</span><span class="s1">&#39;timestamps&#39;</span><span class="p">][</span><span class="s1">&#39;start&#39;</span><span class="p">],</span>
+                    <span class="n">js</span><span class="p">[</span><span class="s1">&#39;timestamps&#39;</span><span class="p">][</span><span class="s1">&#39;end&#39;</span><span class="p">],</span>
+                    <span class="n">js</span><span class="p">[</span><span class="s1">&#39;instance_id&#39;</span><span class="p">],</span>
+                    <span class="n">get_inst_type</span><span class="p">(</span><span class="n">js</span><span class="p">[</span><span class="s1">&#39;instance_id&#39;</span><span class="p">]),</span>
+                    <span class="n">get_instance_size_by_ID</span><span class="p">(</span><span class="n">js</span><span class="p">[</span><span class="s1">&#39;instance_id&#39;</span><span class="p">]),</span>
+                    <span class="s2">&quot;NO_SOLS_LOGGED&quot;</span><span class="p">,</span>
+                    <span class="p">(</span><span class="n">js</span><span class="p">[</span><span class="s1">&#39;timestamps&#39;</span><span class="p">][</span><span class="s1">&#39;end&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">js</span><span class="p">[</span><span class="s1">&#39;timestamps&#39;</span><span class="p">][</span><span class="s1">&#39;start&#39;</span><span class="p">]),</span>
+                    <span class="n">pd</span><span class="o">.</span><span class="n">NA</span><span class="p">,</span>
+                    <span class="n">js</span><span class="p">[</span><span class="s1">&#39;args&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
+                    <span class="n">js</span><span class="p">[</span><span class="s1">&#39;solver&#39;</span><span class="p">][</span><span class="s1">&#39;options&#39;</span><span class="p">][</span><span class="s1">&#39;optimizer_kwargs&#39;</span><span class="p">],</span>
+                    <span class="n">js</span><span class="p">[</span><span class="s1">&#39;solver&#39;</span><span class="p">][</span><span class="s1">&#39;options&#39;</span><span class="p">][</span><span class="s1">&#39;backend_name&#39;</span><span class="p">],</span>
+                    <span class="n">js</span><span class="p">[</span><span class="s1">&#39;solver&#39;</span><span class="p">][</span><span class="s1">&#39;options&#39;</span><span class="p">][</span><span class="s1">&#39;sampler_shots&#39;</span><span class="p">],</span>
+                    <span class="n">js</span><span class="p">[</span><span class="s1">&#39;solver&#39;</span><span class="p">][</span><span class="s1">&#39;options&#39;</span><span class="p">][</span><span class="s1">&#39;estimator_shots&#39;</span><span class="p">]]</span></div>
+
+
+
+<div class="viewcode-block" id="IBMLogParser._extract_failed_line">
+<a class="viewcode-back" href="../../_autosummary/post_processing.logparser.html#post_processing.logparser.IBMLogParser._extract_failed_line">[docs]</a>
+    <span class="k">def</span> <span class="nf">_extract_failed_line</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">js</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extracts a single instance run, parsing a single IBM log.</span>
+
+<span class="sd">        This function extract a &quot;failed&quot; summary line: the one corresponding to</span>
+<span class="sd">        an experiment that yielded no solutions. (A separate function is needed</span>
+<span class="sd">        as some fields might be absent from such logfile, as compared to a</span>
+<span class="sd">        &quot;successful&quot; one.)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">filename</span><span class="p">,</span>
+                <span class="n">js</span><span class="p">[</span><span class="s1">&#39;timestamps&#39;</span><span class="p">][</span><span class="s1">&#39;start&#39;</span><span class="p">],</span>
+                <span class="n">js</span><span class="p">[</span><span class="s1">&#39;timestamps&#39;</span><span class="p">][</span><span class="s1">&#39;end&#39;</span><span class="p">],</span>
+                <span class="n">js</span><span class="p">[</span><span class="s1">&#39;instance_id&#39;</span><span class="p">],</span>
+                <span class="n">get_inst_type</span><span class="p">(</span><span class="n">js</span><span class="p">[</span><span class="s1">&#39;instance_id&#39;</span><span class="p">]),</span>
+                <span class="n">get_instance_size_by_ID</span><span class="p">(</span><span class="n">js</span><span class="p">[</span><span class="s1">&#39;instance_id&#39;</span><span class="p">]),</span>
+                <span class="kc">False</span><span class="p">,</span>
+                <span class="p">(</span><span class="n">js</span><span class="p">[</span><span class="s1">&#39;timestamps&#39;</span><span class="p">][</span><span class="s1">&#39;end&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">js</span><span class="p">[</span><span class="s1">&#39;timestamps&#39;</span><span class="p">][</span><span class="s1">&#39;start&#39;</span><span class="p">]),</span>
+                <span class="n">pd</span><span class="o">.</span><span class="n">NA</span><span class="p">,</span>
+                <span class="n">pd</span><span class="o">.</span><span class="n">NA</span><span class="p">,</span>
+                <span class="n">pd</span><span class="o">.</span><span class="n">NA</span><span class="p">,</span>
+                <span class="n">pd</span><span class="o">.</span><span class="n">NA</span><span class="p">,</span>
+                <span class="n">pd</span><span class="o">.</span><span class="n">NA</span><span class="p">,</span>
+                <span class="n">pd</span><span class="o">.</span><span class="n">NA</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="IBMLogParser.extract_samples">
+<a class="viewcode-back" href="../../_autosummary/post_processing.logparser.html#post_processing.logparser.IBMLogParser.extract_samples">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">extract_samples</span><span class="p">(</span><span class="n">js</span><span class="p">,</span> <span class="n">logfile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">qubo_dir</span><span class="o">=</span><span class="s2">&quot;./instances/QUBO&quot;</span><span class="p">,</span>
+                        <span class="n">orig_dir</span><span class="o">=</span><span class="s2">&quot;./instances/orig&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extracts the sample data from JSON (IBM).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            js: loaded JSON,</span>
+<span class="sd">            logfile: log file name (to save into the output)</span>
+<span class="sd">            logfile(str): analyzed logfile name,</span>
+<span class="sd">            qubo_dir, orig_dir(str): respective JSON files directories</span>
+<span class="sd">                    (for objective calculations)</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            a ``pd.DataFrame`` with the samples.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">js</span><span class="p">[</span><span class="s2">&quot;success&quot;</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">jobs</span> <span class="o">=</span> <span class="n">js</span><span class="p">[</span><span class="s2">&quot;solver&quot;</span><span class="p">][</span><span class="s2">&quot;outcome&quot;</span><span class="p">][</span><span class="s2">&quot;session_data&quot;</span><span class="p">][</span><span class="s2">&quot;job_data&quot;</span><span class="p">]</span>
+        <span class="n">quasi_dists_jobs</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="n">samples</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">jobname</span><span class="p">,</span> <span class="n">job</span> <span class="ow">in</span> <span class="n">jobs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">job</span><span class="p">[</span><span class="s2">&quot;quasi_dists&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">job</span><span class="p">[</span><span class="s2">&quot;quasi_dists&quot;</span><span class="p">])</span> <span class="o">==</span> <span class="mi">1</span>
+                <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">job</span><span class="p">[</span><span class="s2">&quot;quasi_dists&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="mi">1</span>
+                <span class="n">nshots</span> <span class="o">=</span> <span class="n">job</span><span class="p">[</span><span class="s2">&quot;metadata&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;shots&quot;</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">sol</span><span class="p">,</span> <span class="n">freq</span> <span class="ow">in</span> <span class="n">job</span><span class="p">[</span><span class="s2">&quot;quasi_dists&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="n">sol</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">samples</span><span class="p">:</span>
+                        <span class="n">samples</span><span class="p">[</span><span class="n">sol</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+                    <span class="n">samples</span><span class="p">[</span><span class="n">sol</span><span class="p">]</span> <span class="o">+=</span> <span class="n">freq</span><span class="o">*</span><span class="n">nshots</span>
+
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>  <span class="c1"># couldn&#39;t find a solution in the log</span>
+
+        <span class="n">sols</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">no_occ</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">true_objs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">orig_objs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">feasibility</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">inst_id</span> <span class="o">=</span> <span class="n">js</span><span class="p">[</span><span class="s2">&quot;instance_id&quot;</span><span class="p">]</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="n">get_instance_size_by_ID</span><span class="p">(</span><span class="n">inst_id</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="n">qubo_dir</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">sample</span> <span class="ow">in</span> <span class="n">samples</span><span class="p">:</span>
+            <span class="n">bitstring</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;{:0&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">N</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;b}&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">sample</span><span class="p">))</span>
+            <span class="n">sols</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bitstring</span><span class="p">)</span>
+            <span class="n">no_occ</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">samples</span><span class="p">[</span><span class="n">sample</span><span class="p">])</span>
+
+            <span class="n">obj</span><span class="p">,</span> <span class="n">feasible</span> <span class="o">=</span> <span class="n">calculate_QUBO_objective</span><span class="p">(</span><span class="n">inst_id</span><span class="p">,</span> <span class="p">[</span><span class="n">bitstring</span><span class="p">],</span>
+                                               <span class="n">orig_dir</span><span class="o">=</span><span class="n">orig_dir</span><span class="p">,</span>
+                                               <span class="n">qubo_dir</span><span class="o">=</span><span class="n">qubo_dir</span><span class="p">)</span>
+            <span class="n">true_objs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+            <span class="n">feasibility</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">feasible</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">feasible</span><span class="p">:</span>
+                <span class="n">orig_obj</span> <span class="o">=</span> <span class="n">calculate_orig_objective</span><span class="p">(</span><span class="n">inst_id</span><span class="p">,</span> <span class="p">[</span><span class="n">bitstring</span><span class="p">],</span>
+                                               <span class="n">orig_dir</span><span class="o">=</span><span class="n">orig_dir</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">orig_obj</span> <span class="o">=</span> <span class="kc">None</span>
+
+            <span class="n">orig_objs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">orig_obj</span><span class="p">)</span>
+
+        <span class="n">IDs</span> <span class="o">=</span> <span class="p">[</span><span class="n">js</span><span class="p">[</span><span class="s2">&quot;instance_id&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">orig_objs</span><span class="p">))]</span>
+
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">IDs</span><span class="p">,</span> <span class="n">sols</span><span class="p">,</span> <span class="n">feasibility</span><span class="p">,</span> <span class="n">no_occ</span><span class="p">,</span> <span class="n">true_objs</span><span class="p">,</span>
+                                <span class="n">orig_objs</span><span class="p">),</span>
+                            <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;inst_id&#39;</span><span class="p">,</span> <span class="s1">&#39;solution&#39;</span><span class="p">,</span> <span class="s1">&#39;sol_feasible&#39;</span><span class="p">,</span>
+                                     <span class="s1">&#39;no_occ&#39;</span><span class="p">,</span> <span class="s1">&#39;objective&#39;</span><span class="p">,</span> <span class="s1">&#39;orig_obj&#39;</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="IBMLogParser.extract_convergence_data">
+<a class="viewcode-back" href="../../_autosummary/post_processing.logparser.html#post_processing.logparser.IBMLogParser.extract_convergence_data">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">extract_convergence_data</span><span class="p">(</span><span class="n">js</span><span class="p">,</span> <span class="n">logfile</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extracts the outer loop convergence data from an IBM log.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            js: loaded JSON,</span>
+<span class="sd">            logfile: log file name (to save into the output)</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            a ``pd.DataFrame`` with the samples.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># number of classic iterations</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">js</span><span class="p">[</span><span class="s1">&#39;success&#39;</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">history</span> <span class="o">=</span> <span class="n">js</span><span class="p">[</span><span class="s1">&#39;solver&#39;</span><span class="p">][</span><span class="s1">&#39;outcome&#39;</span><span class="p">][</span><span class="s1">&#39;solver_history&#39;</span><span class="p">]</span>
+        <span class="n">K</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">])</span>
+
+        <span class="n">params</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">costs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">variances</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">shots</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">timestamps</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">convdf</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;logfile&quot;</span><span class="p">,</span> <span class="s2">&quot;instance_id&quot;</span><span class="p">,</span> <span class="s2">&quot;iteration&quot;</span><span class="p">,</span>
+                                       <span class="s2">&quot;variable&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">])</span>
+
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">K</span><span class="p">):</span>
+            <span class="n">row</span> <span class="o">=</span> <span class="p">[</span><span class="n">logfile</span><span class="p">,</span> <span class="n">js</span><span class="p">[</span><span class="s2">&quot;instance_id&quot;</span><span class="p">],</span> <span class="n">k</span><span class="p">]</span>
+            <span class="n">convdf</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">convdf</span><span class="p">)]</span> <span class="o">=</span> <span class="n">row</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;cost&quot;</span><span class="p">,</span> <span class="n">history</span><span class="p">[</span><span class="s1">&#39;cost&#39;</span><span class="p">][</span><span class="n">k</span><span class="p">]]</span>
+            <span class="n">convdf</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">convdf</span><span class="p">)]</span> <span class="o">=</span> <span class="n">row</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;timestamp&quot;</span><span class="p">,</span> <span class="n">history</span><span class="p">[</span><span class="s1">&#39;timestamp&#39;</span><span class="p">][</span><span class="n">k</span><span class="p">]]</span>
+
+            <span class="n">params</span> <span class="o">=</span> <span class="n">history</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">][</span><span class="n">k</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">param</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">params</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()]):</span>
+                <span class="n">convdf</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">convdf</span><span class="p">)]</span> <span class="o">=</span> <span class="n">row</span> <span class="o">+</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;param</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">param</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;metadata&#39;</span><span class="p">][</span><span class="n">k</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">mdvar</span> <span class="ow">in</span> <span class="n">history</span><span class="p">[</span><span class="s1">&#39;metadata&#39;</span><span class="p">][</span><span class="n">k</span><span class="p">]:</span>
+                    <span class="n">convdf</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">convdf</span><span class="p">)]</span> <span class="o">=</span> <span class="n">row</span> <span class="o">+</span> <span class="p">[</span><span class="n">mdvar</span><span class="p">,</span> <span class="n">history</span><span class="p">[</span><span class="s1">&#39;metadata&#39;</span><span class="p">][</span><span class="n">k</span><span class="p">][</span><span class="n">mdvar</span><span class="p">]]</span>
+
+        <span class="k">return</span> <span class="n">convdf</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="QuEraLogParser">
+<a class="viewcode-back" href="../../_autosummary/post_processing.logparser.html#post_processing.logparser.QuEraLogParser">[docs]</a>
+<span class="k">class</span> <span class="nc">QuEraLogParser</span> <span class="p">(</span><span class="n">QPULogParser</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Implements the QuEra specific log parsing code.&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">files</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">log</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logtype</span><span class="o">=</span><span class="s2">&quot;QuEra&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;logfile&quot;</span><span class="p">,</span>
+                                          <span class="s2">&quot;start_timestamp&quot;</span><span class="p">,</span>
+                                          <span class="s2">&quot;end_timestamp&quot;</span><span class="p">,</span>
+                                          <span class="s2">&quot;instance_id&quot;</span><span class="p">,</span>
+                                          <span class="s2">&quot;instance_type&quot;</span><span class="p">,</span>
+                                          <span class="s2">&quot;qubo_vars&quot;</span><span class="p">,</span>
+                                          <span class="s2">&quot;R&quot;</span><span class="p">,</span>
+                                          <span class="s2">&quot;version&quot;</span><span class="p">,</span>
+                                          <span class="s2">&quot;success&quot;</span><span class="p">,</span>
+                                          <span class="s2">&quot;sol_time&quot;</span><span class="p">,</span>
+                                          <span class="s2">&quot;obj_from_QPU_sol&quot;</span><span class="p">])</span>
+
+<div class="viewcode-block" id="QuEraLogParser._extract_successful_line">
+<a class="viewcode-back" href="../../_autosummary/post_processing.logparser.html#post_processing.logparser.QuEraLogParser._extract_successful_line">[docs]</a>
+    <span class="k">def</span> <span class="nf">_extract_successful_line</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">js</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extracts a single instance run, parsing a single QuEra log.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">samples</span> <span class="o">=</span> <span class="n">QuEraLogParser</span><span class="o">.</span><span class="n">extract_samples</span><span class="p">(</span><span class="n">js</span><span class="p">)</span>
+        <span class="n">inst_name</span> <span class="o">=</span> <span class="n">js</span><span class="p">[</span><span class="s1">&#39;problem&#39;</span><span class="p">][</span><span class="s2">&quot;instance_name&quot;</span><span class="p">]</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">orig_dir</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">inst_name</span> <span class="o">+</span> <span class="s2">&quot;.json&quot;</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">ofile</span><span class="p">:</span>
+            <span class="n">origjs</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">ofile</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">samples</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">best_sols</span> <span class="o">=</span> <span class="n">samples</span><span class="p">[</span><span class="s2">&quot;solution&quot;</span><span class="p">]</span>  <span class="c1"># choose the best from *all* samples</span>
+            <span class="n">inst_id</span> <span class="o">=</span> <span class="n">origjs</span><span class="p">[</span><span class="s1">&#39;description&#39;</span><span class="p">][</span><span class="s1">&#39;instance_id&#39;</span><span class="p">]</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">filename</span><span class="p">,</span>
+                    <span class="n">js</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;timestamp_start&#39;</span><span class="p">],</span>
+                    <span class="n">js</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;timestamp_end&#39;</span><span class="p">],</span>
+                    <span class="n">inst_id</span><span class="p">,</span>
+                    <span class="n">get_inst_type</span><span class="p">(</span><span class="n">inst_id</span><span class="p">),</span>
+                    <span class="n">get_instance_size_by_ID</span><span class="p">(</span><span class="n">inst_id</span><span class="p">),</span>
+                    <span class="n">js</span><span class="p">[</span><span class="s1">&#39;settings&#39;</span><span class="p">][</span><span class="s1">&#39;R&#39;</span><span class="p">],</span>
+                    <span class="n">js</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;version&#39;</span><span class="p">],</span>
+                    <span class="kc">True</span><span class="p">,</span>
+                    <span class="p">(</span><span class="n">js</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;timestamp_end&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">js</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;timestamp_start&#39;</span><span class="p">]),</span>
+                    <span class="n">calculate_orig_objective</span><span class="p">(</span><span class="n">inst_id</span><span class="p">,</span> <span class="n">best_sols</span><span class="p">,</span> <span class="n">orig_dir</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">orig_dir</span><span class="p">)]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># no samples recorder (not really successful run)</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">filename</span><span class="p">,</span>
+                    <span class="n">js</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;timestamp_start&#39;</span><span class="p">],</span>
+                    <span class="n">js</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;timestamp_end&#39;</span><span class="p">],</span>
+                    <span class="n">inst_id</span><span class="p">,</span>
+                    <span class="n">get_inst_type</span><span class="p">(</span><span class="n">inst_id</span><span class="p">),</span>
+                    <span class="n">get_instance_size_by_ID</span><span class="p">(</span><span class="n">inst_id</span><span class="p">),</span>
+                    <span class="n">js</span><span class="p">[</span><span class="s1">&#39;settings&#39;</span><span class="p">][</span><span class="s1">&#39;R&#39;</span><span class="p">],</span>
+                    <span class="s2">&quot;NO_SOLS_LOGGED&quot;</span><span class="p">,</span>
+                    <span class="p">(</span><span class="n">js</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;timestamp_end&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">js</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">][</span><span class="s1">&#39;timestamp_start&#39;</span><span class="p">]),</span>
+                    <span class="n">pd</span><span class="o">.</span><span class="n">NA</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="QuEraLogParser._extract_failed_line">
+<a class="viewcode-back" href="../../_autosummary/post_processing.logparser.html#post_processing.logparser.QuEraLogParser._extract_failed_line">[docs]</a>
+    <span class="k">def</span> <span class="nf">_extract_failed_line</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">js</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;This function is not implemented, we never received such result.&quot;&quot;&quot;</span>
+        <span class="c1"># We expect it to never happen for QuEra</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;QuEra: found an unsuccessful item / something went wrong before.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="QuEraLogParser.extract_samples">
+<a class="viewcode-back" href="../../_autosummary/post_processing.logparser.html#post_processing.logparser.QuEraLogParser.extract_samples">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">extract_samples</span><span class="p">(</span><span class="n">js</span><span class="p">,</span> <span class="n">logfile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">qubo_dir</span><span class="o">=</span><span class="s2">&quot;./instances/QUBO/&quot;</span><span class="p">,</span>
+                        <span class="n">orig_dir</span><span class="o">=</span><span class="s2">&quot;./instances/orig/&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extracts the sample data from JSON (QuEra logfile).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            js: loaded JSON,</span>
+<span class="sd">            logfile: log file name (to save into the output)</span>
+<span class="sd">            qubo_dir, orig_dir(str): respective JSON files directories</span>
+<span class="sd">                    (for objective calculations)</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            The method assumes (UD)MIS instances only!</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            a ``pd.DataFrame`` with the samples.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sols</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">counts</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">feasibility</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">objs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">orig_objs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">inst_ids</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">inst_name</span> <span class="o">=</span> <span class="n">js</span><span class="p">[</span><span class="s1">&#39;problem&#39;</span><span class="p">][</span><span class="s2">&quot;instance_name&quot;</span><span class="p">]</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">orig_dir</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">inst_name</span> <span class="o">+</span> <span class="s2">&quot;.json&quot;</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">ofile</span><span class="p">:</span>
+            <span class="n">origjs</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">ofile</span><span class="p">)</span>
+
+        <span class="n">inst_id</span> <span class="o">=</span> <span class="n">origjs</span><span class="p">[</span><span class="s1">&#39;description&#39;</span><span class="p">][</span><span class="s1">&#39;instance_id&#39;</span><span class="p">]</span>
+        <span class="n">Q</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">qubojs</span> <span class="o">=</span> <span class="n">load_QUBO</span><span class="p">(</span><span class="n">get_QUBO_by_ID</span><span class="p">(</span><span class="n">inst_id</span><span class="p">))</span>
+        <span class="n">G</span> <span class="o">=</span> <span class="n">extract_G_from_json</span><span class="p">(</span><span class="n">origjs</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">sample</span> <span class="ow">in</span> <span class="n">js</span><span class="p">[</span><span class="s1">&#39;qpu_result&#39;</span><span class="p">][</span><span class="s1">&#39;qpu_counts&#39;</span><span class="p">]:</span>
+            <span class="n">bs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;g&#39;</span><span class="p">:</span><span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">:</span><span class="s1">&#39;1&#39;</span><span class="p">}</span>
+            <span class="n">bitstring</span> <span class="o">=</span> <span class="p">[</span><span class="n">bs</span><span class="p">[</span><span class="n">s</span><span class="p">]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">sample</span><span class="p">)]</span>
+            <span class="n">QUBO_obj</span><span class="p">,</span> <span class="n">fflag</span> <span class="o">=</span> <span class="n">calculate_QUBO_objective</span><span class="p">(</span><span class="n">inst_id</span><span class="p">,</span> <span class="p">[</span><span class="n">bitstring</span><span class="p">])</span>
+
+            <span class="n">inst_ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">inst_id</span><span class="p">)</span>
+            <span class="n">objs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">QUBO_obj</span><span class="p">)</span>
+            <span class="n">feasibility</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fflag</span><span class="p">)</span>
+            <span class="n">sols</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bitstring</span><span class="p">)</span>
+            <span class="n">counts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">js</span><span class="p">[</span><span class="s1">&#39;qpu_result&#39;</span><span class="p">][</span><span class="s1">&#39;qpu_counts&#39;</span><span class="p">][</span><span class="n">sample</span><span class="p">])</span>
+            <span class="n">orig_objs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">calculate_orig_objective</span><span class="p">(</span><span class="n">inst_id</span><span class="p">,</span> <span class="p">[</span><span class="n">bitstring</span><span class="p">]))</span>
+
+
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">inst_ids</span><span class="p">,</span> <span class="n">sols</span><span class="p">,</span> <span class="n">feasibility</span><span class="p">,</span> <span class="n">counts</span><span class="p">,</span>
+                                <span class="n">objs</span><span class="p">,</span> <span class="n">orig_objs</span><span class="p">),</span>
+                            <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;inst_id&#39;</span><span class="p">,</span> <span class="s1">&#39;solution&#39;</span><span class="p">,</span> <span class="s1">&#39;sol_feasible&#39;</span><span class="p">,</span>
+                                    <span class="s1">&#39;no_occ&#39;</span><span class="p">,</span> <span class="s1">&#39;objective&#39;</span><span class="p">,</span> <span class="s1">&#39;orig_obj&#39;</span><span class="p">])</span></div>
+</div>
+
+
+
+<span class="c1">######################################################################</span>
+<span class="c1"># Script commands (to be run from the command line, see USAGE)</span>
+
+<div class="viewcode-block" id="summarize_dwave">
+<a class="viewcode-back" href="../../_autosummary/post_processing.logparser.html#post_processing.logparser.summarize_dwave">[docs]</a>
+<span class="k">def</span> <span class="nf">summarize_dwave</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="n">outfile</span><span class="p">,</span> <span class="n">statsfile</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Processes all the DWave logs in the given directory.&quot;&quot;&quot;</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">DWaveLogParser</span><span class="p">(</span><span class="n">files</span><span class="o">=</span><span class="n">glob</span><span class="p">(</span><span class="n">directory</span> <span class="o">+</span> <span class="s2">&quot;/*.json&quot;</span><span class="p">))</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">process_files</span><span class="p">(</span><span class="n">outfile</span><span class="o">=</span><span class="n">outfile</span><span class="p">,</span> <span class="n">statsfile</span><span class="o">=</span><span class="n">statsfile</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="summarize_ibm">
+<a class="viewcode-back" href="../../_autosummary/post_processing.logparser.html#post_processing.logparser.summarize_ibm">[docs]</a>
+<span class="k">def</span> <span class="nf">summarize_ibm</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="n">outfile</span><span class="p">,</span> <span class="n">statsfile</span><span class="p">,</span> <span class="n">logtype</span><span class="o">=</span><span class="s2">&quot;IBM&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Processes all the IBM logs in the given directory.&quot;&quot;&quot;</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">IBMLogParser</span><span class="p">(</span><span class="n">files</span><span class="o">=</span><span class="n">glob</span><span class="p">(</span><span class="n">directory</span> <span class="o">+</span> <span class="s2">&quot;/*.json&quot;</span><span class="p">),</span> <span class="n">logtype</span><span class="o">=</span><span class="n">logtype</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">process_files</span><span class="p">(</span><span class="n">outfile</span><span class="o">=</span><span class="n">outfile</span><span class="p">,</span> <span class="n">statsfile</span><span class="o">=</span><span class="n">statsfile</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="summarize_quera">
+<a class="viewcode-back" href="../../_autosummary/post_processing.logparser.html#post_processing.logparser.summarize_quera">[docs]</a>
+<span class="k">def</span> <span class="nf">summarize_quera</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="n">outfile</span><span class="p">,</span> <span class="n">statsfile</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Processes all the QuEra logs in the given directory.&quot;&quot;&quot;</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">QuEraLogParser</span><span class="p">(</span><span class="n">files</span><span class="o">=</span><span class="n">glob</span><span class="p">(</span><span class="n">directory</span> <span class="o">+</span> <span class="s2">&quot;/*.json&quot;</span><span class="p">))</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">process_files</span><span class="p">(</span><span class="n">outfile</span><span class="o">=</span><span class="n">outfile</span><span class="p">,</span> <span class="n">statsfile</span><span class="o">=</span><span class="n">statsfile</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="extract_samples">
+<a class="viewcode-back" href="../../_autosummary/post_processing.logparser.html#post_processing.logparser.extract_samples">[docs]</a>
+<span class="k">def</span> <span class="nf">extract_samples</span><span class="p">(</span><span class="n">logtype</span><span class="p">,</span> <span class="n">infile</span><span class="p">,</span> <span class="n">outfile</span><span class="p">,</span>
+                    <span class="n">qubo_dir</span><span class="o">=</span><span class="s2">&quot;./instances/QUBO&quot;</span><span class="p">,</span> <span class="n">orig_dir</span><span class="o">=</span><span class="s2">&quot;./instances/orig&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extracts the last sample from the JSON log.&quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">infile</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">infilehandle</span><span class="p">:</span>
+        <span class="n">js</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">infilehandle</span><span class="p">)</span>
+
+    <span class="n">ParserClass</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;dwave&quot;</span><span class="p">:</span> <span class="n">DWaveLogParser</span><span class="p">,</span> <span class="s2">&quot;ibm&quot;</span><span class="p">:</span> <span class="n">IBMLogParser</span><span class="p">,</span>
+                   <span class="s2">&quot;quera&quot;</span><span class="p">:</span> <span class="n">QuEraLogParser</span><span class="p">}</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">ParserClass</span><span class="p">[</span><span class="n">logtype</span><span class="o">.</span><span class="n">lower</span><span class="p">()](</span><span class="n">files</span> <span class="o">=</span> <span class="p">[</span><span class="n">infile</span><span class="p">])</span>
+    <span class="n">samples</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">extract_samples</span><span class="p">(</span><span class="n">js</span><span class="p">,</span> <span class="n">logfile</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">infile</span><span class="p">),</span> <span class="n">qubo_dir</span><span class="o">=</span><span class="n">qubo_dir</span><span class="p">,</span> <span class="n">orig_dir</span><span class="o">=</span><span class="n">orig_dir</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">samples</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">infile</span><span class="si">}</span><span class="s2">: unsuccessful run, skipping.&quot;</span><span class="p">)</span>
+        <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">samples</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">outfile</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="extract_all_samples">
+<a class="viewcode-back" href="../../_autosummary/post_processing.logparser.html#post_processing.logparser.extract_all_samples">[docs]</a>
+<span class="k">def</span> <span class="nf">extract_all_samples</span><span class="p">(</span><span class="n">logtype</span><span class="p">,</span> <span class="n">jsondir</span><span class="p">,</span> <span class="n">outdir</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extracts the last sample from the JSONs in `jsondir`.&quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">infile</span> <span class="ow">in</span> <span class="n">glob</span><span class="p">(</span><span class="n">jsondir</span> <span class="o">+</span> <span class="s2">&quot;/benchmark_*.json&quot;</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Processing </span><span class="si">{</span><span class="n">infile</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">instance_present_in_folder</span><span class="p">(</span><span class="n">inst_id</span><span class="p">):</span>
+            <span class="n">notfound_instances</span> <span class="o">+=</span> <span class="p">[</span><span class="n">inst_id</span><span class="p">]</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">inst_id</span><span class="si">}</span><span class="s2"> (file </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">): not found in &#39;instances/&#39;, skipping.&quot;</span><span class="p">)</span>
+            <span class="k">continue</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">infile</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">infilehandle</span><span class="p">:</span>
+            <span class="n">js</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">infilehandle</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">js</span><span class="p">[</span><span class="s2">&quot;success&quot;</span><span class="p">]:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;skipped, success=</span><span class="si">{</span><span class="n">js</span><span class="p">[</span><span class="s1">&#39;success&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">continue</span>
+
+        <span class="n">outfile</span> <span class="o">=</span> <span class="n">outdir</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">infile</span><span class="p">))</span> <span class="o">+</span> \
+            <span class="s1">&#39;.sample.csv&#39;</span>
+        <span class="n">ParserClass</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;dwave&quot;</span><span class="p">:</span> <span class="n">DWaveLogParser</span><span class="p">,</span> <span class="s2">&quot;ibm&quot;</span><span class="p">:</span> <span class="n">IBMLogParser</span><span class="p">,</span>
+                    <span class="s2">&quot;quantinuum&quot;</span><span class="p">:</span> <span class="n">QuantinuumLogParser</span><span class="p">}</span>
+        <span class="n">parser</span> <span class="o">=</span> <span class="n">ParserClass</span><span class="p">[</span><span class="n">logtype</span><span class="o">.</span><span class="n">lower</span><span class="p">()](</span><span class="n">files</span> <span class="o">=</span> <span class="p">[</span><span class="n">infile</span><span class="p">])</span>
+        <span class="n">samples</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">extract_samples</span><span class="p">(</span><span class="n">js</span><span class="p">,</span> <span class="n">logfile</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">infile</span><span class="p">))</span>
+        <span class="n">samples</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">outfile</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;done&quot;</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="c1"># treats command line arguments as function name and further args</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">argv</span>
+    <span class="nb">globals</span><span class="p">()[</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]](</span><span class="o">*</span><span class="n">args</span><span class="p">[</span><span class="mi">2</span><span class="p">:])</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Alexey Bochkarev et al..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

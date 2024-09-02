@@ -1,0 +1,473 @@
+2023-10-25 21:24:15,574 bench  INFO   started 984 run(s).
+2023-10-25 21:24:15,574 bench  INFO   run start: instance_id=MWC1, args=(1000, None, None).
+2023-10-25 21:24:23,961 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0000.json".
+2023-10-25 21:24:23,977 bench  INFO   run 1/984 complete.
+2023-10-25 21:24:23,977 bench  INFO   run start: instance_id=MWC157, args=(1000, None, None).
+2023-10-25 21:24:31,434 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0001.json".
+2023-10-25 21:24:31,449 bench  INFO   run 2/984 complete.
+2023-10-25 21:24:31,449 bench  INFO   run start: instance_id=MWC158, args=(1000, None, None).
+2023-10-25 21:24:38,434 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0002.json".
+2023-10-25 21:24:38,449 bench  INFO   run 3/984 complete.
+2023-10-25 21:24:38,449 bench  INFO   run start: instance_id=MWC159, args=(1000, None, None).
+2023-10-25 21:24:45,996 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0003.json".
+2023-10-25 21:24:45,996 bench  INFO   run 4/984 complete.
+2023-10-25 21:24:45,996 bench  INFO   run start: instance_id=MWC2, args=(1000, None, None).
+2023-10-25 21:24:53,590 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0004.json".
+2023-10-25 21:24:53,590 bench  INFO   run 5/984 complete.
+2023-10-25 21:24:53,590 bench  INFO   run start: instance_id=MWC235, args=(1000, None, None).
+2023-10-25 21:25:00,497 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0005.json".
+2023-10-25 21:25:00,497 bench  INFO   run 6/984 complete.
+2023-10-25 21:25:00,497 bench  INFO   run start: instance_id=MWC236, args=(1000, None, None).
+2023-10-25 21:25:08,074 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0006.json".
+2023-10-25 21:25:08,074 bench  INFO   run 7/984 complete.
+2023-10-25 21:25:08,074 bench  INFO   run start: instance_id=MWC237, args=(1000, None, None).
+2023-10-25 21:25:15,255 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0007.json".
+2023-10-25 21:25:15,255 bench  INFO   run 8/984 complete.
+2023-10-25 21:25:15,255 bench  INFO   run start: instance_id=MWC3, args=(1000, None, None).
+2023-10-25 21:25:22,205 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0008.json".
+2023-10-25 21:25:22,220 bench  INFO   run 9/984 complete.
+2023-10-25 21:25:22,220 bench  INFO   run start: instance_id=MWC313, args=(1000, None, None).
+2023-10-25 21:25:29,811 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0009.json".
+2023-10-25 21:25:29,811 bench  INFO   run 10/984 complete.
+2023-10-25 21:25:29,827 bench  INFO   run start: instance_id=MWC314, args=(1000, None, None).
+2023-10-25 21:25:37,804 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0010.json".
+2023-10-25 21:25:37,819 bench  INFO   run 11/984 complete.
+2023-10-25 21:25:37,819 bench  INFO   run start: instance_id=MWC315, args=(1000, None, None).
+2023-10-25 21:25:45,022 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0011.json".
+2023-10-25 21:25:45,022 bench  INFO   run 12/984 complete.
+2023-10-25 21:25:45,022 bench  INFO   run start: instance_id=MWC79, args=(1000, None, None).
+2023-10-25 21:25:52,766 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0012.json".
+2023-10-25 21:25:52,766 bench  INFO   run 13/984 complete.
+2023-10-25 21:25:52,766 bench  INFO   run start: instance_id=MWC80, args=(1000, None, None).
+2023-10-25 21:25:59,634 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0013.json".
+2023-10-25 21:25:59,634 bench  INFO   run 14/984 complete.
+2023-10-25 21:25:59,634 bench  INFO   run start: instance_id=MWC81, args=(1000, None, None).
+2023-10-25 21:26:06,408 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0014.json".
+2023-10-25 21:26:06,423 bench  INFO   run 15/984 complete.
+2023-10-25 21:26:06,423 bench  INFO   run start: instance_id=UDMIS001, args=(1000, None, None).
+2023-10-25 21:26:13,182 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0015.json".
+2023-10-25 21:26:13,197 bench  INFO   run 16/984 complete.
+2023-10-25 21:26:13,197 bench  INFO   run start: instance_id=UDMIS002, args=(1000, None, None).
+2023-10-25 21:26:21,046 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0016.json".
+2023-10-25 21:26:21,046 bench  INFO   run 17/984 complete.
+2023-10-25 21:26:21,046 bench  INFO   run start: instance_id=UDMIS003, args=(1000, None, None).
+2023-10-25 21:26:27,914 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0017.json".
+2023-10-25 21:26:27,914 bench  INFO   run 18/984 complete.
+2023-10-25 21:26:27,914 bench  INFO   run start: instance_id=UDMIS004, args=(1000, None, None).
+2023-10-25 21:26:34,752 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0018.json".
+2023-10-25 21:26:34,752 bench  INFO   run 19/984 complete.
+2023-10-25 21:26:34,752 bench  INFO   run start: instance_id=UDMIS005, args=(1000, None, None).
+2023-10-25 21:26:41,841 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0019.json".
+2023-10-25 21:26:41,841 bench  INFO   run 20/984 complete.
+2023-10-25 21:26:41,841 bench  INFO   run start: instance_id=UDMIS006, args=(1000, None, None).
+2023-10-25 21:26:48,799 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0020.json".
+2023-10-25 21:26:48,799 bench  INFO   run 21/984 complete.
+2023-10-25 21:26:48,799 bench  INFO   run start: instance_id=UDMIS007, args=(1000, None, None).
+2023-10-25 21:26:57,012 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0021.json".
+2023-10-25 21:26:57,027 bench  INFO   run 22/984 complete.
+2023-10-25 21:26:57,027 bench  INFO   run start: instance_id=UDMIS008, args=(1000, None, None).
+2023-10-25 21:27:03,880 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0022.json".
+2023-10-25 21:27:03,896 bench  INFO   run 23/984 complete.
+2023-10-25 21:27:03,896 bench  INFO   run start: instance_id=UDMIS009, args=(1000, None, None).
+2023-10-25 21:27:12,377 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0023.json".
+2023-10-25 21:27:12,393 bench  INFO   run 24/984 complete.
+2023-10-25 21:27:12,393 bench  INFO   run start: instance_id=UDMIS010, args=(1000, None, None).
+2023-10-25 21:27:19,549 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0024.json".
+2023-10-25 21:27:19,549 bench  INFO   run 25/984 complete.
+2023-10-25 21:27:19,549 bench  INFO   run start: instance_id=UDMIS011, args=(1000, None, None).
+2023-10-25 21:27:27,020 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0025.json".
+2023-10-25 21:27:27,036 bench  INFO   run 26/984 complete.
+2023-10-25 21:27:27,036 bench  INFO   run start: instance_id=UDMIS012, args=(1000, None, None).
+2023-10-25 21:27:34,069 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0026.json".
+2023-10-25 21:27:34,085 bench  INFO   run 27/984 complete.
+2023-10-25 21:27:34,085 bench  INFO   run start: instance_id=UDMIS013, args=(1000, None, None).
+2023-10-25 21:27:41,210 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0027.json".
+2023-10-25 21:27:41,226 bench  INFO   run 28/984 complete.
+2023-10-25 21:27:41,226 bench  INFO   run start: instance_id=UDMIS014, args=(1000, None, None).
+2023-10-25 21:27:49,936 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0028.json".
+2023-10-25 21:27:49,951 bench  INFO   run 29/984 complete.
+2023-10-25 21:27:49,951 bench  INFO   run start: instance_id=UDMIS015, args=(1000, None, None).
+2023-10-25 21:27:56,806 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0029.json".
+2023-10-25 21:27:56,806 bench  INFO   run 30/984 complete.
+2023-10-25 21:27:56,806 bench  INFO   run start: instance_id=UDMIS1T, args=(1000, None, None).
+2023-10-25 21:28:04,102 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0030.json".
+2023-10-25 21:28:04,102 bench  INFO   run 31/984 complete.
+2023-10-25 21:28:04,102 bench  INFO   run start: instance_id=UDMIS2T, args=(1000, None, None).
+2023-10-25 21:28:14,846 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0031.json".
+2023-10-25 21:28:14,846 bench  INFO   run 32/984 complete.
+2023-10-25 21:28:14,846 bench  INFO   run start: instance_id=UDMIS3T, args=(1000, None, None).
+2023-10-25 21:28:25,704 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0032.json".
+2023-10-25 21:28:25,720 bench  INFO   run 33/984 complete.
+2023-10-25 21:28:25,720 bench  INFO   run start: instance_id=MWC160, args=(1000, None, None).
+2023-10-25 21:28:33,020 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0033.json".
+2023-10-25 21:28:33,035 bench  INFO   run 34/984 complete.
+2023-10-25 21:28:33,035 bench  INFO   run start: instance_id=MWC161, args=(1000, None, None).
+2023-10-25 21:28:40,230 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0034.json".
+2023-10-25 21:28:40,245 bench  INFO   run 35/984 complete.
+2023-10-25 21:28:40,245 bench  INFO   run start: instance_id=MWC162, args=(1000, None, None).
+2023-10-25 21:28:48,254 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0035.json".
+2023-10-25 21:28:48,269 bench  INFO   run 36/984 complete.
+2023-10-25 21:28:48,269 bench  INFO   run start: instance_id=MWC238, args=(1000, None, None).
+2023-10-25 21:28:57,371 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0036.json".
+2023-10-25 21:28:57,371 bench  INFO   run 37/984 complete.
+2023-10-25 21:28:57,371 bench  INFO   run start: instance_id=MWC239, args=(1000, None, None).
+2023-10-25 21:29:04,734 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0037.json".
+2023-10-25 21:29:04,734 bench  INFO   run 38/984 complete.
+2023-10-25 21:29:04,734 bench  INFO   run start: instance_id=MWC240, args=(1000, None, None).
+2023-10-25 21:29:12,125 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0038.json".
+2023-10-25 21:29:12,125 bench  INFO   run 39/984 complete.
+2023-10-25 21:29:12,125 bench  INFO   run start: instance_id=MWC316, args=(1000, None, None).
+2023-10-25 21:29:19,257 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0039.json".
+2023-10-25 21:29:19,273 bench  INFO   run 40/984 complete.
+2023-10-25 21:29:19,273 bench  INFO   run start: instance_id=MWC317, args=(1000, None, None).
+2023-10-25 21:29:26,657 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0040.json".
+2023-10-25 21:29:26,672 bench  INFO   run 41/984 complete.
+2023-10-25 21:29:26,672 bench  INFO   run start: instance_id=MWC318, args=(1000, None, None).
+2023-10-25 21:29:34,329 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0041.json".
+2023-10-25 21:29:34,345 bench  INFO   run 42/984 complete.
+2023-10-25 21:29:34,345 bench  INFO   run start: instance_id=MWC4, args=(1000, None, None).
+2023-10-25 21:29:41,428 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0042.json".
+2023-10-25 21:29:41,444 bench  INFO   run 43/984 complete.
+2023-10-25 21:29:41,444 bench  INFO   run start: instance_id=MWC5, args=(1000, None, None).
+2023-10-25 21:29:48,292 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0043.json".
+2023-10-25 21:29:48,292 bench  INFO   run 44/984 complete.
+2023-10-25 21:29:48,308 bench  INFO   run start: instance_id=MWC6, args=(1000, None, None).
+2023-10-25 21:29:55,381 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0044.json".
+2023-10-25 21:29:55,381 bench  INFO   run 45/984 complete.
+2023-10-25 21:29:55,381 bench  INFO   run start: instance_id=MWC82, args=(1000, None, None).
+2023-10-25 21:30:11,952 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0045.json".
+2023-10-25 21:30:11,968 bench  INFO   run 46/984 complete.
+2023-10-25 21:30:11,968 bench  INFO   run start: instance_id=MWC83, args=(1000, None, None).
+2023-10-25 21:30:20,130 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0046.json".
+2023-10-25 21:30:20,130 bench  INFO   run 47/984 complete.
+2023-10-25 21:30:20,130 bench  INFO   run start: instance_id=MWC84, args=(1000, None, None).
+2023-10-25 21:30:27,494 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0047.json".
+2023-10-25 21:30:27,510 bench  INFO   run 48/984 complete.
+2023-10-25 21:30:27,510 bench  INFO   run start: instance_id=UDMIS016, args=(1000, None, None).
+2023-10-25 21:30:39,860 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0048.json".
+2023-10-25 21:30:39,860 bench  INFO   run 49/984 complete.
+2023-10-25 21:30:39,860 bench  INFO   run start: instance_id=UDMIS017, args=(1000, None, None).
+2023-10-25 21:30:49,548 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0049.json".
+2023-10-25 21:30:49,548 bench  INFO   run 50/984 complete.
+2023-10-25 21:30:49,548 bench  INFO   run start: instance_id=UDMIS018, args=(1000, None, None).
+2023-10-25 21:31:00,940 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0050.json".
+2023-10-25 21:31:00,956 bench  INFO   run 51/984 complete.
+2023-10-25 21:31:00,956 bench  INFO   run start: instance_id=UDMIS019, args=(1000, None, None).
+2023-10-25 21:31:10,650 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0051.json".
+2023-10-25 21:31:10,650 bench  INFO   run 52/984 complete.
+2023-10-25 21:31:10,650 bench  INFO   run start: instance_id=UDMIS020, args=(1000, None, None).
+2023-10-25 21:31:20,341 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0052.json".
+2023-10-25 21:31:20,356 bench  INFO   run 53/984 complete.
+2023-10-25 21:31:20,356 bench  INFO   run start: instance_id=UDMIS021, args=(1000, None, None).
+2023-10-25 21:31:31,352 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0053.json".
+2023-10-25 21:31:31,352 bench  INFO   run 54/984 complete.
+2023-10-25 21:31:31,352 bench  INFO   run start: instance_id=UDMIS022, args=(1000, None, None).
+2023-10-25 21:31:41,244 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0054.json".
+2023-10-25 21:31:41,244 bench  INFO   run 55/984 complete.
+2023-10-25 21:31:41,244 bench  INFO   run start: instance_id=UDMIS023, args=(1000, None, None).
+2023-10-25 21:31:52,474 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0055.json".
+2023-10-25 21:31:52,490 bench  INFO   run 56/984 complete.
+2023-10-25 21:31:52,490 bench  INFO   run start: instance_id=UDMIS024, args=(1000, None, None).
+2023-10-25 21:32:01,548 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0056.json".
+2023-10-25 21:32:01,564 bench  INFO   run 57/984 complete.
+2023-10-25 21:32:01,564 bench  INFO   run start: instance_id=UDMIS025, args=(1000, None, None).
+2023-10-25 21:32:15,629 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0057.json".
+2023-10-25 21:32:15,629 bench  INFO   run 58/984 complete.
+2023-10-25 21:32:15,629 bench  INFO   run start: instance_id=UDMIS026, args=(1000, None, None).
+2023-10-25 21:32:25,091 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0058.json".
+2023-10-25 21:32:25,106 bench  INFO   run 59/984 complete.
+2023-10-25 21:32:25,106 bench  INFO   run start: instance_id=UDMIS027, args=(1000, None, None).
+2023-10-25 21:32:34,089 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0059.json".
+2023-10-25 21:32:34,104 bench  INFO   run 60/984 complete.
+2023-10-25 21:32:34,104 bench  INFO   run start: instance_id=UDMIS028, args=(1000, None, None).
+2023-10-25 21:32:41,137 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0060.json".
+2023-10-25 21:32:41,152 bench  INFO   run 61/984 complete.
+2023-10-25 21:32:41,152 bench  INFO   run start: instance_id=UDMIS029, args=(1000, None, None).
+2023-10-25 21:32:48,223 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0061.json".
+2023-10-25 21:32:48,239 bench  INFO   run 62/984 complete.
+2023-10-25 21:32:48,239 bench  INFO   run start: instance_id=UDMIS030, args=(1000, None, None).
+2023-10-25 21:32:55,234 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0062.json".
+2023-10-25 21:32:55,249 bench  INFO   run 63/984 complete.
+2023-10-25 21:32:55,249 bench  INFO   run start: instance_id=TSP1, args=(1000, None, None).
+2023-10-25 21:33:02,579 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0063.json".
+2023-10-25 21:33:02,595 bench  INFO   run 64/984 complete.
+2023-10-25 21:33:02,595 bench  INFO   run start: instance_id=TSP105, args=(1000, None, None).
+2023-10-25 21:33:10,154 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0064.json".
+2023-10-25 21:33:10,154 bench  INFO   run 65/984 complete.
+2023-10-25 21:33:10,154 bench  INFO   run start: instance_id=TSP118, args=(1000, None, None).
+2023-10-25 21:33:17,264 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0065.json".
+2023-10-25 21:33:17,279 bench  INFO   run 66/984 complete.
+2023-10-25 21:33:17,279 bench  INFO   run start: instance_id=TSP131, args=(1000, None, None).
+2023-10-25 21:33:24,369 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0066.json".
+2023-10-25 21:33:24,369 bench  INFO   run 67/984 complete.
+2023-10-25 21:33:24,369 bench  INFO   run start: instance_id=TSP14, args=(1000, None, None).
+2023-10-25 21:33:31,626 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0067.json".
+2023-10-25 21:33:31,626 bench  INFO   run 68/984 complete.
+2023-10-25 21:33:31,626 bench  INFO   run start: instance_id=TSP144, args=(1000, None, None).
+2023-10-25 21:33:38,803 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0068.json".
+2023-10-25 21:33:38,818 bench  INFO   run 69/984 complete.
+2023-10-25 21:33:38,818 bench  INFO   run start: instance_id=TSP157, args=(1000, None, None).
+2023-10-25 21:33:46,269 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0069.json".
+2023-10-25 21:33:46,285 bench  INFO   run 70/984 complete.
+2023-10-25 21:33:46,285 bench  INFO   run start: instance_id=TSP170, args=(1000, None, None).
+2023-10-25 21:33:53,511 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0070.json".
+2023-10-25 21:33:53,511 bench  INFO   run 71/984 complete.
+2023-10-25 21:33:53,511 bench  INFO   run start: instance_id=TSP183, args=(1000, None, None).
+2023-10-25 21:34:00,765 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0071.json".
+2023-10-25 21:34:00,781 bench  INFO   run 72/984 complete.
+2023-10-25 21:34:00,781 bench  INFO   run start: instance_id=TSP27, args=(1000, None, None).
+2023-10-25 21:34:12,614 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0072.json".
+2023-10-25 21:34:12,614 bench  INFO   run 73/984 complete.
+2023-10-25 21:34:12,614 bench  INFO   run start: instance_id=TSP40, args=(1000, None, None).
+2023-10-25 21:34:19,903 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0073.json".
+2023-10-25 21:34:19,903 bench  INFO   run 74/984 complete.
+2023-10-25 21:34:19,903 bench  INFO   run start: instance_id=TSP53, args=(1000, None, None).
+2023-10-25 21:34:27,203 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0074.json".
+2023-10-25 21:34:27,219 bench  INFO   run 75/984 complete.
+2023-10-25 21:34:27,219 bench  INFO   run start: instance_id=TSP66, args=(1000, None, None).
+2023-10-25 21:34:34,409 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0075.json".
+2023-10-25 21:34:34,409 bench  INFO   run 76/984 complete.
+2023-10-25 21:34:34,409 bench  INFO   run start: instance_id=TSP79, args=(1000, None, None).
+2023-10-25 21:34:41,966 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0076.json".
+2023-10-25 21:34:41,966 bench  INFO   run 77/984 complete.
+2023-10-25 21:34:41,966 bench  INFO   run start: instance_id=TSP92, args=(1000, None, None).
+2023-10-25 21:34:49,919 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0077.json".
+2023-10-25 21:34:49,934 bench  INFO   run 78/984 complete.
+2023-10-25 21:34:49,934 bench  INFO   run start: instance_id=MWC163, args=(1000, None, None).
+2023-10-25 21:34:57,189 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0078.json".
+2023-10-25 21:34:57,205 bench  INFO   run 79/984 complete.
+2023-10-25 21:34:57,205 bench  INFO   run start: instance_id=MWC164, args=(1000, None, None).
+2023-10-25 21:35:05,493 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0079.json".
+2023-10-25 21:35:05,508 bench  INFO   run 80/984 complete.
+2023-10-25 21:35:05,508 bench  INFO   run start: instance_id=MWC165, args=(1000, None, None).
+2023-10-25 21:35:14,593 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0080.json".
+2023-10-25 21:35:14,609 bench  INFO   run 81/984 complete.
+2023-10-25 21:35:14,609 bench  INFO   run start: instance_id=MWC241, args=(1000, None, None).
+2023-10-25 21:35:21,888 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0081.json".
+2023-10-25 21:35:21,888 bench  INFO   run 82/984 complete.
+2023-10-25 21:35:21,888 bench  INFO   run start: instance_id=MWC242, args=(1000, None, None).
+2023-10-25 21:35:29,642 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0082.json".
+2023-10-25 21:35:29,657 bench  INFO   run 83/984 complete.
+2023-10-25 21:35:29,657 bench  INFO   run start: instance_id=MWC243, args=(1000, None, None).
+2023-10-25 21:35:38,790 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0083.json".
+2023-10-25 21:35:38,805 bench  INFO   run 84/984 complete.
+2023-10-25 21:35:38,805 bench  INFO   run start: instance_id=MWC319, args=(1000, None, None).
+2023-10-25 21:35:46,749 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0084.json".
+2023-10-25 21:35:46,765 bench  INFO   run 85/984 complete.
+2023-10-25 21:35:46,765 bench  INFO   run start: instance_id=MWC320, args=(1000, None, None).
+2023-10-25 21:35:54,883 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0085.json".
+2023-10-25 21:35:54,883 bench  INFO   run 86/984 complete.
+2023-10-25 21:35:54,883 bench  INFO   run start: instance_id=MWC321, args=(1000, None, None).
+2023-10-25 21:36:04,421 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0086.json".
+2023-10-25 21:36:04,436 bench  INFO   run 87/984 complete.
+2023-10-25 21:36:04,436 bench  INFO   run start: instance_id=MWC7, args=(1000, None, None).
+2023-10-25 21:36:11,323 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0087.json".
+2023-10-25 21:36:11,339 bench  INFO   run 88/984 complete.
+2023-10-25 21:36:11,339 bench  INFO   run start: instance_id=MWC8, args=(1000, None, None).
+2023-10-25 21:36:19,782 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0088.json".
+2023-10-25 21:36:19,798 bench  INFO   run 89/984 complete.
+2023-10-25 21:36:19,798 bench  INFO   run start: instance_id=MWC85, args=(1000, None, None).
+2023-10-25 21:36:28,504 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0089.json".
+2023-10-25 21:36:28,520 bench  INFO   run 90/984 complete.
+2023-10-25 21:36:28,520 bench  INFO   run start: instance_id=MWC86, args=(1000, None, None).
+2023-10-25 21:36:42,027 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0090.json".
+2023-10-25 21:36:42,042 bench  INFO   run 91/984 complete.
+2023-10-25 21:36:42,042 bench  INFO   run start: instance_id=MWC87, args=(1000, None, None).
+2023-10-25 21:36:50,619 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0091.json".
+2023-10-25 21:36:50,635 bench  INFO   run 92/984 complete.
+2023-10-25 21:36:50,635 bench  INFO   run start: instance_id=MWC9, args=(1000, None, None).
+2023-10-25 21:36:58,920 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0092.json".
+2023-10-25 21:36:58,936 bench  INFO   run 93/984 complete.
+2023-10-25 21:36:58,936 bench  INFO   run start: instance_id=TSP106, args=(1000, None, None).
+2023-10-25 21:37:08,312 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0093.json".
+2023-10-25 21:37:08,312 bench  INFO   run 94/984 complete.
+2023-10-25 21:37:08,312 bench  INFO   run start: instance_id=TSP119, args=(1000, None, None).
+2023-10-25 21:37:16,703 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0094.json".
+2023-10-25 21:37:16,719 bench  INFO   run 95/984 complete.
+2023-10-25 21:37:16,719 bench  INFO   run start: instance_id=TSP132, args=(1000, None, None).
+2023-10-25 21:37:25,378 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0095.json".
+2023-10-25 21:37:25,378 bench  INFO   run 96/984 complete.
+2023-10-25 21:37:25,378 bench  INFO   run start: instance_id=TSP145, args=(1000, None, None).
+2023-10-25 21:37:33,880 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0096.json".
+2023-10-25 21:37:33,880 bench  INFO   run 97/984 complete.
+2023-10-25 21:37:33,880 bench  INFO   run start: instance_id=TSP15, args=(1000, None, None).
+2023-10-25 21:37:42,093 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0097.json".
+2023-10-25 21:37:42,093 bench  INFO   run 98/984 complete.
+2023-10-25 21:37:42,093 bench  INFO   run start: instance_id=TSP158, args=(1000, None, None).
+2023-10-25 21:37:50,462 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0098.json".
+2023-10-25 21:37:50,462 bench  INFO   run 99/984 complete.
+2023-10-25 21:37:50,462 bench  INFO   run start: instance_id=TSP171, args=(1000, None, None).
+2023-10-25 21:37:58,868 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0099.json".
+2023-10-25 21:37:58,883 bench  INFO   run 100/984 complete.
+2023-10-25 21:37:58,883 bench  INFO   run start: instance_id=TSP184, args=(1000, None, None).
+2023-10-25 21:38:06,759 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0100.json".
+2023-10-25 21:38:06,774 bench  INFO   run 101/984 complete.
+2023-10-25 21:38:06,774 bench  INFO   run start: instance_id=TSP2, args=(1000, None, None).
+2023-10-25 21:38:14,752 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0101.json".
+2023-10-25 21:38:14,752 bench  INFO   run 102/984 complete.
+2023-10-25 21:38:14,752 bench  INFO   run start: instance_id=TSP28, args=(1000, None, None).
+2023-10-25 21:38:22,367 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0102.json".
+2023-10-25 21:38:22,382 bench  INFO   run 103/984 complete.
+2023-10-25 21:38:22,382 bench  INFO   run start: instance_id=TSP41, args=(1000, None, None).
+2023-10-25 21:38:30,622 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0103.json".
+2023-10-25 21:38:30,622 bench  INFO   run 104/984 complete.
+2023-10-25 21:38:30,622 bench  INFO   run start: instance_id=TSP54, args=(1000, None, None).
+2023-10-25 21:38:39,228 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0104.json".
+2023-10-25 21:38:39,228 bench  INFO   run 105/984 complete.
+2023-10-25 21:38:39,228 bench  INFO   run start: instance_id=TSP67, args=(1000, None, None).
+2023-10-25 21:38:48,801 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0105.json".
+2023-10-25 21:38:48,816 bench  INFO   run 106/984 complete.
+2023-10-25 21:38:48,816 bench  INFO   run start: instance_id=TSP80, args=(1000, None, None).
+2023-10-25 21:38:58,835 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0106.json".
+2023-10-25 21:38:58,850 bench  INFO   run 107/984 complete.
+2023-10-25 21:38:58,850 bench  INFO   run start: instance_id=TSP93, args=(1000, None, None).
+2023-10-25 21:39:08,679 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0107.json".
+2023-10-25 21:39:08,694 bench  INFO   run 108/984 complete.
+2023-10-25 21:39:08,694 bench  INFO   run start: instance_id=UDMIS031, args=(1000, None, None).
+2023-10-25 21:39:17,781 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0108.json".
+2023-10-25 21:39:17,796 bench  INFO   run 109/984 complete.
+2023-10-25 21:39:17,796 bench  INFO   run start: instance_id=UDMIS032, args=(1000, None, None).
+2023-10-25 21:39:26,916 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0109.json".
+2023-10-25 21:39:26,916 bench  INFO   run 110/984 complete.
+2023-10-25 21:39:26,916 bench  INFO   run start: instance_id=UDMIS033, args=(1000, None, None).
+2023-10-25 21:39:35,829 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0110.json".
+2023-10-25 21:39:35,829 bench  INFO   run 111/984 complete.
+2023-10-25 21:39:35,829 bench  INFO   run start: instance_id=UDMIS034, args=(1000, None, None).
+2023-10-25 21:39:45,945 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0111.json".
+2023-10-25 21:39:45,945 bench  INFO   run 112/984 complete.
+2023-10-25 21:39:45,945 bench  INFO   run start: instance_id=UDMIS035, args=(1000, None, None).
+2023-10-25 21:40:01,085 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0112.json".
+2023-10-25 21:40:01,085 bench  INFO   run 113/984 complete.
+2023-10-25 21:40:01,085 bench  INFO   run start: instance_id=UDMIS036, args=(1000, None, None).
+2023-10-25 21:40:08,355 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0113.json".
+2023-10-25 21:40:08,370 bench  INFO   run 114/984 complete.
+2023-10-25 21:40:08,370 bench  INFO   run start: instance_id=UDMIS037, args=(1000, None, None).
+2023-10-25 21:40:15,746 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0114.json".
+2023-10-25 21:40:15,746 bench  INFO   run 115/984 complete.
+2023-10-25 21:40:15,746 bench  INFO   run start: instance_id=UDMIS038, args=(1000, None, None).
+2023-10-25 21:40:23,734 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0115.json".
+2023-10-25 21:40:23,750 bench  INFO   run 116/984 complete.
+2023-10-25 21:40:23,750 bench  INFO   run start: instance_id=UDMIS039, args=(1000, None, None).
+2023-10-25 21:40:31,853 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0116.json".
+2023-10-25 21:40:31,853 bench  INFO   run 117/984 complete.
+2023-10-25 21:40:31,853 bench  INFO   run start: instance_id=UDMIS040, args=(1000, None, None).
+2023-10-25 21:40:41,875 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0117.json".
+2023-10-25 21:40:41,875 bench  INFO   run 118/984 complete.
+2023-10-25 21:40:41,875 bench  INFO   run start: instance_id=UDMIS041, args=(1000, None, None).
+2023-10-25 21:40:52,336 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0118.json".
+2023-10-25 21:40:52,352 bench  INFO   run 119/984 complete.
+2023-10-25 21:40:52,352 bench  INFO   run start: instance_id=UDMIS042, args=(1000, None, None).
+2023-10-25 21:41:05,789 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0119.json".
+2023-10-25 21:41:05,789 bench  INFO   run 120/984 complete.
+2023-10-25 21:41:05,789 bench  INFO   run start: instance_id=UDMIS043, args=(1000, None, None).
+2023-10-25 21:41:16,623 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0120.json".
+2023-10-25 21:41:16,638 bench  INFO   run 121/984 complete.
+2023-10-25 21:41:16,638 bench  INFO   run start: instance_id=UDMIS044, args=(1000, None, None).
+2023-10-25 21:41:29,154 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0121.json".
+2023-10-25 21:41:29,154 bench  INFO   run 122/984 complete.
+2023-10-25 21:41:29,154 bench  INFO   run start: instance_id=UDMIS045, args=(1000, None, None).
+2023-10-25 21:41:38,992 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0122.json".
+2023-10-25 21:41:39,007 bench  INFO   run 123/984 complete.
+2023-10-25 21:41:39,007 bench  INFO   run start: instance_id=MWC10, args=(1000, None, None).
+2023-10-25 21:41:50,192 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0123.json".
+2023-10-25 21:41:50,207 bench  INFO   run 124/984 complete.
+2023-10-25 21:41:50,207 bench  INFO   run start: instance_id=MWC11, args=(1000, None, None).
+2023-10-25 21:42:04,874 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0124.json".
+2023-10-25 21:42:04,874 bench  INFO   run 125/984 complete.
+2023-10-25 21:42:04,874 bench  INFO   run start: instance_id=MWC12, args=(1000, None, None).
+2023-10-25 21:42:25,498 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0125.json".
+2023-10-25 21:42:25,514 bench  INFO   run 126/984 complete.
+2023-10-25 21:42:25,514 bench  INFO   run start: instance_id=MWC166, args=(1000, None, None).
+2023-10-25 21:42:43,329 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0126.json".
+2023-10-25 21:42:43,344 bench  INFO   run 127/984 complete.
+2023-10-25 21:42:43,344 bench  INFO   run start: instance_id=MWC167, args=(1000, None, None).
+2023-10-25 21:42:57,040 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0127.json".
+2023-10-25 21:42:57,040 bench  INFO   run 128/984 complete.
+2023-10-25 21:42:57,040 bench  INFO   run start: instance_id=MWC168, args=(1000, None, None).
+2023-10-25 21:43:14,553 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0128.json".
+2023-10-25 21:43:14,568 bench  INFO   run 129/984 complete.
+2023-10-25 21:43:14,568 bench  INFO   run start: instance_id=MWC244, args=(1000, None, None).
+2023-10-25 21:43:30,794 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0129.json".
+2023-10-25 21:43:30,794 bench  INFO   run 130/984 complete.
+2023-10-25 21:43:30,794 bench  INFO   run start: instance_id=MWC245, args=(1000, None, None).
+2023-10-25 21:43:45,964 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0130.json".
+2023-10-25 21:43:45,980 bench  INFO   run 131/984 complete.
+2023-10-25 21:43:45,980 bench  INFO   run start: instance_id=MWC246, args=(1000, None, None).
+2023-10-25 21:43:59,018 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0131.json".
+2023-10-25 21:43:59,018 bench  INFO   run 132/984 complete.
+2023-10-25 21:43:59,018 bench  INFO   run start: instance_id=MWC322, args=(1000, None, None).
+2023-10-25 21:44:16,416 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0132.json".
+2023-10-25 21:44:16,432 bench  INFO   run 133/984 complete.
+2023-10-25 21:44:16,432 bench  INFO   run start: instance_id=MWC323, args=(1000, None, None).
+2023-10-25 21:44:32,385 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0133.json".
+2023-10-25 21:44:32,400 bench  INFO   run 134/984 complete.
+2023-10-25 21:44:32,400 bench  INFO   run start: instance_id=MWC324, args=(1000, None, None).
+2023-10-25 21:44:50,024 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0134.json".
+2023-10-25 21:44:50,040 bench  INFO   run 135/984 complete.
+2023-10-25 21:44:50,040 bench  INFO   run start: instance_id=MWC88, args=(1000, None, None).
+2023-10-25 21:45:05,954 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0135.json".
+2023-10-25 21:45:05,970 bench  INFO   run 136/984 complete.
+2023-10-25 21:45:05,970 bench  INFO   run start: instance_id=MWC89, args=(1000, None, None).
+2023-10-25 21:45:25,259 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0136.json".
+2023-10-25 21:45:25,259 bench  INFO   run 137/984 complete.
+2023-10-25 21:45:25,259 bench  INFO   run start: instance_id=MWC90, args=(1000, None, None).
+2023-10-25 21:45:46,117 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0137.json".
+2023-10-25 21:45:46,133 bench  INFO   run 138/984 complete.
+2023-10-25 21:45:46,133 bench  INFO   run start: instance_id=UDMIS046, args=(1000, None, None).
+2023-10-25 21:46:00,474 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0138.json".
+2023-10-25 21:46:00,490 bench  INFO   run 139/984 complete.
+2023-10-25 21:46:00,490 bench  INFO   run start: instance_id=UDMIS047, args=(1000, None, None).
+2023-10-25 21:46:25,104 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0139.json".
+2023-10-25 21:46:25,119 bench  INFO   run 140/984 complete.
+2023-10-25 21:46:25,119 bench  INFO   run start: instance_id=UDMIS048, args=(1000, None, None).
+2023-10-25 21:46:37,002 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0140.json".
+2023-10-25 21:46:37,017 bench  INFO   run 141/984 complete.
+2023-10-25 21:46:37,017 bench  INFO   run start: instance_id=UDMIS049, args=(1000, None, None).
+2023-10-25 21:46:51,651 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0141.json".
+2023-10-25 21:46:51,666 bench  INFO   run 142/984 complete.
+2023-10-25 21:46:51,666 bench  INFO   run start: instance_id=UDMIS050, args=(1000, None, None).
+2023-10-25 21:47:03,955 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0142.json".
+2023-10-25 21:47:03,970 bench  INFO   run 143/984 complete.
+2023-10-25 21:47:03,970 bench  INFO   run start: instance_id=UDMIS051, args=(1000, None, None).
+2023-10-25 21:47:16,742 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0143.json".
+2023-10-25 21:47:16,742 bench  INFO   run 144/984 complete.
+2023-10-25 21:47:16,742 bench  INFO   run start: instance_id=UDMIS052, args=(1000, None, None).
+2023-10-25 21:47:29,425 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0144.json".
+2023-10-25 21:47:29,440 bench  INFO   run 145/984 complete.
+2023-10-25 21:47:29,440 bench  INFO   run start: instance_id=UDMIS053, args=(1000, None, None).
+2023-10-25 21:47:42,805 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0145.json".
+2023-10-25 21:47:42,821 bench  INFO   run 146/984 complete.
+2023-10-25 21:47:42,821 bench  INFO   run start: instance_id=UDMIS054, args=(1000, None, None).
+2023-10-25 21:47:52,866 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0146.json".
+2023-10-25 21:47:52,866 bench  INFO   run 147/984 complete.
+2023-10-25 21:47:52,881 bench  INFO   run start: instance_id=UDMIS055, args=(1000, None, None).
+2023-10-25 21:48:03,001 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0147.json".
+2023-10-25 21:48:03,017 bench  INFO   run 148/984 complete.
+2023-10-25 21:48:03,017 bench  INFO   run start: instance_id=UDMIS056, args=(1000, None, None).
+2023-10-25 21:48:13,709 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0148.json".
+2023-10-25 21:48:13,724 bench  INFO   run 149/984 complete.
+2023-10-25 21:48:13,724 bench  INFO   run start: instance_id=UDMIS057, args=(1000, None, None).
+2023-10-25 21:48:24,452 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0149.json".
+2023-10-25 21:48:24,468 bench  INFO   run 150/984 complete.
+2023-10-25 21:48:24,468 bench  INFO   run start: instance_id=UDMIS058, args=(1000, None, None).
+2023-10-25 21:48:35,398 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0150.json".
+2023-10-25 21:48:35,414 bench  INFO   run 151/984 complete.
+2023-10-25 21:48:35,414 bench  INFO   run start: instance_id=UDMIS059, args=(1000, None, None).
+2023-10-25 21:48:47,112 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0151.json".
+2023-10-25 21:48:47,128 bench  INFO   run 152/984 complete.
+2023-10-25 21:48:47,128 bench  INFO   run start: instance_id=UDMIS060, args=(1000, None, None).
+2023-10-25 21:48:57,631 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0152.json".
+2023-10-25 21:48:57,647 bench  INFO   run 153/984 complete.
+2023-10-25 21:48:57,647 bench  INFO   run start: instance_id=TSP107, args=(1000, None, None).
+2023-10-25 21:49:13,294 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0153.json".
+2023-10-25 21:49:13,310 bench  INFO   run 154/984 complete.
+2023-10-25 21:49:13,310 bench  INFO   run start: instance_id=TSP120, args=(1000, None, None).
+2023-10-25 21:49:25,351 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0154.json".
+2023-10-25 21:49:25,367 bench  INFO   run 155/984 complete.
+2023-10-25 21:49:25,367 bench  INFO   run start: instance_id=TSP133, args=(1000, None, None).
+2023-10-25 21:49:40,233 bench  INFO   run finished: success, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0155.json".
+2023-10-25 21:49:40,249 bench  INFO   run 156/984 complete.
+2023-10-25 21:49:40,249 bench  INFO   run start: instance_id=TSP146, args=(1000, None, None).
+2023-10-25 21:49:45,235 bench  INFO   run finished: failure, saved to "result/dwave-1000shots/dwave-1000shots_dwave_2.0.1_1698261855.574964_0156.json".
+2023-10-25 21:49:45,235 bench  INFO   run 157/984 complete.
+2023-10-25 21:49:45,235 bench  INFO   run start: instance_id=TSP159, args=(1000, None, None).
