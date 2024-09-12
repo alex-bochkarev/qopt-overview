@@ -156,8 +156,8 @@ ggplot(df_hard)+
   theme(
     axis.text.x = element_text(size = 18),
     axis.text.y = element_text(size = 13),
-    axis.title.x = element_text(size = 26),
-    axis.title.y = element_text(size = 26, margin = margin(t = 50)),
+    axis.title.x = element_text(size = 18),
+    axis.title.y = element_text(size = 18, margin = margin(t = 50)),
     panel.background = element_rect(fill = NA, color = "black"),
     panel.grid.major = element_line(
       size = 0.5, linetype = "solid",

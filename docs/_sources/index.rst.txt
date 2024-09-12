@@ -19,6 +19,14 @@ Here we present our computational setup, source code, and the data with format
 descriptions. Please do not hesitate to `reach out
 <https://www.bochkarev.io/contact>`_ if you have any further questions.
 
+The preprint is available as `arXiv:2409.01373 <https://arxiv.org/abs/2409.01373>`_
+
+To cite, feel free to use this bibtex entry:
+
+.. include:: ../../citation.bib
+   :literal:
+
+
 .. toctree::
    :maxdepth: 1
    :caption: Contents:

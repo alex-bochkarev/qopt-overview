@@ -126,7 +126,7 @@ ggplot(dfl, aes(fill=factor(run_result,
         ##   color = "lightgrey"
         ##   ),
         strip.text.x = element_text(size = 12),
-        strip.text.y = element_text(size = 20, angle = -90),
+        strip.text.y = element_text(size = 12, angle = -90),
         strip.background = element_blank(), legend.position = c(0.8,0.875),
         legend.text = element_text(size=20),
         legend.title = element_text(size=20),

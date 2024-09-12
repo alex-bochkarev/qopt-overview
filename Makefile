@@ -207,6 +207,7 @@ code-docs: $(INSTS)/orig_instances.zip $(INSTS)/QUBO_formulations.zip \
 	cd ../quera && unzip ./raw_logs.zip && rm ./raw_logs.zip && \
 	cd ../.. && \
 	cp ../docs/source/GH_README.md ./README.md && \
+	cp ../citation.bib ./citation.bib && \
 	touch ./docs/.nojekyll
 
 

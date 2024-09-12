@@ -4,3 +4,7 @@ This repository provides [technical
 details](https://alex-bochkarev.github.io/qopt-overview) on the source code and
 contains the [computation data](./run_logs/) along with [problem
 instances](./instances/) for the related research project.
+
+Preprint: [arXiv.2409.01373](https://arxiv.org/abs/2409.01373).
+
+To cite: see [citation.bib](./citation.bib).
