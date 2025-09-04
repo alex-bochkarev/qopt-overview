@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>classic_bm_MWC &mdash; qopt-overview  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/autoclasstoc.css?v=08871587" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=3dd0334f" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            qopt-overview
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html#computational-pipeline">Computational pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview.html#implementation-details">Implementation details</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../raw-data.html">Raw data formats</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">qopt-overview</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content style-external-links">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Module code</a></li>
+      <li class="breadcrumb-item active">classic_bm_MWC</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for classic_bm_MWC</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Solves MaxCut instances with a few alternative classical heuristics.</span>
+
+<span class="sd">USAGE:</span>
+<span class="sd">    python -m classic_bm_MWC | tee ./run_logs/classic_solutions/MWC_heuristics.log</span>
+
+<span class="sd">Relevant files:</span>
+
+<span class="sd">    - instance IDs to solve are taken from ``./run_logs/solved_MWC.list``.</span>
+
+<span class="sd">    - D-Wave runtime (for the heuristic 1) is read from ``./run_logs/summaries/dwave_summary.csv``.</span>
+
+<span class="sd">The main baseline heuristic is just Gurobi solver with the time limit set to the</span>
+<span class="sd">   actual runtime of the D-Wave&#39;s experiment (for the respective instance).</span>
+
+<span class="sd">See also: :py:mod:`classic_solve_MWC_QUBO_only` and :py:mod:`classic_solve_MWCs`.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">time</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">argparse</span> <span class="kn">import</span> <span class="n">ArgumentParser</span>
+
+<span class="kn">import</span> <span class="nn">mlrose_ky</span> <span class="k">as</span> <span class="nn">mlrose</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">qubo_utils</span> <span class="kn">import</span> <span class="n">load_QUBO</span><span class="p">,</span> <span class="n">get_QUBO_by_ID</span><span class="p">,</span> <span class="n">solve_QUBO</span>
+
+
+<div class="viewcode-block" id="gurobi_QUBO_timeout">
+<a class="viewcode-back" href="../_autosummary/classic_bm_MWC.html#classic_bm_MWC.gurobi_QUBO_timeout">[docs]</a>
+<span class="k">def</span> <span class="nf">gurobi_QUBO_timeout</span><span class="p">(</span><span class="n">inst_id</span><span class="p">,</span> <span class="n">inst_dir</span><span class="p">,</span> <span class="n">timeout</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Solves a QUBO using Gurobi with a timeout.&quot;&quot;&quot;</span>
+
+    <span class="n">Q</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_QUBO</span><span class="p">(</span><span class="n">get_QUBO_by_ID</span><span class="p">(</span><span class="n">inst_id</span><span class="p">,</span> <span class="n">inst_dir</span> <span class="o">+</span> <span class="s2">&quot;/QUBO&quot;</span><span class="p">))</span>
+
+    <span class="n">runtime</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
+    <span class="n">m</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="n">solve_QUBO</span><span class="p">(</span><span class="n">Q</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="n">quiet</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+    <span class="n">runtime</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">runtime</span>
+
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([{</span>
+        <span class="s2">&quot;instance_id&quot;</span><span class="p">:</span> <span class="n">inst_id</span><span class="p">,</span>
+        <span class="s2">&quot;qubo_vars&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">Q</span><span class="p">),</span>
+        <span class="s2">&quot;timeout&quot;</span><span class="p">:</span> <span class="n">timeout</span><span class="p">,</span>
+        <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;GurobiTimeout&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;runtime&quot;</span><span class="p">:</span> <span class="n">runtime</span><span class="p">,</span>
+        <span class="s2">&quot;solution&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">X</span><span class="p">))</span>
+                             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">Q</span><span class="p">))]),</span>
+        <span class="s2">&quot;objective&quot;</span><span class="p">:</span> <span class="o">-</span><span class="n">m</span><span class="o">.</span><span class="n">objVal</span><span class="p">,</span>
+        <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Gurobi status: </span><span class="si">{</span><span class="n">m</span><span class="o">.</span><span class="n">status</span><span class="si">}</span><span class="s2">, gap: </span><span class="si">{</span><span class="n">m</span><span class="o">.</span><span class="n">MIPGap</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">}])</span></div>
+
+
+<div class="viewcode-block" id="mlrose_SA">
+<a class="viewcode-back" href="../_autosummary/classic_bm_MWC.html#classic_bm_MWC.mlrose_SA">[docs]</a>
+<span class="k">def</span> <span class="nf">mlrose_SA</span><span class="p">(</span><span class="n">inst_id</span><span class="p">,</span> <span class="n">inst_dir</span><span class="p">,</span> <span class="n">timeout</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Solves a QUBO using mlrose&#39;s Simulated Annealing algo.&quot;&quot;&quot;</span>
+    <span class="n">Q</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_QUBO</span><span class="p">(</span><span class="n">get_QUBO_by_ID</span><span class="p">(</span><span class="n">inst_id</span><span class="p">,</span> <span class="n">inst_dir</span> <span class="o">+</span> <span class="s2">&quot;/QUBO&quot;</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">QUBO_fitness</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">x</span> <span class="o">@</span> <span class="n">Q</span> <span class="o">@</span> <span class="n">x</span> <span class="o">+</span> <span class="n">P</span> <span class="o">@</span> <span class="n">x</span> <span class="o">+</span> <span class="n">C</span>
+
+    <span class="n">problem</span> <span class="o">=</span> <span class="n">mlrose</span><span class="o">.</span><span class="n">DiscreteOpt</span><span class="p">(</span><span class="n">length</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">Q</span><span class="p">),</span>
+                                 <span class="n">fitness_fn</span><span class="o">=</span><span class="n">mlrose</span><span class="o">.</span><span class="n">CustomFitness</span><span class="p">(</span><span class="n">QUBO_fitness</span><span class="p">),</span>
+                                 <span class="n">maximize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                 <span class="n">max_val</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">runtime</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
+
+    <span class="n">best_x</span><span class="p">,</span> <span class="n">best_obj</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">mlrose</span><span class="o">.</span><span class="n">simulated_annealing</span><span class="p">(</span><span class="n">problem</span><span class="p">,</span>
+                                                     <span class="n">schedule</span><span class="o">=</span><span class="n">mlrose</span><span class="o">.</span><span class="n">ExpDecay</span><span class="p">(),</span>
+                                                     <span class="n">max_attempts</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">Q</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">runtime</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">runtime</span>
+
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([{</span>
+        <span class="s2">&quot;instance_id&quot;</span><span class="p">:</span> <span class="n">inst_id</span><span class="p">,</span>
+        <span class="s2">&quot;qubo_vars&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">Q</span><span class="p">),</span>
+        <span class="s2">&quot;timeout&quot;</span><span class="p">:</span> <span class="s2">&quot;n/a&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;SimulatedAnnealing&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;runtime&quot;</span><span class="p">:</span> <span class="n">runtime</span><span class="p">,</span>
+        <span class="s2">&quot;solution&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">xj</span><span class="p">))</span>
+                             <span class="k">for</span> <span class="n">xj</span> <span class="ow">in</span> <span class="n">best_x</span><span class="p">]),</span>
+        <span class="s2">&quot;objective&quot;</span><span class="p">:</span> <span class="o">-</span><span class="n">best_obj</span><span class="p">,</span>
+        <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">}])</span></div>
+
+
+
+<div class="viewcode-block" id="mlrose_GA">
+<a class="viewcode-back" href="../_autosummary/classic_bm_MWC.html#classic_bm_MWC.mlrose_GA">[docs]</a>
+<span class="k">def</span> <span class="nf">mlrose_GA</span><span class="p">(</span><span class="n">inst_id</span><span class="p">,</span> <span class="n">inst_dir</span><span class="p">,</span> <span class="n">timeout</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Solves a QUBO using mlrose&#39;s Genetic Algo.&quot;&quot;&quot;</span>
+    <span class="n">Q</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_QUBO</span><span class="p">(</span><span class="n">get_QUBO_by_ID</span><span class="p">(</span><span class="n">inst_id</span><span class="p">,</span> <span class="n">inst_dir</span> <span class="o">+</span> <span class="s2">&quot;/QUBO&quot;</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">QUBO_fitness</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">x</span> <span class="o">@</span> <span class="n">Q</span> <span class="o">@</span> <span class="n">x</span> <span class="o">+</span> <span class="n">P</span> <span class="o">@</span> <span class="n">x</span> <span class="o">+</span> <span class="n">C</span>
+
+    <span class="n">problem</span> <span class="o">=</span> <span class="n">mlrose</span><span class="o">.</span><span class="n">DiscreteOpt</span><span class="p">(</span><span class="n">length</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">Q</span><span class="p">),</span>
+                                 <span class="n">fitness_fn</span><span class="o">=</span><span class="n">mlrose</span><span class="o">.</span><span class="n">CustomFitness</span><span class="p">(</span><span class="n">QUBO_fitness</span><span class="p">),</span>
+                                 <span class="n">maximize</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                                 <span class="n">max_val</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">runtime</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
+
+    <span class="n">best_x</span><span class="p">,</span> <span class="n">best_obj</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">mlrose</span><span class="o">.</span><span class="n">genetic_alg</span><span class="p">(</span><span class="n">problem</span><span class="p">,</span>
+                                             <span class="n">pop_size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">Q</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">runtime</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">runtime</span>
+
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([{</span>
+        <span class="s2">&quot;instance_id&quot;</span><span class="p">:</span> <span class="n">inst_id</span><span class="p">,</span>
+        <span class="s2">&quot;qubo_vars&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">Q</span><span class="p">),</span>
+        <span class="s2">&quot;timeout&quot;</span><span class="p">:</span> <span class="s2">&quot;n/a&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;GeneticAlg&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;runtime&quot;</span><span class="p">:</span> <span class="n">runtime</span><span class="p">,</span>
+        <span class="s2">&quot;solution&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">xj</span><span class="p">))</span>
+                             <span class="k">for</span> <span class="n">xj</span> <span class="ow">in</span> <span class="n">best_x</span><span class="p">]),</span>
+        <span class="s2">&quot;objective&quot;</span><span class="p">:</span> <span class="o">-</span><span class="n">best_obj</span><span class="p">,</span>
+        <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">}])</span></div>
+
+
+<div class="viewcode-block" id="main">
+<a class="viewcode-back" href="../_autosummary/classic_bm_MWC.html#classic_bm_MWC.main">[docs]</a>
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Main script code.</span>
+
+<span class="sd">    Solves all instances given by ``./instances/QUBO/MWC*.json`` and saves the</span>
+<span class="sd">    results into ``./run_logs/classic_solutions/MWC_QUBO.csv``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">ArgumentParser</span><span class="p">()</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--instlist&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;./run_logs/solved_MWC.list&#39;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;list of instances to solve&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--instdir&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;./instances&#39;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;dir with instances (both QUBO and orig)&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--method&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;gurobi-timeout&#39;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;heuristic 1: Gurobi (QUBO) with a timeout&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--output&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;./run_logs/classic_bm.csv&#39;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;resulting summary table&quot;</span><span class="p">)</span>
+
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+    <span class="c1"># output dataframe format</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span>
+        <span class="s2">&quot;instance_id&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;qubo_vars&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;timeout&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;method&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;runtime&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;solution&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;objective&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;comment&quot;</span><span class="p">])</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">instances</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">instlist</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error reading the instances list: </span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">instlist</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># prepare the timeouts</span>
+    <span class="c1"># Load the main summary file (from D-Wave logs)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;./run_logs/summaries/dwave_summary.csv&quot;</span><span class="p">)</span>
+    <span class="n">df_e</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;./run_logs/summaries/embeddings.csv&quot;</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;embedding_time&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+                  <span class="n">df_e</span><span class="p">[[</span><span class="s2">&quot;instance_id&quot;</span><span class="p">,</span> <span class="s2">&quot;emb_time&quot;</span><span class="p">,</span> <span class="s2">&quot;emb_success&quot;</span><span class="p">]],</span>
+                  <span class="n">on</span><span class="o">=</span><span class="s2">&quot;instance_id&quot;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">)</span>
+
+    <span class="n">timeouts</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;instance_id&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;end_timestamp&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;start_timestamp&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;emb_time&#39;</span><span class="p">]))</span>
+
+    <span class="n">methods</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;gurobi-timeout&quot;</span><span class="p">:</span> <span class="n">gurobi_QUBO_timeout</span><span class="p">,</span>
+               <span class="s2">&quot;SA&quot;</span><span class="p">:</span> <span class="n">mlrose_SA</span><span class="p">,</span>
+               <span class="s2">&quot;GA&quot;</span><span class="p">:</span> <span class="n">mlrose_GA</span><span class="p">}</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">heuristic</span> <span class="o">=</span> <span class="n">methods</span><span class="p">[</span><span class="n">args</span><span class="o">.</span><span class="n">method</span><span class="p">]</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Wrong method specified: </span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">method</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Currently implemented methods are:&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;• &quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">- &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">methods</span><span class="o">.</span><span class="n">keys</span><span class="p">()]))</span>
+        <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">inst</span> <span class="ow">in</span> <span class="n">instances</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2"> / </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">instances</span><span class="p">)</span><span class="si">}</span><span class="s2">; </span><span class="si">{</span><span class="n">inst</span><span class="p">[</span><span class="s1">&#39;instance_id&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> ]: using </span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">method</span><span class="si">}</span><span class="s2"> (QPU time was </span><span class="si">{</span><span class="n">timeouts</span><span class="p">[</span><span class="n">inst</span><span class="p">[</span><span class="s1">&#39;instance_id&#39;</span><span class="p">]]</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> sec)...&quot;</span><span class="p">,</span>
+              <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">out</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">out</span><span class="p">,</span> <span class="n">heuristic</span><span class="p">(</span><span class="n">inst</span><span class="p">[</span><span class="s1">&#39;instance_id&#39;</span><span class="p">],</span>
+                                                 <span class="n">args</span><span class="o">.</span><span class="n">instdir</span><span class="p">,</span>
+                                                 <span class="n">timeouts</span><span class="p">[</span><span class="n">inst</span><span class="p">[</span><span class="s1">&#39;instance_id&#39;</span><span class="p">]],</span>
+                                                 <span class="n">quiet</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)])</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">rt</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="s1">&#39;runtime&#39;</span><span class="p">])[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2"> / </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">instances</span><span class="p">)</span><span class="si">}</span><span class="s2">; </span><span class="si">{</span><span class="n">inst</span><span class="p">[</span><span class="s1">&#39;instance_id&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> ] ✓ done (</span><span class="si">{</span><span class="n">rt</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> sec vs </span><span class="si">{</span><span class="n">timeouts</span><span class="p">[</span><span class="n">inst</span><span class="p">[</span><span class="s1">&#39;instance_id&#39;</span><span class="p">]]</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> of QPU).&quot;</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Bochkarev, Heese, Jäger, Schiewe, and Schöbel.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,15 @@
+﻿classic\_bm\_MWC
+================
+
+.. automodule:: classic_bm_MWC
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      gurobi_QUBO_timeout
+      main
+      mlrose_GA
+      mlrose_SA
+   

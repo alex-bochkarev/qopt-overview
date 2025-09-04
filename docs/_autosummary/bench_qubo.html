@@ -22,7 +22,9 @@
         <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="runner" href="runner.html" />
+    <link rel="prev" title="bench" href="bench.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -45,10 +47,56 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../overview.html#computational-pipeline">Computational pipeline</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../overview.html#implementation-details">Implementation details</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../overview.html#implementation-details">Implementation details</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="TSP_inst.html">TSP_inst</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MWC_inst.html">MWC_inst</a></li>
+<li class="toctree-l2"><a class="reference internal" href="MIS_inst.html">MIS_inst</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classic_solve_UDMISes.html">classic_solve_UDMISes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classic_solve_MWC_QUBO_only.html">classic_solve_MWC_QUBO_only</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classic_solve_MWCs.html">classic_solve_MWCs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classic_solve_TSPs_MTZ.html">classic_solve_TSPs_MTZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classic_bm_MWC.html">classic_bm_MWC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bench.html">bench</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">bench_qubo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#bench_qubo.DataBaseQUBO"><code class="docutils literal notranslate"><span class="pre">DataBaseQUBO</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#bench_qubo.DataBaseQUBO._preprocess_qubo_data"><code class="docutils literal notranslate"><span class="pre">DataBaseQUBO._preprocess_qubo_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#bench_qubo.DataBaseQUBO.get_qubo_data"><code class="docutils literal notranslate"><span class="pre">DataBaseQUBO.get_qubo_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#bench_qubo.DataBaseQUBO.get_embedding_data"><code class="docutils literal notranslate"><span class="pre">DataBaseQUBO.get_embedding_data()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#bench_qubo.QUBOSolver"><code class="docutils literal notranslate"><span class="pre">QUBOSolver</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#bench_qubo.QUBOSolver._run"><code class="docutils literal notranslate"><span class="pre">QUBOSolver._run()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#bench_qubo.QUBOSolver.get_data"><code class="docutils literal notranslate"><span class="pre">QUBOSolver.get_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#bench_qubo.QUBOSolver.get_embedding_data"><code class="docutils literal notranslate"><span class="pre">QUBOSolver.get_embedding_data()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#bench_qubo.QUBOSolverDwave"><code class="docutils literal notranslate"><span class="pre">QUBOSolverDwave</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#bench_qubo.QUBOSolverDwave._load_embedding"><code class="docutils literal notranslate"><span class="pre">QUBOSolverDwave._load_embedding()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#bench_qubo.QUBOSolverDwave._calculate_embedding"><code class="docutils literal notranslate"><span class="pre">QUBOSolverDwave._calculate_embedding()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#bench_qubo.QUBOSolverDwave._run"><code class="docutils literal notranslate"><span class="pre">QUBOSolverDwave._run()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#bench_qubo.QUBOSolverIBM"><code class="docutils literal notranslate"><span class="pre">QUBOSolverIBM</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#bench_qubo.QUBOSolverIBM._run_qpu_estimator"><code class="docutils literal notranslate"><span class="pre">QUBOSolverIBM._run_qpu_estimator()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#bench_qubo.QUBOSolverIBM._run_qpu_sampler"><code class="docutils literal notranslate"><span class="pre">QUBOSolverIBM._run_qpu_sampler()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#bench_qubo.QUBOSolverIBM._run"><code class="docutils literal notranslate"><span class="pre">QUBOSolverIBM._run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="runner.html">runner</a></li>
+<li class="toctree-l2"><a class="reference internal" href="run_dwave.html">run_dwave</a></li>
+<li class="toctree-l2"><a class="reference internal" href="run_ibm.html">run_ibm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="run_ibm_sim.html">run_ibm_sim</a></li>
+<li class="toctree-l2"><a class="reference internal" href="precompute_embeddings.html">precompute_embeddings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="post_processing.logparser.html">post_processing.logparser</a></li>
+<li class="toctree-l2"><a class="reference internal" href="post_processing.select_runs.html">post_processing.select_runs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../overview.html#preparing-python-and-r-environments">Preparing python and R environments</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../raw-data.html">Raw data formats</a></li>
 </ul>
 
@@ -66,6 +114,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../overview.html">Overview</a></li>
       <li class="breadcrumb-item active">bench_qubo</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/_autosummary/bench_qubo.rst.txt" rel="nofollow"> View page source</a>

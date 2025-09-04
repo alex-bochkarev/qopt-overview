@@ -7,6 +7,7 @@ suppressPackageStartupMessages({
   library(forcats)
   library(viridis)
   library(Hmisc)
+  library(latex2exp)
 })
 
 # Load classic solutions data
@@ -103,8 +104,9 @@ ggplot(dfm) +
                  color=ProbType,
                             shape=device), size=5, alpha=0.7) +
   geom_abline(slope = 1.0, intercept = 0.0, color = "red", size=2) +
-  xlab("Total runtime (QPU), seconds") +
-  ylab("Baseline runtime (Gurobi), seconds") +
+  labs(
+    x=TeX("Total runtime (QPU), $t_{q}$, seconds"),
+    y=TeX("Baseline runtime (Gurobi), $t_{c}$, seconds"))+
   theme(
     axis.text.x = element_text(size = 30),
     axis.text.y = element_text(size = 30),
@@ -120,7 +122,7 @@ ggplot(dfm) +
     legend.position = c(0.875,0.7),
     legend.text = element_text(size=30),
     legend.title = element_text(size=30))+
-  scale_colour_viridis_d(name="Problem type")+
+  scale_colour_viridis_d(name="Problem class")+
   scale_shape_discrete(name="Device")+
   scale_x_continuous(breaks = xlabs,
                      labels = xlabs,
@@ -140,19 +142,23 @@ dfm$QPU_rel_runtime_signed = with(dfm,
 
 dfm = filter(dfm, instance_id != "MWC1")  # that's a very degenerate case
 
+dfm$Dev = as.factor(dfm$device)
 df_hard = filter(dfm, classic_sol_time > 20)
 
 # Note this is only larger MaxCuts, solved by D-Wave only:
 unique(df_hard$prob_type)
 unique(df_hard$device)
 
+df_hard$device <- factor(df_hard$device,
+                          levels = unique(dfm$device))
 ggplot(df_hard)+
   geom_vline(xintercept = 0.0, color='red', size=1)+
   geom_hline(yintercept = 0.0, color='red', size=1)+
-  geom_point(aes(x = QPU_rel_runtime_signed, y = QPU_rel_obj_signed), size=2,
-              width=0.1)+
-  xlab("Relative runtime deviation") +
-  ylab("Relative objective deviation") +
+  geom_point(aes(x = QPU_rel_runtime_signed, y = QPU_rel_obj_signed,
+                 color=ProbType, shape=Dev), size=3, alpha=0.7) +
+  labs(
+    x=TeX("Relative runtime deviation, $R_t$"),
+    y=TeX("Relative objective deviation, $R_f"))+
   theme(
     axis.text.x = element_text(size = 18),
     axis.text.y = element_text(size = 13),
@@ -165,8 +171,11 @@ ggplot(df_hard)+
     ),
     strip.text.x = element_text(size = 22),
     strip.text.y = element_text(size = 22, angle = -90),
-    strip.background = element_blank()
-  )
+    strip.background = element_blank(),
+    legend.position="none"
+  )+
+  scale_colour_viridis_d(name="Problem type", drop=FALSE)+
+  scale_shape_discrete(name="Device", drop=FALSE)
 
 ggsave("./figures/hard_instances.png", width = 5, height = 5)
 

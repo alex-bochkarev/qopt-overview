@@ -5,6 +5,7 @@ suppressPackageStartupMessages({
   library(forcats)
   library(optparse)
   library(stringr)
+  library(ggh4x)
 })
 
 option_list = list(
@@ -118,6 +119,9 @@ if (draw_classic_solution) {
                      aes(yintercept = opt_obj), color='#440154', linewidth = 2,
                      linetype='solid')
 }
-p
+p = p+
+  facetted_pos_scales(
+    y = list(scale_y_continuous(breaks = function(x) unique(floor(pretty(seq(min(x), (max(x) + 1) * 1.1))))),
+             NULL, NULL, NULL, NULL))
 
 ggsave(paste0(opt$out, ".png"), width = 16, height = 10)

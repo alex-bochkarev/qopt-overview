@@ -1,3 +1,6 @@
+.. role:: raw-html(raw)
+    :format: html
+
 QC for discrete optimization: code documentation.
 =================================================
 
@@ -9,8 +12,7 @@ research project:
 .. rst-class:: center
 
 **"Quantum computing for discrete optimization:
-a highlight of three technologies"**
-
+a highlight of three technologies"** :raw-html:`<br>`
 by A. Bochkarev, R. Heese, S. Jäger, P. Schiewe, and A. Schöbel.
 
 -----
@@ -19,13 +21,13 @@ Here we present our computational setup, source code, and the data with format
 descriptions. Please do not hesitate to `reach out
 <https://www.bochkarev.io/contact>`_ if you have any further questions.
 
-The preprint is available as `arXiv:2409.01373 <https://arxiv.org/abs/2409.01373>`_
-
-To cite, feel free to use this bibtex entry:
+- Paper: `10.1016/j.ejor.2025.07.063 <https://doi.org/10.1016/j.ejor.2025.07.063>`_
+- Preprint: `arXiv:2409.01373 <https://arxiv.org/abs/2409.01373>`_
+- Github repository:  `qopt-overview <https://github.com/alex-bochkarev/qopt-overview>`_ (source code and data)
+- To cite (:download:`citation.bib <../../citation.bib>`):
 
 .. include:: ../../citation.bib
    :literal:
-
 
 .. toctree::
    :maxdepth: 1

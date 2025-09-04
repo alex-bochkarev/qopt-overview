@@ -58,6 +58,14 @@
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/classic_solve_MWC_QUBO_only.html">classic_solve_MWC_QUBO_only</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/classic_solve_MWCs.html">classic_solve_MWCs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/classic_solve_TSPs_MTZ.html">classic_solve_TSPs_MTZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/classic_bm_MWC.html">classic_bm_MWC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/bench.html">bench</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/bench_qubo.html">bench_qubo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/runner.html">runner</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/run_dwave.html">run_dwave</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/run_ibm.html">run_ibm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/run_ibm_sim.html">run_ibm_sim</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/precompute_embeddings.html">precompute_embeddings</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/post_processing.logparser.html">post_processing.logparser</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/post_processing.select_runs.html">post_processing.select_runs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#preparing-python-and-r-environments">Preparing python and R environments</a></li>
@@ -92,9 +100,10 @@
              
   <section id="overview">
 <h1>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h1>
-<p>This archive is organized as follows. The <code class="docutils literal notranslate"><span class="pre">📁</span> <span class="pre">docs</span></code> folder contains HTML documents
-with this description, and the rest of the root directory represents a snapshot from
-our source code repository with the following structure:</p>
+<p>This archive is organized as follows. The <code class="docutils literal notranslate"><span class="pre">📁</span> <span class="pre">docs</span></code> folder contains HTML
+documents with this description, and the rest of the root directory represents a
+snapshot from our <a class="reference external" href="https://github.com/alex-bochkarev/qopt-overview">source code repository</a> with the following
+structure:</p>
 <table class="docutils align-default" id="id3">
 <caption><span class="caption-text">Repository structure</span><a class="headerlink" href="#id3" title="Link to this table"></a></caption>
 <colgroup>
@@ -238,7 +247,7 @@ raw log files (in JSON format) obtained from the QPUs. Assuming the necessary
 software is present and instances and run logs are unpacked, one can rebuild any
 figure by issuing a <code class="docutils literal notranslate"><span class="pre">make</span></code> command from the root directory. <a class="reference external" href="https://www.gnu.org/software/make">GNU make</a> will consider the files’ timestamps and
 re-run the calculations as necessary. For example:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>figures/inst_summary.png<span class="w">  </span><span class="c1"># to rebuild Figure 4, or</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>figures/inst_summary.png<span class="w">  </span><span class="c1"># to rebuild Figure 6, or</span>
 make<span class="w"> </span>figures<span class="w">                   </span><span class="c1"># to rebuild all figures for the paper</span>
 </pre></div>
 </div>
@@ -254,11 +263,11 @@ results.</p>
 <tr class="row-odd"><th class="head"><p>Figure or table</p></th>
 <th class="head"><p>Filename</p></th>
 <th class="head"><p>Plotting code</p></th>
-<th class="head"><p>Data files</p></th>
+<th class="head"><p>Relevant data files</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>Fig. 4</p></td>
+<tr class="row-even"><td><p>Fig. 6</p></td>
 <td><p>inst_summary.png</p></td>
 <td><p>inst_summary.R</p></td>
 <td><p>quera_stats.csv,</p>
@@ -273,9 +282,9 @@ results.</p>
 <p>solutions_all.csv</p>
 </td>
 </tr>
-<tr class="row-odd"><td><p>Fig. 5a,</p>
-<p>Fig. 5b,</p>
-<p>Table 5</p>
+<tr class="row-odd"><td><p>Fig. 7a,</p>
+<p>Fig. 7b,</p>
+<p>Table 4</p>
 </td>
 <td><p>qpu_vs_cpu_runtimes.png,</p>
 <p>hard_instances.png</p>
@@ -292,10 +301,10 @@ results.</p>
 <p>quera_summary.csv</p>
 </td>
 </tr>
-<tr class="row-even"><td><p>Fig. 6,</p>
-<p>Fig. 11,
-Table 7</p>
-<p>Fig. 18</p>
+<tr class="row-even"><td><p>Fig. 8,</p>
+<p>Fig. S.4,
+Table S.1</p>
+<p>Fig. S.13</p>
 </td>
 <td><p>runtime_vs_embtime_TSP.png,</p>
 <p>runtime_vs_embtime_MWC.png,</p>
@@ -310,14 +319,14 @@ regression_summary.tex</p>
 <p>embeddings.csv</p>
 </td>
 </tr>
-<tr class="row-odd"><td><p>Fig. 9</p></td>
+<tr class="row-odd"><td><p>Fig. S.3</p></td>
 <td><p>nonzeros_vs_size.png</p></td>
 <td><p>igs_draw_nonzeros.R</p></td>
 <td><p>instances.csv</p>
 <p>all_devices_stats.csv</p>
 </td>
 </tr>
-<tr class="row-even"><td><p>Fig. 10</p></td>
+<tr class="row-even"><td><p>Fig. S.5</p></td>
 <td><p>runs_summary.png</p></td>
 <td><p>inst_summary_by_inst.R</p></td>
 <td><p>quera_summary_full.csv</p>
@@ -328,19 +337,44 @@ regression_summary.tex</p>
 <p>solutions_all.csv</p>
 </td>
 </tr>
-<tr class="row-odd"><td><p>Fig. 12,
-13,
-and 15</p></td>
+<tr class="row-odd"><td><p>Fig. S.6,
+S.7,
+and S.9</p></td>
 <td><p>files *.json.hist.png in
 <code class="docutils literal notranslate"><span class="pre">📁</span> <span class="pre">figures</span></code> folder</p></td>
 <td><p>make_suppl_sample_figures.sh</p></td>
 <td><p>(raw QPU logfiles)</p></td>
 </tr>
+<tr class="row-even"><td><p>Fig. S.14</p></td>
+<td><p>LBOPvsQUBO_sec.png</p>
+<p>LBOPvsQUBO_gap.png</p>
+</td>
+<td><p>MWC_ILP_vs_QUBO.R</p></td>
+<td><p>MWC_QUBO_vs_LBOP/MWC.csv
+ibm-qpu_summary.csv
+ibm-sim_summary.csv
+dwave_summary.csv
+quera_summary.csv
+instances.csv</p></td>
+</tr>
+<tr class="row-odd"><td><p>Fig. S.15</p></td>
+<td><p>gurobi_conv/MWC*.png</p></td>
+<td><p>classic_conv_figs.R</p></td>
+<td><p>gurobi_MWC_logs/*.log</p></td>
+</tr>
+<tr class="row-even"><td><p>Fig. S.16</p></td>
+<td><p>gurobi_timeout.png</p></td>
+<td><p>gurobi_timeout_figs.R</p></td>
+<td><p>MWC_bm_gurobi.csv
+dwave_summary.csv
+MWC_inst_summary.csv</p></td>
+</tr>
 </tbody>
 </table>
-<p>Figures 7, 8, and 14 (instance examples) are made with ad-hoc code illustrated
+<p>Figures S.1, S.2, and S.8 (instance examples) are made with ad-hoc code illustrated
 in the Jupyter notebook <code class="docutils literal notranslate"><span class="pre">data_sel.ipynb</span></code>.</p>
-<p>Please refer to <code class="docutils literal notranslate"><span class="pre">Makefile</span></code> for more details on the computational recipes.</p>
+<p>Please refer to <code class="docutils literal notranslate"><span class="pre">Makefile</span></code> for more details on the computational recipes and
+<a class="reference internal" href="raw-data.html"><span class="doc">raw data descriptions</span></a> for information on the data and log files.</p>
 </section>
 <section id="implementation-details">
 <h1>Implementation details<a class="headerlink" href="#implementation-details" title="Link to this heading"></a></h1>
@@ -381,13 +415,17 @@ done using <a class="reference external" href="https://www.gurobi.com">Gurobi</a
 <tr class="row-even"><td><p><a class="reference internal" href="_autosummary/classic_solve_TSPs_MTZ.html#module-classic_solve_TSPs_MTZ" title="classic_solve_TSPs_MTZ"><code class="xref py py-obj docutils literal notranslate"><span class="pre">classic_solve_TSPs_MTZ</span></code></a></p></td>
 <td><p>Solves TSP in MTZ formulation with Gurobi, saving the objectives and solution times.</p></td>
 </tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/classic_bm_MWC.html#module-classic_bm_MWC" title="classic_bm_MWC"><code class="xref py py-obj docutils literal notranslate"><span class="pre">classic_bm_MWC</span></code></a></p></td>
+<td><p>Solves MaxCut instances with a few alternative classical heuristics.</p></td>
+</tr>
 </tbody>
 </table>
 </div></blockquote>
 </li>
 <li><p>Interactions with QPUs are programmed in Python and implemented via remote
 interfaces. The relevant code for D-Wave and IBM is stored in <code class="docutils literal notranslate"><span class="pre">📁</span>
-<span class="pre">benchmark</span></code> folder:</p>
+<span class="pre">benchmark</span></code> folder. The code for the neutral atoms computer is stored
+separately, in a jupyter notebook – see above.</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/bench.html#module-bench" title="bench"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bench</span></code></a></p></td>
@@ -411,16 +449,17 @@ interfaces. The relevant code for D-Wave and IBM is stored in <code class="docut
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/precompute_embeddings.html#module-precompute_embeddings" title="precompute_embeddings"><code class="xref py py-obj docutils literal notranslate"><span class="pre">precompute_embeddings</span></code></a></p></td>
 <td><p>Precomputes (DWave) embeddings for the instances in QUBO folder.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/notebook.html#module-notebook" title="notebook"><code class="xref py py-obj docutils literal notranslate"><span class="pre">notebook</span></code></a></p></td>
-<td><p>The Jupyter HTML Notebook</p></td>
-</tr>
 </tbody>
 </table>
 </li>
 <li><p>Post-processing of the log files (summarizing the raw data) is done locally
-in Python, with the following two modules:</p>
-<blockquote>
-<div><table class="autosummary longtable docutils align-default">
+in Python. There are also a few ad-hoc scripts. Namely, <cite>show_problems.sh</cite>
+prints the error messages obtained from the QPUs. Relies on <cite>jq</cite> JSON
+parsing utility, takes the instance lists to look into from
+<cite>run_logs/problems_dwave.list</cite> and <cite>run_logs/problems_ibmq.list</cite> (which can
+be easily obtained from the summary <cite>csv</cite> files in <cite>run_logs/summaries/</cite>,
+filtering the instances by <cite>success</cite> field.) The key Python modules are:</p>
+<table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/post_processing.logparser.html#module-post_processing.logparser" title="post_processing.logparser"><code class="xref py py-obj docutils literal notranslate"><span class="pre">post_processing.logparser</span></code></a></p></td>
 <td><p>Implements JSON pasers, summarizing the raw QPU output files.</p></td>
@@ -430,7 +469,6 @@ in Python, with the following two modules:</p>
 </tr>
 </tbody>
 </table>
-</div></blockquote>
 </li>
 <li><p>Figures production from <code class="docutils literal notranslate"><span class="pre">.csv</span></code>-files, including the necessary technical
 data transformations are made using <a class="reference external" href="https://www.r-project.org">R language</a>,

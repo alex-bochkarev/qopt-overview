@@ -60,6 +60,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#qpu-run-logs">QPU run logs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#gurobi-run-logs">Gurobi run logs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#computed-summaries">Computed summaries</a></li>
 </ul>
 </li>
@@ -106,7 +107,8 @@ instance with <code class="docutils literal notranslate"><span class="pre">TSP1<
 <li><p><code class="docutils literal notranslate"><span class="pre">./instances/QUBO/TSP1_16_5_pr107.qubo.json</span></code> with QUBO formulation.</p></li>
 </ul>
 <p>Both files are in the standard <a class="reference external" href="https://en.wikipedia.org/wiki/JSON">JSON</a>
-format, which can be parsed by <a class="reference external" href="https://docs.python.org/3/library/json.html#module-json">json</a> python package or,
+format, which can be parsed by
+<a class="reference external" href="https://docs.python.org/3/library/json.html#module-json">json package</a> or,
 for example, <a class="reference external" href="https://jqlang.github.io/jq/">jq</a> command line utility. Besides
 <code class="docutils literal notranslate"><span class="pre">jq</span></code> command, one can use any JSON editor/viewer for visual inspection, one
 notable example being the standard JSON viewer built into <a class="reference external" href="https://www.mozilla.org/en-US/firefox/">Firefox</a> browser.</p>
@@ -331,6 +333,17 @@ devised from the log parsing source code, namely, the following functions:</p>
 <li><p><a class="reference internal" href="_autosummary/post_processing.logparser.html#post_processing.logparser.IBMLogParser.extract_convergence_data" title="post_processing.logparser.IBMLogParser.extract_convergence_data"><code class="xref py py-func docutils literal notranslate"><span class="pre">post_processing.logparser.IBMLogParser.extract_convergence_data()</span></code></a></p></li>
 </ul>
 </div></blockquote>
+</section>
+<section id="gurobi-run-logs">
+<h2>Gurobi run logs<a class="headerlink" href="#gurobi-run-logs" title="Link to this heading"></a></h2>
+<p>The classical solver outputs and log files are collected in
+<code class="docutils literal notranslate"><span class="pre">📁 run_logs/classic_solutions</span></code>. Note that besides the summarized <code class="docutils literal notranslate"><span class="pre">csv</span></code>
+solutions data, the intermediate solver outputs are saved into <code class="docutils literal notranslate"><span class="pre">.log</span></code> files.
+Some branch-and-cut data for selected MWC (QUBO) instances are extracted from
+the main logfile and placed into <code class="docutils literal notranslate"><span class="pre">📁 gurobi_MWC_logs</span></code> to make the
+illustrations in the supplementary materials. (See also
+<code class="docutils literal notranslate"><span class="pre">run_logs/classic_solutions/gurobi_MWC_logs/format.txt</span></code> for a few further
+notes on the branch-and-cut tree data formats.)</p>
 </section>
 <section id="computed-summaries">
 <h2>Computed summaries<a class="headerlink" href="#computed-summaries" title="Link to this heading"></a></h2>

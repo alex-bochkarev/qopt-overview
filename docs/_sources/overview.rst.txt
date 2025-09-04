@@ -1,9 +1,11 @@
 Overview
 --------
 
-This archive is organized as follows. The ``📁 docs`` folder contains HTML documents
-with this description, and the rest of the root directory represents a snapshot from
-our source code repository with the following structure:
+This archive is organized as follows. The ``📁 docs`` folder contains HTML
+documents with this description, and the rest of the root directory represents a
+snapshot from our `source code repository
+<https://github.com/alex-bochkarev/qopt-overview>`_ with the following
+structure:
 
 .. list-table:: Repository structure
     :widths: 25 35
@@ -149,7 +151,7 @@ re-run the calculations as necessary. For example:
 
 .. code:: bash
 
-   make figures/inst_summary.png  # to rebuild Figure 4, or
+   make figures/inst_summary.png  # to rebuild Figure 6, or
    make figures                   # to rebuild all figures for the paper
 
 Interactions with QPU are specific to the devices and both formats and
@@ -166,9 +168,9 @@ The key figures in the paper are produced as follows:
    :trim:
 
 +--------------------+---------------------------------+-----------------------------+--------------------------+
-|Figure or |_| table |Filename                         |Plotting code                |Data files                |
+|Figure or |_| table |Filename                         |Plotting code                |Relevant data files       |
 +====================+=================================+=============================+==========================+
-|Fig. 4              |inst_summary.png                 |inst_summary.R               |quera_stats.csv,          |
+|Fig. 6              |inst_summary.png                 |inst_summary.R               |quera_stats.csv,          |
 |                    |                                 |                             |                          |
 |                    |                                 |                             |quera_summary.csv,        |
 |                    |                                 |                             |                          |
@@ -188,11 +190,11 @@ The key figures in the paper are produced as follows:
 |                    |                                 |                             |                          |
 |                    |                                 |                             |solutions_all.csv         |
 +--------------------+---------------------------------+-----------------------------+--------------------------+
-|Fig. 5a,            |qpu_vs_cpu_runtimes.png,         |QPU_vs_classic_figures.R     |TSP_MTZ.csv,              |
+|Fig. 7a,            |qpu_vs_cpu_runtimes.png,         |QPU_vs_classic_figures.R     |TSP_MTZ.csv,              |
 |                    |                                 |                             |                          |
-|Fig. 5b,            |hard_instances.png               |                             |UDMIS.csv,                |
+|Fig. 7b,            |hard_instances.png               |                             |UDMIS.csv,                |
 |                    |                                 |                             |                          |
-|Table 5             |qpu_vs_cpu.tex                   |                             |MWC_QUBO.csv,             |
+|Table 4             |qpu_vs_cpu.tex                   |                             |MWC_QUBO.csv,             |
 |                    |                                 |                             |                          |
 |                    |                                 |                             |ibm-qpu_summary.csv,      |
 |                    |                                 |                             |                          |
@@ -204,24 +206,24 @@ The key figures in the paper are produced as follows:
 |                    |                                 |                             |                          |
 |                    |                                 |                             |quera_summary.csv         |
 +--------------------+---------------------------------+-----------------------------+--------------------------+
-|Fig. 6,             |runtime_vs_embtime_TSP.png,      |dwave.R                      |dwave_summary.csv,        |
+|Fig. 8,             |runtime_vs_embtime_TSP.png,      |dwave.R                      |dwave_summary.csv,        |
 |                    |                                 |                             |                          |
 |                    |runtime_vs_embtime_MWC.png,      |                             |embeddings.csv            |
 |                    |                                 |                             |                          |
 |                    |runtime_vs_embtime_UDMIS.png     |                             |                          |
 |                    |                                 |                             |                          |
-|Fig. 11,            |dwave_qubit_cost_logs_regline.png|                             |                          |
-|Table 7             |regression_summary.tex           |                             |                          |
+|Fig. S.4,           |dwave_qubit_cost_logs_regline.png|                             |                          |
+|Table S.1           |regression_summary.tex           |                             |                          |
 |                    |                                 |                             |                          |
-|Fig. 18             |dwave_soltimes_noemb.png         |                             |                          |
+|Fig. S.13           |dwave_soltimes_noemb.png         |                             |                          |
 |                    |                                 |                             |                          |
 |                    |dwave_embtime_share.png          |                             |                          |
 +--------------------+---------------------------------+-----------------------------+--------------------------+
-|Fig. 9              | nonzeros_vs_size.png            |igs_draw_nonzeros.R          |instances.csv             |
+|Fig. S.3            |nonzeros_vs_size.png             |igs_draw_nonzeros.R          |instances.csv             |
 |                    |                                 |                             |                          |
 |                    |                                 |                             |all_devices_stats.csv     |
 +--------------------+---------------------------------+-----------------------------+--------------------------+
-|Fig. 10             |runs_summary.png                 |inst_summary_by_inst.R       |quera_summary_full.csv    |
+|Fig. S.5            |runs_summary.png                 |inst_summary_by_inst.R       |quera_summary_full.csv    |
 |                    |                                 |                             |                          |
 |                    |                                 |                             |dwave_summary_full.csv,   |
 |                    |                                 |                             |                          |
@@ -233,15 +235,29 @@ The key figures in the paper are produced as follows:
 |                    |                                 |                             |                          |
 |                    |                                 |                             |solutions_all.csv         |
 +--------------------+---------------------------------+-----------------------------+--------------------------+
-|Fig. 12,            |files \*.json.hist.png in        |make_suppl_sample_figures.sh |(raw QPU logfiles)        |
-|13,                 |``📁 figures`` folder            |                             |                          |
-|and 15              |                                 |                             |                          |
+|Fig. S.6,           |files \*.json.hist.png in        |make_suppl_sample_figures.sh |(raw QPU logfiles)        |
+|S.7,                |``📁 figures`` folder            |                             |                          |
+|and S.9             |                                 |                             |                          |
++--------------------+---------------------------------+-----------------------------+--------------------------+
+| Fig. S.14          |LBOPvsQUBO_sec.png               |MWC_ILP_vs_QUBO.R            |MWC_QUBO_vs_LBOP/MWC.csv  |
+|                    |                                 |                             |ibm-qpu_summary.csv       |
+|                    |LBOPvsQUBO_gap.png               |                             |ibm-sim_summary.csv       |
+|                    |                                 |                             |dwave_summary.csv         |
+|                    |                                 |                             |quera_summary.csv         |
+|                    |                                 |                             |instances.csv             |
++--------------------+---------------------------------+-----------------------------+--------------------------+
+|Fig. S.15           |gurobi_conv/MWC\*.png            |classic_conv_figs.R          |gurobi_MWC_logs/\*.log    |
++--------------------+---------------------------------+-----------------------------+--------------------------+
+|Fig. S.16           |gurobi_timeout.png               |gurobi_timeout_figs.R        |MWC_bm_gurobi.csv         |
+|                    |                                 |                             |dwave_summary.csv         |
+|                    |                                 |                             |MWC_inst_summary.csv      |
 +--------------------+---------------------------------+-----------------------------+--------------------------+
 
-Figures 7, 8, and 14 (instance examples) are made with ad-hoc code illustrated
+Figures S.1, S.2, and S.8 (instance examples) are made with ad-hoc code illustrated
 in the Jupyter notebook ``data_sel.ipynb``.
 
-Please refer to ``Makefile`` for more details on the computational recipes.
+Please refer to ``Makefile`` for more details on the computational recipes and
+:doc:`raw data descriptions <raw-data>` for information on the data and log files.
 
 Implementation details
 ----------------------
@@ -270,10 +286,12 @@ Our experimental setup broadly comprises five parts:
         classic_solve_MWC_QUBO_only
         classic_solve_MWCs
         classic_solve_TSPs_MTZ
+        classic_bm_MWC
 
 #. Interactions with QPUs are programmed in Python and implemented via remote
    interfaces. The relevant code for D-Wave and IBM is stored in ``📁
-   benchmark`` folder:
+   benchmark`` folder. The code for the neutral atoms computer is stored
+   separately, in a jupyter notebook -- see above.
 
    .. autosummary::
         :toctree: _autosummary
@@ -286,18 +304,21 @@ Our experimental setup broadly comprises five parts:
         run_ibm_sim
         precompute_embeddings
 
-    (The code for the neutral atoms computer is stored separately, in a jupyter
-    notebook -- see above.)
-
 #. Post-processing of the log files (summarizing the raw data) is done locally
-   in Python, with the following two modules:
+   in Python. There are also a few ad-hoc scripts. Namely, `show_problems.sh`
+   prints the error messages obtained from the QPUs. Relies on `jq` JSON
+   parsing utility, takes the instance lists to look into from
+   `run_logs/problems_dwave.list` and `run_logs/problems_ibmq.list` (which can
+   be easily obtained from the summary `csv` files in `run_logs/summaries/`,
+   filtering the instances by `success` field.) The key Python modules are:
 
-    .. autosummary::
-        :toctree: _autosummary
-        :recursive:
+   .. autosummary::
+       :toctree: _autosummary
+       :recursive:
 
-        post_processing.logparser
-        post_processing.select_runs
+       post_processing.logparser
+       post_processing.select_runs
+
 
 #. Figures production from ``.csv``-files, including the necessary technical
    data transformations are made using `R language <https://www.r-project.org>`_,

@@ -76,6 +76,9 @@ $(FIGS)/nonzeros_vs_size.png: $(PP)/igs_draw_nonzeros.R \
 $(RLOGS)/instances.csv: $(PP)/dataset_summary.py
 	python -m post_processing.dataset_summary summarize_src_QUBOs > $@
 
+$(RLOGS)/MWC_inst_summary.csv: $(PP)/dataset_summary.py
+	python -m post_processing.dataset_summary summarize_src_MWCs > $@
+
 $(FIGS)/dwave-MWC159.hist.png $(FIGS)/dwave-TSP53.hist.png $(FIGS)/dwave-TSP82.hist.png \
 	$(FIGS)/quera-UDMIS1TG.hist.png $(FIGS)/quera-UDMIS4TG.hist.png $(FIGS)/quera-UDMIS7TG.hist.png \
 	$(FIGS)/ibm-sim-UDMIS1TG.hist.png $(FIGS)/ibm-sim-UDMIS4TG.hist.png $(FIGS)/ibm-sim-UDMIS7TG.hist.png \
@@ -87,8 +90,24 @@ $(FIGS)/dwave-MWC159.hist.png $(FIGS)/dwave-TSP53.hist.png $(FIGS)/dwave-TSP82.h
 	$(SUMM)/ibm-sim_summary.csv $(SUMM)/ibm-qpu_summary.csv
 	./make_suppl_sample_figures.sh
 
+$(FIGS)/LBOPvsQUBO_sec.png $(FIGS)/LBOPvsQUBO_gap.png: $(PP)/MWC_ILP_vs_QUBO.R \
+	$(RLOGS)/classic_solutions/MWC_QUBO_vs_LBOP/MWC.csv \
+	$(SUMM)/ibm-qpu_summary.csv \
+	$(SUMM)/ibm-sim_summary.csv \
+	$(SUMM)/dwave_summary.csv \
+	$(SUMM)/quera_summary.csv \
+	$(RLOGS)/instances.csv
+	Rscript $<
+
 # Recipies for the source data
 #
+
+$(RLOGS)/classic_solutions/MWC.csv: classic_solve_MWCs.py
+	python -m classic_solve_MWCs
+
+# $(RLOGS)/classic_solutions/MWC_QUBO_vs_LBOP/MWC.csv
+# is copied from classic_solutions/MWC.csv (might be concatenated from
+# several such files if run in parallel)
 
 $(SUMM)/all_devices_stats_full.csv: $(RLOGS)/summaries/dwave_stats_full.csv \
 	$(RLOGS)/summaries/ibm-qpu_stats_full.csv $(RLOGS)/summaries/ibm-sim_stats_full.csv \
@@ -157,6 +176,11 @@ $(CPUSOLS)/MWC_QUBO.csv: classic_solve_MWC_QUBO_only.py
 	touch $@
 #	python -m classic_solve_MWC_QUBO_only | tee $(CPUSOLS)/MWC_QUBO.log
 
+$(CPUSOLS)/MWC_bm_gurobi.csv: classic_bm_MWC.py
+	python -m classic_bm_MWC --method gurobi-timeout --output $@ | tee $(CPUSOLS)/gurobi-timeout.log
+
+$(CPUSOLS)/MWC_bm_GA.csv: classic_bm_MWC.py
+	python -m classic_bm_MWC --method GA --output $@ | tee $(CPUSOLS)/GA-timeout.log
 ######################################################################
 # Instance generation code (for reference)
 

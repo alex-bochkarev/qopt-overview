@@ -6,6 +6,7 @@ suppressPackageStartupMessages({
   library(forcats)
   library(viridis)
   library(stargazer)
+  library(latex2exp)
 })
 
 df <- read.csv("./run_logs/summaries/dwave_summary.csv", stringsAsFactors = FALSE)
@@ -46,13 +47,13 @@ ggplot(df) +
   geom_jitter(aes(x = binary_vars, y = emb_qubits, color=prob_type,
                   shape=prob_type), width=0.02, size=5, alpha=0.5)+
   geom_line(aes(x = binary_vars,
-                y = exp(coef(reg_MWC)[1] + coef(reg_MWC)[2]*log(binary_vars))), color='#440154FF',
+                y = exp(coef(reg_MWC)[1] + coef(reg_MWC)[2]*log(binary_vars))), color='#21908CFF',
             linetype='dashed')+
   geom_line(aes(x = binary_vars,
-                y = exp(coef(reg_TSP)[1] + coef(reg_TSP)[2]*log(binary_vars))), color='#21908CFF',
+                y = exp(coef(reg_TSP)[1] + coef(reg_TSP)[2]*log(binary_vars))), color='#FDE725FF',
             linetype='dashed')+
   geom_line(aes(x = binary_vars,
-                y = exp(coef(reg_UDMIS)[1] + coef(reg_UDMIS)[2]*log(binary_vars))), color='#FDE725FF',
+                y = exp(coef(reg_UDMIS)[1] + coef(reg_UDMIS)[2]*log(binary_vars))), color='#440154FF',
             linetype='dashed')+
   theme(
     axis.text.x = element_text(size = 25),
@@ -73,16 +74,17 @@ ggplot(df) +
     legend.key=element_blank(),
     legend.text = element_text(size=25),
     legend.title = element_text(size=25))+
-  scale_color_viridis_d(name="Problem type")+
-  scale_shape_discrete(name="Problem type")+
+  scale_color_viridis_d(name="Problem class")+
+  scale_shape_discrete(name="Problem class")+
   scale_x_continuous(breaks = labs,
                      labels = labs,
                      trans = scales::log_trans())+
   scale_y_continuous(breaks = labs,
                      labels = labs,
                      trans = scales::log_trans())+
-  xlab("Number of logical qubits")+
-  ylab("Number of physical qubits")
+  labs(
+    x=TeX("Number of logical qubits, $N$"),
+    y=TeX("Number of physical qubits, $N_e$"))
 
 ggsave("./figures/dwave_qubit_cost_logs_regline.png", width = 15, height = 10)
 

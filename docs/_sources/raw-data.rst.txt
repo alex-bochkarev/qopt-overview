@@ -20,8 +20,8 @@ instance with ``TSP1`` is represented by two files:
 - ``./instances/QUBO/TSP1_16_5_pr107.qubo.json`` with QUBO formulation.
 
 Both files are in the standard `JSON <https://en.wikipedia.org/wiki/JSON>`_
-format, which can be parsed by `json
-<https://docs.python.org/3/library/json.html#module-json>`_ python package or,
+format, which can be parsed by
+`json package <https://docs.python.org/3/library/json.html#module-json>`_ or,
 for example, `jq <https://jqlang.github.io/jq/>`_ command line utility. Besides
 ``jq`` command, one can use any JSON editor/viewer for visual inspection, one
 notable example being the standard JSON viewer built into `Firefox
@@ -201,6 +201,19 @@ devised from the log parsing source code, namely, the following functions:
    - :py:func:`post_processing.logparser.IBMLogParser._extract_successful_line`
    - :py:func:`post_processing.logparser.IBMLogParser.extract_samples`
    - :py:func:`post_processing.logparser.IBMLogParser.extract_convergence_data`
+
+
+Gurobi run logs
+---------------
+
+The classical solver outputs and log files are collected in
+``📁 run_logs/classic_solutions``. Note that besides the summarized ``csv``
+solutions data, the intermediate solver outputs are saved into ``.log`` files.
+Some branch-and-cut data for selected MWC (QUBO) instances are extracted from
+the main logfile and placed into ``📁 gurobi_MWC_logs`` to make the
+illustrations in the supplementary materials. (See also
+``run_logs/classic_solutions/gurobi_MWC_logs/format.txt`` for a few further
+notes on the branch-and-cut tree data formats.)
 
 Computed summaries
 ------------------

@@ -42,8 +42,8 @@ ggplot(filter(df_full, qubo_vars < 150))+
   geom_jitter(aes(x = qubo_vars, y = Qn_nonzeros / (qubo_vars*qubo_vars),
                   color=prob_type, shape=prob_type),
               size=5, width=0.5)+
-  scale_colour_viridis_d(name="Problem type")+
-  scale_shape_discrete(name="Problem type")+
+  scale_colour_viridis_d(name="Problem class")+
+  scale_shape_discrete(name="Problem class")+
   theme(
     axis.text.x = element_text(size = 23),
     axis.text.y = element_text(size = 23),
@@ -65,7 +65,7 @@ ggplot(filter(df_full, qubo_vars < 150))+
     legend.key=element_blank()
   )+
   scale_y_continuous(labels = scales::percent_format(accuracy = 1))+
-  xlab("Number of QUBO variables.")+
-  ylab("Share of nonzeros in Q.")
+  xlab("Number of QUBO variables, N")+
+  ylab("Share of nonzeros in Q")
 
 ggsave("./figures/nonzeros_vs_size.png", width=15, height = 10)
